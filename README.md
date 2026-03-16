@@ -60,6 +60,4 @@ ToolsNova is a collection of professional web tools built with HTML, CSS, and Ja
 
 ## 🚀 Live Demo
 
-[View Live Site](https://yourusername.github.io)
-
-## 📁 Project Structure
+[View Live Site](https://toolsnova.github.io)
