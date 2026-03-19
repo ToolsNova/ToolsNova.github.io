@@ -579,7 +579,7 @@ if (localStorage.getItem('toolsnova_darkmode') === 'true') {
     }
 }
 
-// ===== MOBILE MENU - SINGLE CLEAN VERSION =====
+// ===== MOBILE MENU - FIXED VERSION =====
 if (mobileBtn) {
     const navLinks = document.querySelector('.nav-links');
     
@@ -592,19 +592,21 @@ if (mobileBtn) {
             document.body.appendChild(overlay);
         }
         
-        // Add mobile header if not exists
-        let mobileHeader = navLinks.querySelector('.mobile-menu-header');
-        if (!mobileHeader) {
-            mobileHeader = document.createElement('div');
-            mobileHeader.className = 'mobile-menu-header';
-            mobileHeader.innerHTML = `
-                <div class="mobile-menu-logo">
-                    <i class="fas fa-star"></i>
-                    <span>ToolsNova</span>
-                </div>
-                <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
-            `;
-            navLinks.prepend(mobileHeader);
+        // Add mobile header only on mobile
+        if (window.innerWidth <= 768) {
+            let mobileHeader = navLinks.querySelector('.mobile-menu-header');
+            if (!mobileHeader) {
+                mobileHeader = document.createElement('div');
+                mobileHeader.className = 'mobile-menu-header';
+                mobileHeader.innerHTML = `
+                    <div class="mobile-menu-logo">
+                        <i class="fas fa-star"></i>
+                        <span>ToolsNova</span>
+                    </div>
+                    <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
+                `;
+                navLinks.prepend(mobileHeader);
+            }
         }
         
         // Toggle menu function
@@ -635,7 +637,15 @@ if (mobileBtn) {
             icon.classList.add('fa-bars');
         }
         
-        // Mobile button click
+        // Mobile button click - use both for reliability
+        mobileBtn.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMenu();
+            return false;
+        };
+        
+        // Also keep addEventListener as backup
         mobileBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -643,13 +653,21 @@ if (mobileBtn) {
         });
         
         // Close button click
-        const closeBtn = mobileHeader.querySelector('.mobile-menu-close');
+        const closeBtn = navLinks.querySelector('.mobile-menu-close');
         if (closeBtn) {
-            closeBtn.addEventListener('click', closeMenu);
+            closeBtn.onclick = function(e) {
+                e.preventDefault();
+                closeMenu();
+                return false;
+            };
         }
         
         // Overlay click to close
-        overlay.addEventListener('click', closeMenu);
+        overlay.onclick = function(e) {
+            e.preventDefault();
+            closeMenu();
+            return false;
+        };
         
         // Close when clicking any link
         const links = navLinks.querySelectorAll('a');
