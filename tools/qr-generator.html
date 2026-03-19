@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- Primary Meta Tags -->
+    <title>QR Code Generator - ToolsNova | Create Free QR Codes</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
+    <meta name="title" content="QR Code Generator - ToolsNova | Create Free QR Codes Online">
+    <meta name="description" content="Free online QR code generator. Create QR codes for URLs, text, WiFi, email, and more. Download as PNG. Customizable size and error correction. No signup required.">
+    <meta name="keywords" content="QR code generator, create QR code, free QR code, QR code maker, QR generator online, custom QR code, download QR code, QR code for URL">
+    <meta name="author" content="ToolsNova">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ToolsNova.github.iotools/qr-generator.html">
+    <meta property="og:title" content="QR Code Generator - ToolsNova | Create Free QR Codes">
+    <meta property="og:description" content="Free online QR code generator. Create QR codes for URLs, text, WiFi, and more. Download as PNG.">
+    <meta property="og:image" content="https://ToolsNova.github.ioassets/images/og-qr-generator.jpg">
+    <meta property="og:site_name" content="ToolsNova">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ToolsNova.github.iotools/qr-generator.html">
+    <meta name="twitter:title" content="QR Code Generator - ToolsNova">
+    <meta name="twitter:description" content="Free online QR code generator. Create QR codes instantly.">
+    <meta name="twitter:image" content="https://ToolsNova.github.ioassets/images/twitter-qr-generator.jpg">
+    <meta name="twitter:site" content="@toolsnova">
+    <meta name="twitter:creator" content="@toolsnova">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ToolsNova.github.iotools/qr-generator.html">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="./css/qr-generator.css">
+    
+    <!-- Preconnect for faster loading -->
+    <link rel="preconnect" href="https://www.gstatic.com">
+    
+    <!-- Mobile Web App Capabilities -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="QR Generator">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Verification (add these when site is live) -->
+    <!-- <meta name="google-site-verification" content="your-google-verification-code"> -->
+    <!-- <meta name="msvalidate.01" content="your-bing-verification-code"> -->
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../tools.html">Tools</a>
+                <a href="../ai-assistant.html">AI Assistant</a>
+                <a href="../about.html">About</a>
+                
+                <!-- Auth Links -->
+                <div class="auth-links" id="authLinks">
+                    <a href="../login.html" class="login-link">Login</a>
+                    <a href="../signup.html" class="nav-cta">Sign Up</a>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span class="user-greeting" id="userGreeting">Hi, User</span>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <i class="far fa-moon"></i>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Ad Section 1 - Top Banner -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tool Container -->
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1>QR Code Generator</h1>
+            <p>Create custom QR codes for URLs, text, and more</p>
+        </div>
+
+        <!-- Generator Card -->
+        <div class="generator-card">
+            <div class="input-group">
+                <label><i class="fas fa-pencil" style="margin-right: 8px;"></i> Content</label>
+                <textarea id="qrContent" class="text-input" placeholder="Enter URL or text... (e.g., https://ToolsNova.github.io)" rows="3"></textarea>
+            </div>
+            
+            <div class="options-row">
+                <div class="input-group half">
+                    <label><i class="fas fa-arrows-up-down-left-right" style="margin-right: 8px;"></i> Size</label>
+                    <select id="qrSize" class="select-input">
+                        <option value="100">100 x 100</option>
+                        <option value="150">150 x 150</option>
+                        <option value="200" selected>200 x 200</option>
+                        <option value="250">250 x 250</option>
+                        <option value="300">300 x 300</option>
+                        <option value="400">400 x 400</option>
+                        <option value="500">500 x 500</option>
+                    </select>
+                </div>
+                
+                <div class="input-group half">
+                    <label><i class="fas fa-shield" style="margin-right: 8px;"></i> Error Correction</label>
+                    <select id="qrErrorCorrection" class="select-input">
+                        <option value="L">L (7%)</option>
+                        <option value="M" selected>M (15%)</option>
+                        <option value="Q">Q (25%)</option>
+                        <option value="H">H (30%)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="generate-btn" id="generateBtn">
+                <i class="fas fa-qrcode" style="margin-right: 8px;"></i>
+                Generate QR Code
+            </button>
+            
+            <div class="qr-result" id="qrResult" style="display: none;">
+                <div class="qr-code-container" id="qrCodeContainer"></div>
+                <div class="qr-actions">
+                    <button class="action-btn" id="downloadBtn">
+                        <i class="fas fa-download"></i> Download PNG
+                    </button>
+                    <button class="action-btn" id="copyBtn">
+                        <i class="fas fa-copy"></i> Copy QR
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Section 2 - Below Generator -->
+        <div class="ad-container" style="margin-top: 20px;">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <h3>How It Works</h3>
+            <p>Enter any text or URL, choose your preferred size and error correction level, and click generate. Your QR code will be created instantly and you can download it as PNG.</p>
+            
+            <h3>What Can You Create?</h3>
+            <ul>
+                <li><i class="fas fa-link" style="color: #3b82f6;"></i> Website URLs</li>
+                <li><i class="fas fa-envelope" style="color: #3b82f6;"></i> Email addresses</li>
+                <li><i class="fas fa-wifi" style="color: #3b82f6;"></i> WiFi credentials</li>
+                <li><i class="fas fa-phone" style="color: #3b82f6;"></i> Phone numbers</li>
+                <li><i class="fas fa-map-pin" style="color: #3b82f6;"></i> Locations</li>
+            </ul>
+            
+            <h3>Features</h3>
+            <ul>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Multiple sizes (100px - 500px)</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> 4 error correction levels</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Download as PNG</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Copy QR code</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Free to use</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Ad Section 3 - Bottom Banner -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+                <p>Your universe of professional web tools.</p>
+                
+                <!-- Guest info (shown when logged out) -->
+                <div class="guest-info" id="footerGuestInfo">
+                    <i class="fas fa-user-guest"></i>
+                    <span>Guest users get 3 free uses</span>
+                </div>
+                
+                <!-- User info (shown when logged in) -->
+                <div class="user-info-footer" id="footerUserInfo" style="display: none;">
+                    <i class="fas fa-crown" style="color: var(--success);"></i>
+                    <span>You have unlimited access</span>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-group">
+                    <h4>Tools</h4>
+                    <a href="./tools.html">All Tools</a>
+                    <a href="./tools.html">Media Tools</a>
+                    <a href="./tools.html">AI Tools</a>
+                    <a href="./tools.html">Calculators</a>
+                </div>
+                <div class="footer-group">
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+                <div class="footer-group">
+                    <h4>Account</h4>
+                    <a href="login.html" id="footerLogin">Login</a>
+                    <a href="signup.html" id="footerSignup">Sign Up</a>
+                    <a href="#" id="footerLogout" style="display: none;">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 ToolsNova. All rights reserved. Made for developers and creators.</p>
+        </div>
+    </div>
+</footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <!-- JavaScript -->
+    <script src="../js/script.js"></script>
+    <script src="./js/qr-generator.js"></script>
+</body>
+</html>

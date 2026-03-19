@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- Primary Meta Tags -->
+    <title>Resize Image - ToolsNova | Resize Images Online Free</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
+    <meta name="title" content="Resize Image - ToolsNova | Resize Images Online Free">
+    <meta name="description" content="Free online tool to resize images. Change image dimensions, maintain aspect ratio, resize JPG, PNG, WebP instantly. No upload required, 100% private.">
+    <meta name="keywords" content="resize image, image resizer, change image size, resize jpg, resize png, image dimensions, photo resizer, online image resizer">
+    <meta name="author" content="ToolsNova">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ToolsNova.github.io/tools/resize-image.html">
+    <meta property="og:title" content="Resize Image - ToolsNova">
+    <meta property="og:description" content="Free online tool to resize images instantly in your browser.">
+    <meta property="og:image" content="https://ToolsNova.github.io/assets/images/og-resize.jpg">
+    <meta property="og:site_name" content="ToolsNova">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ToolsNova.github.io/tools/resize-image.html">
+    <meta name="twitter:title" content="Resize Image - ToolsNova">
+    <meta name="twitter:description" content="Free online tool to resize images.">
+    <meta name="twitter:image" content="https://ToolsNova.github.io/assets/images/twitter-resize.jpg">
+    <meta name="twitter:site" content="@toolsnova">
+    <meta name="twitter:creator" content="@toolsnova">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ToolsNova.github.io/tools/resize-image.html">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="./css/resize-image.css">
+    
+    <!-- Mobile Web App Capabilities -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Resize Image">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../tools.html">Tools</a>
+                <a href="../ai-assistant.html">AI Assistant</a>
+                <a href="../about.html">About</a>
+                
+                <!-- Auth Links -->
+                <div class="auth-links" id="authLinks">
+                    <a href="../login.html" class="login-link">Login</a>
+                    <a href="../signup.html" class="nav-cta">Sign Up</a>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span class="user-greeting" id="userGreeting">Hi, User</span>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <i class="far fa-moon"></i>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Ad Section 1 - Top Banner -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tool Container -->
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1>Resize Image</h1>
+            <p>Change image dimensions instantly. Maintain aspect ratio or set custom size.</p>
+        </div>
+
+        <!-- Upload Card -->
+        <div class="upload-card">
+            <div class="upload-area" id="uploadArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Drop your image here</h3>
+                <p>or click to browse</p>
+                <p class="supported-formats">Supports: JPG, PNG, WebP, GIF (max 50MB)</p>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+            </div>
+            
+            <div class="file-info" id="fileInfo" style="display: none;">
+                <div class="file-details">
+                    <i class="fas fa-image"></i>
+                    <div>
+                        <div class="file-name" id="fileName"></div>
+                        <div class="file-size" id="fileSize"></div>
+                    </div>
+                </div>
+                <button class="change-file-btn" id="changeFileBtn">
+                    <i class="fas fa-sync-alt"></i> Change
+                </button>
+            </div>
+        </div>
+
+        <!-- Editor Container -->
+        <div class="editor-container" id="editorContainer" style="display: none;">
+            <div class="editor-layout">
+                <!-- Left Controls -->
+                <div class="controls-panel">
+                    <h3>Resize Settings</h3>
+                    
+                    <div class="preset-sizes">
+                        <label>Preset Sizes</label>
+                        <div class="preset-grid">
+                            <button class="preset-btn" data-width="3840" data-height="2160">4K (3840x2160)</button>
+                            <button class="preset-btn" data-width="2560" data-height="1440">2K (2560x1440)</button>
+                            <button class="preset-btn" data-width="1920" data-height="1080">Full HD (1920x1080)</button>
+                            <button class="preset-btn" data-width="1280" data-height="720">HD (1280x720)</button>
+                            <button class="preset-btn" data-width="1024" data-height="1024">Square (1024x1024)</button>
+                            <button class="preset-btn" data-width="800" data-height="600">SVGA (800x600)</button>
+                            <button class="preset-btn" data-width="640" data-height="480">VGA (640x480)</button>
+                            <button class="preset-btn" data-width="320" data-height="240">QVGA (320x240)</button>
+                        </div>
+                    </div>
+
+                    <div class="custom-size">
+                        <label>Custom Size</label>
+                        <div class="size-inputs">
+                            <div class="input-group">
+                                <span class="input-label">Width</span>
+                                <input type="number" id="widthInput" class="size-field" min="1" placeholder="px">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-label">Height</span>
+                                <input type="number" id="heightInput" class="size-field" min="1" placeholder="px">
+                            </div>
+                        </div>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="maintainAspect" checked>
+                            <span>Maintain aspect ratio</span>
+                        </label>
+
+                        <div class="original-size-info">
+                            <span>Original: <span id="originalDimensions"></span></span>
+                            <span>New: <span id="newDimensions"></span></span>
+                        </div>
+                    </div>
+
+                    <div class="resize-actions">
+                        <button class="apply-btn" id="applyResizeBtn">
+                            <i class="fas fa-check"></i> Apply Resize
+                        </button>
+                        <button class="reset-btn" id="resetBtn">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+
+                    <div class="export-section">
+                        <label>Export Format</label>
+                        <select id="exportFormat" class="export-select">
+                            <option value="image/jpeg">JPEG</option>
+                            <option value="image/png">PNG</option>
+                            <option value="image/webp">WebP</option>
+                        </select>
+                        
+                        <div class="quality-control">
+                            <label>Quality: <span id="qualityValue">90%</span></label>
+                            <input type="range" id="qualitySlider" min="1" max="100" value="90">
+                        </div>
+
+                        <button class="download-btn" id="downloadBtn">
+                            <i class="fas fa-download"></i> Download Resized Image
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Preview Area -->
+                <div class="preview-area">
+                    <div class="preview-container">
+                        <div class="preview-box">
+                            <div class="preview-label">Original</div>
+                            <div class="image-wrapper">
+                                <img id="originalPreview" class="preview-image" alt="Original">
+                            </div>
+                            <div class="image-dimensions" id="originalDimensionsText"></div>
+                        </div>
+                        <div class="preview-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div class="preview-box">
+                            <div class="preview-label">Resized</div>
+                            <div class="image-wrapper">
+                                <img id="resizedPreview" class="preview-image" alt="Resized">
+                            </div>
+                            <div class="image-dimensions" id="resizedDimensionsText"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Section 2 - Below Tool -->
+        <div class="ad-container" style="margin-top: 20px;">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <h3>About This Tool</h3>
+            <p>Resize images directly in your browser. Your files never leave your device - 100% private and secure.</p>
+            
+            <h3>Features</h3>
+            <ul>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> No upload required - works offline</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Common preset sizes for quick selection</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Custom dimensions with aspect ratio lock</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Real-time preview of new dimensions</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Export as JPG, PNG, or WebP</li>
+            </ul>
+
+            <div class="tip-box">
+                <i class="fas fa-lightbulb"></i>
+                <div>
+                    <strong>Pro Tip:</strong> Use preset sizes for common resolutions. Keep aspect ratio locked to avoid stretching your image.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Section 3 - Bottom Banner -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-star"></i>
+                    <span>ToolsNova</span>
+                    <p>Your universe of professional web tools.</p>
+                    
+                    <!-- Guest info -->
+                    <div class="guest-info" id="footerGuestInfo">
+                        <i class="fas fa-user-guest"></i>
+                        <span>Guest users get 3 free uses</span>
+                    </div>
+                    
+                    <!-- User info -->
+                    <div class="user-info-footer" id="footerUserInfo" style="display: none;">
+                        <i class="fas fa-crown" style="color: var(--success);"></i>
+                        <span>You have unlimited access</span>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-group">
+                        <h4>Tools</h4>
+                        <a href="../tools.html">All Tools</a>
+                        <a href="../tools.html#media">Media Tools</a>
+                        <a href="../tools.html#ai">AI Tools</a>
+                        <a href="../tools.html#calc">Calculators</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Company</h4>
+                        <a href="../about.html">About</a>
+                        <a href="../privacy.html">Privacy Policy</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Account</h4>
+                        <a href="../login.html" id="footerLogin">Login</a>
+                        <a href="../signup.html" id="footerSignup">Sign Up</a>
+                        <a href="#" id="footerLogout" style="display: none;">Logout</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 ToolsNova. All rights reserved. Made for developers and creators.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../js/script.js"></script>
+    <script src="./js/resize-image.js"></script>
+    
+    <!-- Page-specific auth script -->
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+            const authLinks = document.getElementById('authLinks');
+            const userMenu = document.getElementById('userMenu');
+            const userGreeting = document.getElementById('userGreeting');
+            const footerLogin = document.getElementById('footerLogin');
+            const footerSignup = document.getElementById('footerSignup');
+            const footerLogout = document.getElementById('footerLogout');
+            const footerGuestInfo = document.getElementById('footerGuestInfo');
+            const footerUserInfo = document.getElementById('footerUserInfo');
+            
+            if (user) {
+                if (authLinks) authLinks.style.display = 'none';
+                if (userMenu) {
+                    userMenu.style.display = 'flex';
+                    if (userGreeting) userGreeting.textContent = `Hi, ${user.email.split('@')[0]}`;
+                }
+                if (footerLogin) footerLogin.style.display = 'none';
+                if (footerSignup) footerSignup.style.display = 'none';
+                if (footerLogout) footerLogout.style.display = 'block';
+                if (footerGuestInfo) footerGuestInfo.style.display = 'none';
+                if (footerUserInfo) footerUserInfo.style.display = 'flex';
+            } else {
+                if (authLinks) authLinks.style.display = 'flex';
+                if (userMenu) userMenu.style.display = 'none';
+                if (footerLogin) footerLogin.style.display = 'block';
+                if (footerSignup) footerSignup.style.display = 'block';
+                if (footerLogout) footerLogout.style.display = 'none';
+                if (footerGuestInfo) footerGuestInfo.style.display = 'flex';
+                if (footerUserInfo) footerUserInfo.style.display = 'none';
+            }
+        });
+        
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = '../index.html';
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+            document.getElementById('footerLogout')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+        });
+    </script>
+</body>
+</html>
