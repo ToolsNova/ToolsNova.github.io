@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- Primary Meta Tags -->
+    <title>About ToolsNova - Professional Web Tools for Developers & Creators</title>
+    <meta name="title" content="About ToolsNova - Professional Web Tools for Developers & Creators">
+    <meta name="description" content="ToolsNova is your universe of professional web tools. Founded in 2025, we provide 100+ free tools including YouTube downloader, QR code generator, AI assistant, image editor, and code editors. No signup required for basic use.">
+    <meta name="keywords" content="about ToolsNova, our mission, web tools team, free online tools, about us, company story, developer tools, creator tools">
+    <meta name="author" content="ToolsNova">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ToolsNova.github.ioabout.html">
+    <meta property="og:title" content="About ToolsNova - Professional Web Tools for Everyone">
+    <meta property="og:description" content="ToolsNova is your universe of professional web tools. 100+ free tools including YouTube downloader, QR generator, AI assistant, image editor, and code editors.">
+    <meta property="og:image" content="https://ToolsNova.github.ioassets/images/og-about.jpg">
+    <meta property="og:site_name" content="ToolsNova">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ToolsNova.github.ioabout.html">
+    <meta name="twitter:title" content="About ToolsNova - Professional Web Tools">
+    <meta name="twitter:description" content="ToolsNova is your universe of professional web tools. 100+ free tools for developers and creators.">
+    <meta name="twitter:image" content="https://ToolsNova.github.ioassets/images/twitter-about.jpg">
+    <meta name="twitter:site" content="@toolsnova">
+    <meta name="twitter:creator" content="@toolsnova">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ToolsNova.github.ioabout.html">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    
+    <!-- Additional SEO -->
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    <meta name="category" content="Technology">
+    <meta name="coverage" content="Worldwide">
+    <meta name="target" content="all">
+    <meta name="rating" content="General">
+    
+    <!-- Custom CSS (reuse your existing style.css) -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* About Page Specific Styles */
+        .about-hero {
+            padding: 80px 32px;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .about-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .about-hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .mission-section {
+            padding: 80px 32px;
+            background: var(--bg-primary);
+        }
+        
+        .mission-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .mission-content h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        
+        .mission-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .mission-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 30px;
+            background: var(--bg-secondary);
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        .values-section {
+            padding: 80px 32px;
+            background: var(--bg-secondary);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--text-primary);
+        }
+        
+        .values-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .value-card {
+            background: var(--bg-primary);
+            padding: 40px 30px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .value-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .value-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+        
+        .value-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .value-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+        
+        .value-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .story-section {
+            padding: 80px 32px;
+            background: var(--bg-secondary);
+        }
+        
+        .story-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .story-timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .timeline-year {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 100px;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            background: var(--bg-primary);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+        
+        .timeline-content h3 {
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        
+        .timeline-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .cta-section {
+            padding: 80px 32px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .cta-btn {
+            padding: 15px 40px;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-btn.primary {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .cta-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .cta-btn.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .cta-btn.secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .mission-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .values-grid,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .timeline-item {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-btn {
+                width: 100%;
+                max-width: 300px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation (same as other pages) -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="ai-assistant.html">AI Assistant</a>
+                <a href="tools.html">Tools</a>
+                <a href="about.html" class="active">About</a>
+                
+                <!-- Auth Links (shown when logged out) -->
+                <div class="auth-links" id="authLinks">
+                    <a href="login.html" class="login-link">Login</a>
+                    <a href="signup.html" class="nav-cta">Sign Up</a>
+                </div>
+                
+                <!-- User Menu (shown when logged in) -->
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span class="user-greeting" id="userGreeting">Hi, User</span>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <i class="far fa-moon"></i>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Hero Section -->
+    <section class="about-hero">
+        <h1>Welcome to ToolsNova</h1>
+        <p>Your universe of professional web tools - built by creators, for creators</p>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission-section">
+        <div class="mission-container">
+            <div class="mission-content">
+                <h2>Our Mission</h2>
+                <p>ToolsNova was founded with a simple mission: to provide high-quality, professional web tools to everyone, completely free. We believe that powerful tools shouldn't require expensive subscriptions or complex signups.</p>
+                <p>Whether you're a developer needing a quick code editor, a creator looking for media tools, or just someone who needs to generate a QR code - ToolsNova has you covered. No spam, just tools that work.</p>
+                <p>And with our AI Assistant, you get cutting-edge AI assistance without paying a dime.</p>
+            </div>
+            <div class="mission-stats">
+                <div class="stat-item">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Free Tools</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">21</div>
+                    <div class="stat-label">Categories</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Free Guest Uses</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">2025</div>
+                    <div class="stat-label">Founded</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="story-section">
+        <div class="story-container">
+            <h2 class="section-title">Our Story</h2>
+            <div class="story-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2025</div>
+                    <div class="timeline-content">
+                        <h3>The Beginning</h3>
+                        <p>ToolsNova started as a simple idea: create a collection of useful web tools without the bloat. What began as 20 tools quickly grew into something bigger.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2025</div>
+                    <div class="timeline-content">
+                        <h3>AI Integration</h3>
+                        <p>We created a powerful AI assistant that actually helps, not just talks. Now you can get coding help, analyze files, and more.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2026</div>
+                    <div class="timeline-content">
+                        <h3>100+ Tools</h3>
+                        <p>Today, ToolsNova offers over 100 tools across 4 major categories: Media Tools, AI Tools, Image Editor, and Code Editors. And we're just getting started.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Values -->
+    <section class="values-section">
+        <div class="container">
+            <h2 class="section-title">What We Stand For</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>No Premium Reqired</h3>
+                    <p>Use most tools instantly without any premium subscription.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Fast & Reliable</h3>
+                    <p>All tools are optimized for speed. No waiting, no lag - just instant results.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Made for Creators</h3>
+                    <p>Every tool is designed with creators and developers in mind. We build what we'd want to use.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to get started?</h2>
+            <p>Join thousands of users who trust ToolsNova for their daily tasks.</p>
+            <div class="cta-buttons">
+                <a href="index.html" class="cta-btn primary">Explore Tools</a>
+                <a href="signup.html" class="cta-btn secondary" id="ctaSignup">Sign Up Free</a>
+                <a href="index.html" class="cta-btn primary" id="ctaDashboard" style="display: none;">Go to Dashboard</a>
+            </div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+                <p>Your universe of professional web tools.</p>
+                
+                <!-- Guest info (shown when logged out) -->
+                <div class="guest-info" id="footerGuestInfo">
+                    <i class="fas fa-user-guest"></i>
+                    <span>Guest users get 3 free uses</span>
+                </div>
+                
+                <!-- User info (shown when logged in) -->
+                <div class="user-info-footer" id="footerUserInfo" style="display: none;">
+                    <i class="fas fa-crown" style="color: var(--success);"></i>
+                    <span>You have unlimited access</span>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-group">
+                    <h4>Tools</h4>
+                    <a href="tools.html">All Tools</a>
+                    <a href="tools.html">Media Tools</a>
+                    <a href="tools.html">AI Tools</a>
+                    <a href="tools.html">Calculators</a>
+                </div>
+                <div class="footer-group">
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+                <div class="footer-group">
+                    <h4>Account</h4>
+                    <a href="login.html" id="footerLogin">Login</a>
+                    <a href="signup.html" id="footerSignup">Sign Up</a>
+                    <a href="#" id="footerLogout" style="display: none;">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 ToolsNova. All rights reserved. Made for developers and creators.</p>
+        </div>
+    </div>
+</footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <!-- Auth Handling Script -->
+    <script>
+        // Initialize Firebase
+        firebase.initializeApp({
+            apiKey: "AIzaSyBADT8ZDZ9TGEVeVm73Yf_rwI6YmAtjRa8",
+            authDomain: "toolsnova-869.firebaseapp.com",
+            projectId: "toolsnova-869",
+            storageBucket: "toolsnova-869.firebasestorage.app",
+            messagingSenderId: "393315506444",
+            appId: "1:393315506444:web:595807ed58abe6b6ad9129"
+        });
+        
+        const auth = firebase.auth();
+        
+        // Update UI based on auth state
+        function updateAuthUI(user) {
+            const authLinks = document.getElementById('authLinks');
+            const userMenu = document.getElementById('userMenu');
+            const userGreeting = document.getElementById('userGreeting');
+            const ctaSignup = document.getElementById('ctaSignup');
+            const ctaDashboard = document.getElementById('ctaDashboard');
+            const footerLogin = document.getElementById('footerLogin');
+            const footerSignup = document.getElementById('footerSignup');
+            const footerLogout = document.getElementById('footerLogout');
+            const footerGuestInfo = document.getElementById('footerGuestInfo');
+            const footerUserInfo = document.getElementById('footerUserInfo');
+            
+            if (user) {
+                // User is logged in
+                if (authLinks) authLinks.style.display = 'none';
+                if (userMenu) {
+                    userMenu.style.display = 'flex';
+                    if (userGreeting) {
+                        userGreeting.textContent = `Hi, ${user.email.split('@')[0]}`;
+                    }
+                }
+                if (ctaSignup) ctaSignup.style.display = 'none';
+                if (ctaDashboard) ctaDashboard.style.display = 'inline-block';
+                if (footerLogin) footerLogin.style.display = 'none';
+                if (footerSignup) footerSignup.style.display = 'none';
+                if (footerLogout) footerLogout.style.display = 'block';
+                
+                // Update footer guest info
+                if (footerGuestInfo) footerGuestInfo.style.display = 'none';
+                if (footerUserInfo) footerUserInfo.style.display = 'flex';
+            } else {
+                // User is guest
+                if (authLinks) authLinks.style.display = 'flex';
+                if (userMenu) userMenu.style.display = 'none';
+                if (ctaSignup) ctaSignup.style.display = 'inline-block';
+                if (ctaDashboard) ctaDashboard.style.display = 'none';
+                if (footerLogin) footerLogin.style.display = 'block';
+                if (footerSignup) footerSignup.style.display = 'block';
+                if (footerLogout) footerLogout.style.display = 'none';
+                
+                // Show footer guest info
+                if (footerGuestInfo) footerGuestInfo.style.display = 'flex';
+                if (footerUserInfo) footerUserInfo.style.display = 'none';
+            }
+        }
+        
+        // Logout function
+        function logout() {
+            auth.signOut().then(() => {
+                console.log('Logged out successfully');
+                window.location.href = 'index.html';
+            }).catch(error => {
+                console.error('Logout error:', error);
+            });
+        }
+        
+        // Auth state observer
+        auth.onAuthStateChanged((user) => {
+            console.log('Auth state changed:', user ? 'logged in' : 'guest');
+            updateAuthUI(user);
+        });
+        
+        // Add logout button listener
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    logout();
+                });
+            }
+            
+            const footerLogout = document.getElementById('footerLogout');
+            if (footerLogout) {
+                footerLogout.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    logout();
+                });
+            }
+        });
+        
+        // Dark mode toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const icon = themeToggle.querySelector('i');
+                if (document.body.classList.contains('dark-mode')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+            });
+        }
+        
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            if (themeToggle) {
+                const icon = themeToggle.querySelector('i');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        }
+    </script>
+</body>
+</html>

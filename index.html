@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToolsNova - Professional web tools</title>
+    
+    <!-- Primary Meta Tags -->
+<title>ToolsNova - 100+ Free Professional Web Tools | YouTube Downloader, QR Code, AI Tools</title>
+    <meta name="title" content="ToolsNova - 100+ Free Professional Web Tools | YouTube Downloader, QR Code, AI Tools">
+    <meta name="description" content="100+ free web tools: YouTube thumbnail downloader, YouTube to MP3, AI content detector, currency converter, QR code generator, AI image generator, background remover, image editor, code editors and more. No Premium subscription needed. Guest users get 3 free tries.">
+    <meta name="keywords" content="web tools, online tools, free tools, youtube downloader, youtube thumbnail downloader, youtube to mp3, ai content detector, currency converter, qr code generator, ai tools, ai image generator, background remover, image editor, crop image, resize image, code editor, python editor, html editor, online compiler, free online tools">
+    <meta name="author" content="ToolsNova">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ToolsNova.github.io">
+    <meta property="og:title" content="ToolsNova - 100+ Free Professional Web Tools">
+    <meta property="og:description" content="100+ free web tools: YouTube thumbnail downloader, YouTube to MP3, AI content detector, currency converter, QR code generator, AI image generator, background remover, image editor, code editors and more. Guest users get 3 free tries.">
+    <meta property="og:image" content="https://ToolsNova.github.io/assets/images/og-image.jpg">
+    <meta property="og:site_name" content="ToolsNova">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ToolsNova.github.io">
+    <meta name="twitter:title" content="ToolsNova - 100+ Free Professional Web Tools">
+    <meta name="twitter:description" content="100+ free web tools: YouTube thumbnail downloader, YouTube to MP3, AI content detector, currency converter, QR code generator, AI image generator, background remover, image editor, code editors and more.">
+    <meta name="twitter:image" content="https://ToolsNova.github.io/assets/images/og-image.jpg">
+    <meta name="twitter:site" content="@toolsnova">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ToolsNova.github.io">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#3b82f6">
+
+    <!-- MS Tile -->
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    <meta name="msapplication-TileImage" content="/assets/images/ms-icon-144x144.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="ai-assistant.html">AI Assistant</a>
+                <a href="tools.html">Tools</a>
+                <!-- These will be dynamically updated by JavaScript -->
+                <div class="auth-links" id="authLinks">
+                    <a href="login.html" class="login-link">Login</a>
+                    <a href="signup.html" class="nav-cta signup-link">Sign Up</a>
+                </div>
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span class="user-greeting" id="userGreeting">Hi, User</span>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <i class="far fa-moon"></i>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <span class="hero-tag">ToolsNova</span>
+                <h1 class="hero-title">
+                    Your universe of <span class="gradient-text">professional</span><br>web tools
+                </h1>
+                <p class="hero-description">
+                    Media tools, AI generators, image editor, code editors and more. 
+                    <span class="guest-badge" id="userBadge">Guest: 3 free uses</span>
+                </p>
+                
+                <!-- Search Bar -->
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" id="mainSearchInput" placeholder="Search tools..." autocomplete="off">
+                </div>
+
+                <!-- Usage Counter (only show for guests) -->
+                <div class="usage-counter" id="usageCounter">
+                    <i class="fas fa-bolt"></i>
+                    <span>Guest uses left: <strong id="usesLeft">3</strong>/3</span>
+                    <a href="signup.html" class="usage-link">Sign up for unlimited</a>
+                </div>
+
+                <!-- Welcome Message (show for logged in users) -->
+                <div class="welcome-message" id="welcomeMessage" style="display: none;">
+                    <i class="fas fa-crown" style="color: #f59e0b;"></i>
+                    <span>Welcome back! You have <strong>unlimited access</strong> to all tools.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Popular Tools Section -->
+<section class="tools-section" id="popularToolsSection">
+    <div class="container">
+        <div class="section-header">
+            <h2><i class="fas fa-fire" style="color: #f59e0b;"></i> Popular Tools</h2>
+            <a href="tools.html" class="view-all">View all <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="tools-grid" id="popularToolsGrid"></div>
+    </div>
+</section>
+
+<!-- Search Results Section (Hidden by default) -->
+<section class="tools-section" id="searchResultsSection" style="display: none;">
+    <div class="container">
+        <div class="section-header">
+            <h2><i class="fas fa-search"></i> Search Results <span id="resultCount"></span></h2>
+            <button class="clear-search" id="clearSearch"><i class="fas fa-times"></i> Clear</button>
+        </div>
+        <div class="tools-grid" id="searchResultsGrid"></div>
+    </div>
+</section>
+    <!-- Search Results Section -->
+    <section class="tools-section" id="searchResultsSection" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-search"></i> Search Results <span id="resultCount"></span></h2>
+                <button class="clear-search" id="clearSearch"><i class="fas fa-times"></i> Clear</button>
+            </div>
+            <div class="tools-grid" id="searchResultsGrid"></div>
+        </div>
+    </section>
+
+    <!-- Ad Section 1 -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Section -->
+<section class="categories-section">
+    <div class="container">
+        <h2 class="section-title">Explore Categories</h2>
+        
+        <!-- Category Showcase - 6 Cards (5 categories + 1 All Tools) -->
+        <div class="category-showcase">
+            <!-- Media Tools Card -->
+            <a href="tools.html#media" class="category-showcard" onclick="addClickAnimation(this)">
+                <i class="fas fa-video"></i>
+                <h4>Media Tools</h4>
+                <p>YouTube, MP3, QR & more</p>
+                <span class="tool-count-badge">5 tools</span>
+            </a>
+            
+            <!-- AI Tools Card -->
+            <a href="tools.html#ai" class="category-showcard" onclick="addClickAnimation(this)">
+                <i class="fas fa-robot"></i>
+                <h4>AI Tools</h4>
+                <p>Image, text, detection</p>
+                <span class="tool-count-badge">5 tools</span>
+            </a>
+            
+            <!-- Image Editor Card -->
+            <a href="tools.html#image" class="category-showcard" onclick="addClickAnimation(this)">
+                <i class="fas fa-paint-brush"></i>
+                <h4>Image Editor</h4>
+                <p>Crop, filters, OCR</p>
+                <span class="tool-count-badge">6 tools</span>
+            </a>
+            
+            <!-- Code Editors Card -->
+            <a href="tools.html#code" class="category-showcard" onclick="addClickAnimation(this)">
+                <i class="fas fa-code"></i>
+                <h4>Code Editors</h4>
+                <p>Python, HTML, JSON</p>
+                <span class="tool-count-badge">5 tools</span>
+            </a>
+            
+            <!-- Calculators Card -->
+            <a href="tools.html#calc" class="category-showcard" onclick="addClickAnimation(this)">
+                <i class="fas fa-calculator"></i>
+                <h4>Calculators</h4>
+                <p>Age, discount, currency</p>
+                <span class="tool-count-badge">4 tools</span>
+            </a>
+            
+            <!-- ALL TOOLS CARD - Opens tools.html -->
+            <a href="tools.html" class="category-showcard all-tools-card" onclick="addClickAnimation(this)">
+                <i class="fas fa-grid-2"></i>
+                <h4>All Tools</h4>
+                <p>View complete collection</p>
+                <span class="tool-count-badge">25+ tools</span>
+            </a>
+        </div>
+        
+        <!-- Media Tools (3 tools) -->
+        <div class="category-group">
+            <div class="category-header">
+                <i class="fas fa-video" style="color: #ef4444;"></i>
+                <h3>Media Tools <span class="tool-count">(3 of 6 tools)</span></h3>
+                <a href="tools.html#media" class="view-all-link" onclick="addClickAnimation(this)">View all <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="category-grid" id="mediaToolsGrid"></div>
+        </div>
+
+        <!-- AI Tools (3 tools) -->
+        <div class="category-group">
+            <div class="category-header">
+                <i class="fas fa-robot" style="color: #8b5cf6;"></i>
+                <h3>AI Tools <span class="tool-count">(3 of 5 tools)</span></h3>
+                <a href="tools.html#ai" class="view-all-link" onclick="addClickAnimation(this)">View all <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="category-grid" id="aiToolsGrid"></div>
+        </div>
+
+        <!-- Image Editor (3 tools) -->
+        <div class="category-group">
+            <div class="category-header">
+                <i class="fas fa-paint-brush" style="color: #3b82f6;"></i>
+                <h3>Image Editor <span class="tool-count">(3 of 6 tools)</span></h3>
+                <a href="tools.html#image" class="view-all-link" onclick="addClickAnimation(this)">View all <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="category-grid" id="imageToolsGrid"></div>
+        </div>
+
+        <!-- Code Editors (3 tools) -->
+        <div class="category-group">
+            <div class="category-header">
+                <i class="fas fa-code" style="color: #10b981;"></i>
+                <h3>Code Editors <span class="tool-count">(3 of 5 tools)</span></h3>
+                <a href="tools.html#code" class="view-all-link" onclick="addClickAnimation(this)">View all <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="category-grid" id="codeToolsGrid"></div>
+        </div>
+
+        <!-- Calculators & Converters (3 tools) -->
+        <div class="category-group">
+            <div class="category-header">
+                <i class="fas fa-calculator" style="color: #f59e0b;"></i>
+                <h3>Calculators <span class="tool-count">(3 of 4 tools)</span></h3>
+                <a href="tools.html#calc" class="view-all-link" onclick="addClickAnimation(this)">View all <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="category-grid" id="calculatorToolsGrid"></div>
+        </div>
+    </div>
+</section>
+    <!-- Ad Section 2 -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+                <p>Your universe of professional web tools.</p>
+                
+                <!-- Guest info (shown when logged out) -->
+                <div class="guest-info" id="footerGuestInfo">
+                    <i class="fas fa-user-guest"></i>
+                    <span>Guest users get 3 free uses</span>
+                </div>
+                
+                <!-- User info (shown when logged in) -->
+                <div class="user-info-footer" id="footerUserInfo" style="display: none;">
+                    <i class="fas fa-crown" style="color: var(--success);"></i>
+                    <span>You have unlimited access</span>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-group">
+                    <h4>Tools</h4>
+                    <a href="tools.html">All Tools</a>
+                    <a href="tools.html#media">Media Tools</a>
+                    <a href="tools.html#ai">AI Tools</a>
+                    <a href="tools.html#calc">Calculators</a>
+                </div>
+                <div class="footer-group">
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+                <div class="footer-group">
+                    <h4>Account</h4>
+                    <a href="login.html" id="footerLogin">Login</a>
+                    <a href="signup.html" id="footerSignup">Sign Up</a>
+                    <a href="#" id="footerLogout" style="display: none;">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 ToolsNova. All rights reserved. Made for developers and creators.</p>
+        </div>
+    </div>
+</footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="js/script.js"></script>
+</body>
+</html>

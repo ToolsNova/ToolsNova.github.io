@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- Primary Meta Tags -->
+    <title>AI Assistant - ToolsNova | Free AI Chat Bot with File Analysis</title>
+    <meta name="title" content="AI Assistant - ToolsNova | Free AI Chat Bot with File Analysis">
+    <meta name="description" content="Free AI chat assistant that actually writes code, analyzes files, and remembers conversations. Ask for programs, get instant help.">
+    <meta name="keywords" content="AI assistant, chat bot, free AI, code generator, file analysis, python code, javascript help, programming assistant, ToolsNova, AI chat, machine learning, code helper">
+    <meta name="author" content="ToolsNova">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="1 day">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ToolsNova.github.ioai-chat">
+    <meta property="og:title" content="AI Assistant - ToolsNova | Free AI Chat Bot">
+    <meta property="og:description" content="Free AI chat assistant that writes code, analyzes files, and remembers conversations. Upload documents, get instant help.">
+    <meta property="og:image" content="https://ToolsNova.github.ioassets/images/og-image-ai.jpg">
+    <meta property="og:site_name" content="ToolsNova">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ToolsNova.github.ioai-chat">
+    <meta name="twitter:title" content="AI Assistant - ToolsNova | Free AI Chat Bot">
+    <meta name="twitter:description" content="Free AI chat assistant that writes code, analyzes files, and remembers conversations. Try it now!">
+    <meta name="twitter:image" content="https://ToolsNova.github.ioassets/images/twitter-image-ai.jpg">
+    <meta name="twitter:site" content="@toolsnova">
+    <meta name="twitter:creator" content="@toolsnova">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ToolsNova.github.ioai-chat">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/ai-chat.css">
+    
+    <!-- Additional SEO -->
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    <meta name="category" content="Technology">
+    <meta name="coverage" content="Worldwide">
+    <meta name="target" content="all">
+    <meta name="rating" content="General">
+    
+    <!-- Verification (add if you have them) -->
+    <!-- <meta name="google-site-verification" content="your-google-verification-code"> -->
+    <!-- <meta name="msvalidate.01" content="your-bing-verification-code"> -->
+    
+    <!-- Preconnect for faster loading -->
+    <link rel="preconnect" href="https://api.groq.com">
+    <link rel="preconnect" href="https://www.gstatic.com">
+    
+    <!-- Mobile Web App Capabilities -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ToolsNova AI">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>ToolsNova AI</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <!-- New Chat Button -->
+            <button class="new-chat-btn" id="newChatBtn">
+                <i class="fas fa-plus"></i>
+                <span>New Chat</span>
+            </button>
+            
+            <!-- Chat History -->
+            <div class="chat-history" id="chatHistory"></div>
+            
+            <!-- User Profile Section -->
+            <div class="user-profile-section">
+                <!-- Guest View - Login/Signup buttons -->
+                <div class="auth-buttons" id="sidebarAuth">
+                    <a href="login.html" class="btn-login">Login</a>
+                    <a href="signup.html" class="btn-signup">Sign Up</a>
+                </div>
+                
+                <!-- Logged In User View - User info and logout -->
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name" id="sidebarUserName">User</div>
+                        <div class="user-status">Online</div>
+                    </div>
+                    <button class="logout-icon" id="sidebarLogout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="main">
+            <!-- Navbar -->
+            <header class="chat-navbar">
+                <div class="nav-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="logo">
+                        <i class="fas fa-star"></i>
+                        <span>ToolsNova</span>
+                    </div>
+                    <div class="current-chat-title" id="currentChatTitle"></div>
+                </div>
+                
+                <div class="nav-right">
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="far fa-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <div class="messages-wrapper" id="messagesWrapper">
+                    <!-- Welcome Screen (No Chips) -->
+                    <div class="welcome-screen" id="welcomeScreen">
+                        <div class="welcome-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h2>How can I help you today?</h2>
+                        <p>Ask me anything - I can write code, answer questions, and Give Suggestion!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <textarea 
+                        class="message-input" 
+                        id="messageInput" 
+                        placeholder="Type your message... (Shift+Enter for new line)" 
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div id="filePreviewContainer" class="file-preview-container"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <!-- Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="js/ai-chat.js"></script>
+</body>
+</html>
