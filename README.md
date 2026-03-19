@@ -7,7 +7,7 @@ ToolsNova is a collection of professional web tools built with HTML, CSS, and Ja
 
 ## ✨ Features
 
-- ✅ **21+ Free Tools** - Age calculator, discount calculator, BMI calculator, QR generator, currency converter, and more coming soon
+- ✅ **20+ Free Tools** - Age calculator, discount calculator, BMI calculator, QR generator, currency converter, and more coming soon
 - ✅ **AI Assistant** - Chat with AI, analyze files, generate code (powered by Groq API)
 - ✅ **User Authentication** - Sign up/login with Firebase (optional, for unlimited use)
 - ✅ **Guest Mode** - 3 free uses without signing up
@@ -34,7 +34,6 @@ ToolsNova is a collection of professional web tools built with HTML, CSS, and Ja
 
 ### 🤖 AI Tools
 - AI Assistant (Chat + File Analysis)
-- AI Image Generator
 - Background Remover
 - AI Content Detector
 - AI Grammar Checker
