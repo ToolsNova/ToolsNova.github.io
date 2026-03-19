@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- Primary Meta Tags -->
+    <title>Currency Converter - ToolsNova | Free Exchange Rate Calculator</title>
+    <meta name="title" content="Currency Converter - ToolsNova | Free Exchange Rate Calculator">
+    <meta name="description" content="Free currency converter with basic (30+ currencies) and advanced (150+ currencies) modes. Real-time exchange rates. Perfect for travelers, shoppers, and businesses.">
+    <meta name="keywords" content="currency converter, exchange rate, forex, USD to EUR, USD to INR, money converter, currency calculator, live exchange rates">
+    <meta name="author" content="ToolsNova">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ToolsNova.github.iotools/currency-converter.html">
+    <meta property="og:title" content="Currency Converter - ToolsNova | Free Exchange Rate Calculator">
+    <meta property="og:description" content="Free currency converter with basic (30+ currencies) and advanced (150+ currencies) modes. Real-time exchange rates.">
+    <meta property="og:image" content="https://ToolsNova.github.ioassets/images/og-currency-converter.jpg">
+    <meta property="og:site_name" content="ToolsNova">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ToolsNova.github.iotools/currency-converter.html">
+    <meta name="twitter:title" content="Currency Converter - ToolsNova">
+    <meta name="twitter:description" content="Free currency converter with basic (30+ currencies) and advanced (150+ currencies) modes.">
+    <meta name="twitter:image" content="https://ToolsNova.github.ioassets/images/twitter-currency-converter.jpg">
+    <meta name="twitter:site" content="@toolsnova">
+    <meta name="twitter:creator" content="@toolsnova">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ToolsNova.github.iotools/currency-converter.html">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/currency-converter.css">
+    
+    <!-- Preconnect for faster loading -->
+    <link rel="preconnect" href="https://www.gstatic.com">
+    
+    <!-- Mobile Web App Capabilities -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Currency Converter">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../tools.html">Tools</a>
+                <a href="../ai-assistant.html">AI Assistant</a>
+                <a href="../about.html">About</a>
+                
+                <!-- Auth Links -->
+                <div class="auth-links" id="authLinks">
+                    <a href="../login.html" class="login-link">Login</a>
+                    <a href="../signup.html" class="nav-cta">Sign Up</a>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span class="user-greeting" id="userGreeting">Hi, User</span>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <i class="far fa-moon"></i>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Ad Section 1 - Top Banner -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tool Container -->
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1>Currency Converter</h1>
+            <p>Convert between currencies with real-time exchange rates</p>
+        </div>
+
+        <!-- Mode Selector -->
+        <div class="mode-selector">
+            <button class="mode-btn active" id="basicModeBtn">
+                <i class="fas fa-globe"></i>
+                Basic (30+ Currencies)
+            </button>
+            <button class="mode-btn" id="advancedModeBtn">
+                <i class="fas fa-rocket"></i>
+                Advanced (150+ Currencies)
+            </button>
+        </div>
+
+        <!-- Basic Converter Card (Frankfurter - 30+ currencies) -->
+        <div class="converter-card" id="basicConverter">
+            <div class="card-header">
+                <span class="badge basic">Basic</span>
+                <h2><i class="fas fa-globe"></i> 30+ Currencies</h2>
+            </div>
+            
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Amount</label>
+                    <input type="number" id="basicAmount" class="number-input" value="1" min="0.01" step="0.01">
+                </div>
+            </div>
+            
+            <div class="currency-row">
+                <div class="input-group">
+                    <label>From</label>
+                    <select id="basicFrom" class="currency-select"></select>
+                </div>
+                
+                <button class="swap-btn" id="basicSwapBtn">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+                
+                <div class="input-group">
+                    <label>To</label>
+                    <select id="basicTo" class="currency-select"></select>
+                </div>
+            </div>
+            
+            <button class="convert-btn" id="basicConvertBtn">
+                <i class="fas fa-calculator"></i>
+                Convert
+            </button>
+            
+            <div class="result-card" id="basicResult" style="display: none;">
+                <div class="conversion-result">
+                    <span class="from-amount" id="basicFromAmount">1 USD</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <span class="to-amount" id="basicToAmount"></span>
+                </div>
+                <div class="exchange-rate" id="basicRate"></div>
+                <div class="last-updated" id="basicUpdated"></div>
+            </div>
+        </div>
+
+        <!-- Advanced Converter Card (FreeCurrencyAPI - 150+ currencies) -->
+        <div class="converter-card advanced" id="advancedConverter" style="display: none;">
+            <div class="card-header">
+                <span class="badge advanced">Advanced</span>
+                <h2><i class="fas fa-rocket"></i> 150+ Currencies</h2>
+            </div>
+            
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Amount</label>
+                    <input type="number" id="advancedAmount" class="number-input" value="1" min="0.01" step="0.01">
+                </div>
+            </div>
+            
+            <div class="currency-row">
+                <div class="input-group">
+                    <label>From</label>
+                    <select id="advancedFrom" class="currency-select"></select>
+                </div>
+                
+                <button class="swap-btn" id="advancedSwapBtn">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+                
+                <div class="input-group">
+                    <label>To</label>
+                    <select id="advancedTo" class="currency-select"></select>
+                </div>
+            </div>
+            
+            <button class="convert-btn" id="advancedConvertBtn">
+                <i class="fas fa-calculator"></i>
+                Convert
+            </button>
+            
+            <div class="result-card" id="advancedResult" style="display: none;">
+                <div class="conversion-result">
+                    <span class="from-amount" id="advancedFromAmount">1 USD</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <span class="to-amount" id="advancedToAmount"></span>
+                </div>
+                <div class="exchange-rate" id="advancedRate"></div>
+                <div class="last-updated" id="advancedUpdated"></div>
+            </div>
+        </div>
+
+        <!-- Ad Section 2 - Below Converters -->
+        <div class="ad-container" style="margin-top: 20px;">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <h3>About This Tool</h3>
+            <p>Choose between two powerful currency converters:</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-globe feature-icon basic-icon"></i>
+                    <h4>Basic Converter</h4>
+                    <p><strong>30+ currencies</strong> from major economies</p>
+                    <ul>
+                        <li>✅ 100% Free</li>
+                        <li>✅ Unlimited usage</li>
+                        <li>✅ European Central Bank data</li>
+                        <li>✅ Daily updates</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-rocket feature-icon advanced-icon"></i>
+                    <h4>Advanced Converter</h4>
+                    <p><strong>150+ currencies</strong> worldwide</p>
+                    <ul>
+                        <li>✅ 5,000 requests/month</li>
+                        <li>✅ Rare & exotic currencies</li>
+                        <li>✅ Global coverage</li>
+                        <li>✅ Daily updates</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>Popular Currency Pairs</h3>
+            <div class="popular-pairs">
+                <span class="pair-tag">USD → EUR</span>
+                <span class="pair-tag">USD → GBP</span>
+                <span class="pair-tag">USD → JPY</span>
+                <span class="pair-tag">USD → INR</span>
+                <span class="pair-tag">EUR → USD</span>
+                <span class="pair-tag">GBP → USD</span>
+                <span class="pair-tag">EUR → GBP</span>
+                <span class="pair-tag">AUD → USD</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Section 3 - Bottom Banner -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+                <p>Your universe of professional web tools.</p>
+                
+                <!-- Guest info (shown when logged out) -->
+                <div class="guest-info" id="footerGuestInfo">
+                    <i class="fas fa-user-guest"></i>
+                    <span>Guest users get 3 free uses</span>
+                </div>
+                
+                <!-- User info (shown when logged in) -->
+                <div class="user-info-footer" id="footerUserInfo" style="display: none;">
+                    <i class="fas fa-crown" style="color: var(--success);"></i>
+                    <span>You have unlimited access</span>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-group">
+                    <h4>Tools</h4>
+                    <a href="tools.html">All Tools</a>
+                    <a href="tools.html">Media Tools</a>
+                    <a href="tools.html">AI Tools</a>
+                    <a href="tools.html">Calculators</a>
+                </div>
+                <div class="footer-group">
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+                <div class="footer-group">
+                    <h4>Account</h4>
+                    <a href="login.html" id="footerLogin">Login</a>
+                    <a href="signup.html" id="footerSignup">Sign Up</a>
+                    <a href="#" id="footerLogout" style="display: none;">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 ToolsNova. All rights reserved. Made for developers and creators.</p>
+        </div>
+    </div>
+</footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <!-- JavaScript -->
+    <script src="../js/script.js"></script>
+    <script src="js/currency-converter.js"></script>
+</body>
+</html>

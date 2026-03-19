@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- Primary Meta Tags -->
+    <title>BMI Calculator - ToolsNova | Calculate Body Mass Index</title>
+    <meta name="title" content="BMI Calculator - ToolsNova | Calculate Body Mass Index">
+    <meta name="description" content="Free online BMI calculator. Calculate your Body Mass Index instantly. Check if you're underweight, normal, overweight, or obese based on your height and weight. Simple and accurate.">
+    <meta name="keywords" content="BMI calculator, body mass index, BMI chart, healthy weight, weight calculator, height weight ratio, health calculator, fitness tool, ideal weight">
+    <meta name="author" content="ToolsNova">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ToolsNova.github.iotools/bmi-calculator.html">
+    <meta property="og:title" content="BMI Calculator - ToolsNova | Calculate Body Mass Index">
+    <meta property="og:description" content="Free online BMI calculator. Calculate your Body Mass Index instantly. Check your health status.">
+    <meta property="og:image" content="https://ToolsNova.github.ioassets/images/og-bmi-calculator.jpg">
+    <meta property="og:site_name" content="ToolsNova">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ToolsNova.github.iotools/bmi-calculator.html">
+    <meta name="twitter:title" content="BMI Calculator - ToolsNova | Body Mass Index">
+    <meta name="twitter:description" content="Free online BMI calculator. Calculate your Body Mass Index instantly.">
+    <meta name="twitter:image" content="https://ToolsNova.github.ioassets/images/twitter-bmi-calculator.jpg">
+    <meta name="twitter:site" content="@toolsnova">
+    <meta name="twitter:creator" content="@toolsnova">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ToolsNova.github.iotools/bmi-calculator.html">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/bmi-calculator.css">
+    
+    <!-- Preconnect for faster loading -->
+    <link rel="preconnect" href="https://www.gstatic.com">
+    
+    <!-- Mobile Web App Capabilities -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BMI Calculator">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Verification (add these when site is live) -->
+    <!-- <meta name="google-site-verification" content="your-google-verification-code"> -->
+    <!-- <meta name="msvalidate.01" content="your-bing-verification-code"> -->
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../tools.html">Tools</a>
+                <a href="../ai-assistant.html">AI Assistant</a>
+                <a href="../about.html">About</a>
+                
+                <!-- Auth Links -->
+                <div class="auth-links" id="authLinks">
+                    <a href="../login.html" class="login-link">Login</a>
+                    <a href="../signup.html" class="nav-cta">Sign Up</a>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span class="user-greeting" id="userGreeting">Hi, User</span>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <i class="far fa-moon"></i>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Ad Section 1 - Top Banner -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tool Container -->
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1>BMI Calculator</h1>
+            <p>Calculate your Body Mass Index and check your health status</p>
+        </div>
+
+        <!-- Calculator Card -->
+        <div class="calculator-card">
+            <div class="input-row">
+                <div class="input-group">
+                    <label><i class="fas fa-arrows-up-down" style="margin-right: 8px;"></i> Height (cm)</label>
+                    <input type="number" id="height" class="number-input" placeholder="e.g. 175" min="50" max="250" step="0.1">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-weight-scale" style="margin-right: 8px;"></i> Weight (kg)</label>
+                    <input type="number" id="weight" class="number-input" placeholder="e.g. 70" min="10" max="300" step="0.1">
+                </div>
+            </div>
+            
+            <button class="calculate-btn" id="calculateBtn">
+                <i class="fas fa-calculator" style="margin-right: 8px;"></i>
+                Calculate BMI
+            </button>
+            
+            <div class="result" id="result"></div>
+            
+            <div class="bmi-scale" id="bmiScale" style="display: none;">
+                <div class="scale-bar">
+                    <div class="scale-segment underweight" style="width: 20%;">Underweight</div>
+                    <div class="scale-segment normal" style="width: 30%;">Normal</div>
+                    <div class="scale-segment overweight" style="width: 25%;">Overweight</div>
+                    <div class="scale-segment obese" style="width: 25%;">Obese</div>
+                </div>
+                <div class="scale-indicator" id="scaleIndicator"></div>
+            </div>
+        </div>
+
+        <!-- Ad Section 2 - Below Calculator -->
+        <div class="ad-container" style="margin-top: 20px;">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BMI Categories -->
+        <div class="info-section">
+            <h3>BMI Categories</h3>
+            <div class="categories-grid">
+                <div class="category-item">
+                    <div class="category-color underweight"></div>
+                    <div class="category-info">
+                        <h4>Underweight</h4>
+                        <p>Below 18.5</p>
+                    </div>
+                </div>
+                <div class="category-item">
+                    <div class="category-color normal"></div>
+                    <div class="category-info">
+                        <h4>Normal weight</h4>
+                        <p>18.5 – 24.9</p>
+                    </div>
+                </div>
+                <div class="category-item">
+                    <div class="category-color overweight"></div>
+                    <div class="category-info">
+                        <h4>Overweight</h4>
+                        <p>25 – 29.9</p>
+                    </div>
+                </div>
+                <div class="category-item">
+                    <div class="category-color obese"></div>
+                    <div class="category-info">
+                        <h4>Obese</h4>
+                        <p>30 and above</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>About BMI</h3>
+            <p>Body Mass Index (BMI) is a simple measurement that uses your height and weight to estimate body fat. While it doesn't directly measure body fat, it's a useful screening tool for weight categories.</p>
+            
+            <h3>Features</h3>
+            <ul>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Instant BMI calculation</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Visual BMI scale</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Free to use</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Works on all devices</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Ad Section 3 - Bottom Banner -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+                <p>Your universe of professional web tools.</p>
+                
+                <!-- Guest info (shown when logged out) -->
+                <div class="guest-info" id="footerGuestInfo">
+                    <i class="fas fa-user-guest"></i>
+                    <span>Guest users get 3 free uses</span>
+                </div>
+                
+                <!-- User info (shown when logged in) -->
+                <div class="user-info-footer" id="footerUserInfo" style="display: none;">
+                    <i class="fas fa-crown" style="color: var(--success);"></i>
+                    <span>You have unlimited access</span>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-group">
+                    <h4>Tools</h4>
+                    <a href="tools.html">All Tools</a>
+                    <a href="tools.html">Media Tools</a>
+                    <a href="tools.html">AI Tools</a>
+                    <a href="tools.html">Calculators</a>
+                </div>
+                <div class="footer-group">
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+                <div class="footer-group">
+                    <h4>Account</h4>
+                    <a href="login.html" id="footerLogin">Login</a>
+                    <a href="signup.html" id="footerSignup">Sign Up</a>
+                    <a href="#" id="footerLogout" style="display: none;">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 ToolsNova. All rights reserved. Made for developers and creators.</p>
+        </div>
+    </div>
+</footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <!-- JavaScript -->
+    <script src="../js/script.js"></script>
+    <script src="js/bmi-calculator.js"></script>
+</body>
+</html>

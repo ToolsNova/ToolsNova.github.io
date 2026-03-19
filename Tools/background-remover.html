@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- Primary Meta Tags -->
+    <title>Background Remover - ToolsNova | Remove Image Background Free</title>
+    <meta name="title" content="Background Remover - ToolsNova | Remove Image Background Free">
+    <meta name="description" content="Free online background remover. Remove image backgrounds automatically with AI. No upload required - works in your browser. 100% private and secure.">
+    <meta name="keywords" content="background remover, remove background, image background remover, transparent background, bg remover, remove bg">
+    <meta name="author" content="ToolsNova">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/background-remover.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../tools.html">Tools</a>
+                <a href="../ai-assistant.html">AI Assistant</a>
+                <a href="../about.html">About</a>
+                
+                <div class="auth-links" id="authLinks">
+                    <a href="../login.html" class="login-link">Login</a>
+                    <a href="../signup.html" class="nav-cta">Sign Up</a>
+                </div>
+                
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span class="user-greeting" id="userGreeting">Hi, User</span>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <i class="far fa-moon"></i>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Tool Container -->
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1><i class="fas fa-eraser" style="color: #8b5cf6;"></i> Background Remover</h1>
+            <p>Remove image backgrounds automatically - 100% private, works in your browser</p>
+        </div>
+
+        <!-- Upload Card -->
+        <div class="upload-card">
+            <div class="upload-area" id="uploadArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Drop your image here</h3>
+                <p>or click to browse</p>
+                <p class="supported-formats">Supports: JPG, PNG, WEBP (max 10MB)</p>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+            </div>
+            
+            <div class="file-info" id="fileInfo" style="display: none;">
+                <div class="file-details">
+                    <i class="fas fa-image"></i>
+                    <div>
+                        <div class="file-name" id="fileName"></div>
+                        <div class="file-size" id="fileSize"></div>
+                    </div>
+                </div>
+                <button class="change-file-btn" id="changeFileBtn">
+                    <i class="fas fa-sync-alt"></i> Change
+                </button>
+            </div>
+
+            <button class="remove-btn" id="removeBtn">
+                <i class="fas fa-magic"></i> Remove Background
+            </button>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage"></div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Removing background...</p>
+            <p class="loading-note">This may take 10-20 seconds for first use</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- Result Card -->
+        <div class="result-card" id="resultCard" style="display: none;">
+            <h3>Background Removed!</h3>
+            
+            <div class="comparison-container">
+                <div class="comparison-item">
+                    <h4>Original</h4>
+                    <img id="originalImage" class="comparison-image" alt="Original">
+                </div>
+                <div class="comparison-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="comparison-item">
+                    <h4>Result</h4>
+                    <img id="resultImage" class="comparison-image" alt="Result">
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="download-btn" id="downloadBtn">
+                    <i class="fas fa-download"></i> Download Image
+                </button>
+                <button class="new-btn" id="newBtn">
+                    <i class="fas fa-plus"></i> Remove Another
+                </button>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <h3>About This Tool</h3>
+            <p>Remove image backgrounds instantly using AI. Your images never leave your device - 100% private and secure.</p>
+            
+            <h3>Features</h3>
+            <ul>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> No upload required - works offline</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Privacy focused - images stay on your device</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Free to use, no API key needed</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Unlimited usage</li>
+            </ul>
+            
+            <p class="note"><i class="fas fa-info-circle"></i> First use may take longer as the AI model downloads. After that, it's instant!</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-star"></i>
+                    <span>ToolsNova</span>
+                    <p>Your universe of professional web tools.</p>
+                    
+                    <div class="guest-info" id="footerGuestInfo">
+                        <i class="fas fa-user-guest"></i>
+                        <span>Guest users get 3 free uses</span>
+                    </div>
+                    
+                    <div class="user-info-footer" id="footerUserInfo" style="display: none;">
+                        <i class="fas fa-crown" style="color: var(--success);"></i>
+                        <span>You have unlimited access</span>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-group">
+                        <h4>Tools</h4>
+                        <a href="../tools.html">All Tools</a>
+                        <a href="../tools.html#media">Media Tools</a>
+                        <a href="../tools.html#ai">AI Tools</a>
+                        <a href="../tools.html#calc">Calculators</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Company</h4>
+                        <a href="../about.html">About</a>
+                        <a href="../privacy.html">Privacy Policy</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Account</h4>
+                        <a href="../login.html" id="footerLogin">Login</a>
+                        <a href="../signup.html" id="footerSignup">Sign Up</a>
+                        <a href="#" id="footerLogout" style="display: none;">Logout</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 ToolsNova. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <!-- JavaScript -->
+    <script src="../js/script.js"></script>
+    <script src="js/background-remover.js"></script>
+</body>
+</html>

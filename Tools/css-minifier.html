@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- Primary Meta Tags -->
+    <title>CSS Minifier - ToolsNova | Minify and Format CSS Online</title>
+    <meta name="title" content="CSS Minifier - ToolsNova | Minify and Format CSS Online">
+    <meta name="description" content="Free online CSS minifier. Compress CSS code, remove comments and whitespace, format CSS beautifully. Perfect for optimizing website performance.">
+    <meta name="keywords" content="css minifier, minify css, compress css, css formatter, beautify css, css optimizer, online css minifier, css compressor">
+    <meta name="author" content="ToolsNova">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233b82f6'>T</text></svg>">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ToolsNova.github.io/tools/css-minifier.html">
+    <meta property="og:title" content="CSS Minifier - ToolsNova">
+    <meta property="og:description" content="Free online CSS minifier. Compress and format CSS instantly.">
+    <meta property="og:image" content="https://ToolsNova.github.io/assets/images/og-css-minifier.jpg">
+    <meta property="og:site_name" content="ToolsNova">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ToolsNova.github.io/tools/css-minifier.html">
+    <meta name="twitter:title" content="CSS Minifier - ToolsNova">
+    <meta name="twitter:description" content="Free online CSS minifier. Compress and format CSS instantly.">
+    <meta name="twitter:image" content="https://ToolsNova.github.io/assets/images/twitter-css-minifier.jpg">
+    <meta name="twitter:site" content="@toolsnova">
+    <meta name="twitter:creator" content="@toolsnova">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ToolsNova.github.io/tools/css-minifier.html">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/css-minifier.css">
+    
+    <!-- Mobile Web App Capabilities -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CSS Minifier">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../tools.html">Tools</a>
+                <a href="../ai-assistant.html">AI Assistant</a>
+                <a href="../about.html">About</a>
+                
+                <!-- Auth Links -->
+                <div class="auth-links" id="authLinks">
+                    <a href="../login.html" class="login-link">Login</a>
+                    <a href="../signup.html" class="nav-cta">Sign Up</a>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span class="user-greeting" id="userGreeting">Hi, User</span>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <i class="far fa-moon"></i>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Ad Section 1 - Top Banner -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tool Container -->
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1>CSS Minifier</h1>
+            <p>Compress CSS code, remove comments and whitespace, or format beautifully</p>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-label">Original Size</span>
+                <span class="stat-value" id="originalSize">0 B</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Minified Size</span>
+                <span class="stat-value" id="minifiedSize">0 B</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Saved</span>
+                <span class="stat-value" id="savedPercent">0%</span>
+            </div>
+        </div>
+
+        <!-- Main Editor Card -->
+        <div class="editor-card">
+            <div class="editor-header">
+                <div class="editor-tabs">
+                    <button class="tab-btn active" id="minifyTab">Minify</button>
+                    <button class="tab-btn" id="formatTab">Format</button>
+                </div>
+                <div class="editor-actions">
+                    <button class="action-btn" id="loadSampleBtn" title="Load Sample">
+                        <i class="fas fa-file-code"></i>
+                    </button>
+                    <button class="action-btn" id="copyBtn" title="Copy to Clipboard">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="action-btn" id="downloadBtn" title="Download CSS">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="action-btn" id="clearBtn" title="Clear">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="editor-content">
+                <!-- Input Area -->
+                <div class="input-section">
+                    <div class="section-label">
+                        <span>Input CSS</span>
+                        <span class="line-count" id="inputLines">Lines: 0</span>
+                    </div>
+                    <textarea id="inputCss" class="css-input" placeholder="Paste your CSS here..."></textarea>
+                </div>
+
+                <!-- Output Area -->
+                <div class="output-section">
+                    <div class="section-label">
+                        <span>Output CSS</span>
+                        <span class="line-count" id="outputLines">Lines: 0</span>
+                    </div>
+                    
+                    <!-- Minify View -->
+                    <div id="minifyView" class="output-view active">
+                        <textarea id="minifiedCss" class="css-output" readonly></textarea>
+                    </div>
+                    
+                    <!-- Format View -->
+                    <div id="formatView" class="output-view">
+                        <textarea id="formattedCss" class="css-output" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Options Bar -->
+            <div class="options-bar">
+                <div class="option-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="removeComments" checked>
+                        <span>Remove Comments</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="removeWhitespace" checked>
+                        <span>Remove Extra Whitespace</span>
+                    </label>
+                </div>
+                <div class="format-options" id="formatOptions" style="display: none;">
+                    <label>Indent Size:</label>
+                    <select id="indentSize">
+                        <option value="2">2 spaces</option>
+                        <option value="4" selected>4 spaces</option>
+                        <option value="tab">Tab</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Section 2 - Below Tool -->
+        <div class="ad-container" style="margin-top: 20px;">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <h3>About This Tool</h3>
+            <p>Minify CSS to reduce file size and improve website loading speed. Format CSS to make it readable and maintainable.</p>
+            
+            <h3>Features</h3>
+            <ul>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Remove CSS comments</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Remove unnecessary whitespace</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Format CSS with proper indentation</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Real-time size comparison</li>
+                <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Copy to clipboard or download</li>
+            </ul>
+
+            <div class="tip-box">
+                <i class="fas fa-lightbulb"></i>
+                <div>
+                    <strong>Pro Tip:</strong> Minified CSS loads faster and saves bandwidth. Use Format mode when you need to debug or edit.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Section 3 - Bottom Banner -->
+    <div class="ad-container">
+        <div class="container">
+            <div class="ad-banner">
+                <p>Advertisement</p>
+                <div class="ad-placeholder">
+                    <i class="fas fa-ad"></i>
+                    <span>Ad Placeholder</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-star"></i>
+                    <span>ToolsNova</span>
+                    <p>Your universe of professional web tools.</p>
+                    
+                    <!-- Guest info -->
+                    <div class="guest-info" id="footerGuestInfo">
+                        <i class="fas fa-user-guest"></i>
+                        <span>Guest users get 3 free uses</span>
+                    </div>
+                    
+                    <!-- User info -->
+                    <div class="user-info-footer" id="footerUserInfo" style="display: none;">
+                        <i class="fas fa-crown" style="color: var(--success);"></i>
+                        <span>You have unlimited access</span>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-group">
+                        <h4>Tools</h4>
+                        <a href="../tools.html">All Tools</a>
+                        <a href="../tools.html#media">Media Tools</a>
+                        <a href="../tools.html#ai">AI Tools</a>
+                        <a href="../tools.html#calc">Calculators</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Company</h4>
+                        <a href="../about.html">About</a>
+                        <a href="../privacy.html">Privacy Policy</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Account</h4>
+                        <a href="../login.html" id="footerLogin">Login</a>
+                        <a href="../signup.html" id="footerSignup">Sign Up</a>
+                        <a href="#" id="footerLogout" style="display: none;">Logout</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 ToolsNova. All rights reserved. Made for developers and creators.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../js/script.js"></script>
+    <script src="js/css-minifier.js"></script>
+    
+    <!-- Page-specific auth script -->
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+            const authLinks = document.getElementById('authLinks');
+            const userMenu = document.getElementById('userMenu');
+            const userGreeting = document.getElementById('userGreeting');
+            const footerLogin = document.getElementById('footerLogin');
+            const footerSignup = document.getElementById('footerSignup');
+            const footerLogout = document.getElementById('footerLogout');
+            const footerGuestInfo = document.getElementById('footerGuestInfo');
+            const footerUserInfo = document.getElementById('footerUserInfo');
+            
+            if (user) {
+                if (authLinks) authLinks.style.display = 'none';
+                if (userMenu) {
+                    userMenu.style.display = 'flex';
+                    if (userGreeting) userGreeting.textContent = `Hi, ${user.email.split('@')[0]}`;
+                }
+                if (footerLogin) footerLogin.style.display = 'none';
+                if (footerSignup) footerSignup.style.display = 'none';
+                if (footerLogout) footerLogout.style.display = 'block';
+                if (footerGuestInfo) footerGuestInfo.style.display = 'none';
+                if (footerUserInfo) footerUserInfo.style.display = 'flex';
+            } else {
+                if (authLinks) authLinks.style.display = 'flex';
+                if (userMenu) userMenu.style.display = 'none';
+                if (footerLogin) footerLogin.style.display = 'block';
+                if (footerSignup) footerSignup.style.display = 'block';
+                if (footerLogout) footerLogout.style.display = 'none';
+                if (footerGuestInfo) footerGuestInfo.style.display = 'flex';
+                if (footerUserInfo) footerUserInfo.style.display = 'none';
+            }
+        });
+        
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = '../index.html';
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+            document.getElementById('footerLogout')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+        });
+    </script>
+</body>
+</html>
