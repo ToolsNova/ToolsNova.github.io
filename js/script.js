@@ -579,71 +579,129 @@ if (localStorage.getItem('toolsnova_darkmode') === 'true') {
     }
 }
 
-// ===== MOBILE MENU =====
+// ===== MOBILE MENU - FIXED VERSION =====
 if (mobileBtn) {
-    // Create menu elements
-    const overlay = document.createElement('div');
-    overlay.className = 'mobile-menu-overlay';
+    // Get existing nav-links (don't create new menu)
+    const navLinks = document.querySelector('.nav-links');
     
-    const menu = document.createElement('div');
-    menu.className = 'mobile-menu';
-    
-    document.body.appendChild(overlay);
-    document.body.appendChild(menu);
-    
-    // Update mobile menu based on auth state
-    function updateMobileMenu() {
-        const user = auth.currentUser;
-        let menuLinks = `
-            <div class="mobile-menu-header">
-                <div class="mobile-menu-logo">
-                    <i class="fas fa-star"></i>
-                    <span>ToolsNova</span>
-                </div>
-                <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="mobile-menu-links">
-                <a href="index.html" class="mobile-link">Home</a>
-                <a href="ai-assistant.html" class="mobile-link">AI Assistant</a>
-                <a href="./tools.html" class="mobile-link">Tools</a>
-        `;
-        
-        if (user) {
-            menuLinks += `
-                <div class="mobile-user-info">
-                    <i class="fas fa-user"></i>
-                    <span>${user.email}</span>
-                </div>
-                <a href="#" class="mobile-link mobile-logout" id="mobileLogout">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            `;
-        } else {
-            menuLinks += `
-                <a href="login.html" class="mobile-link">Login</a>
-                <a href="signup.html" class="mobile-link mobile-cta">Sign Up</a>
-            `;
+    if (navLinks) {
+        // Create overlay if it doesn't exist
+        let overlay = document.querySelector('.mobile-menu-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'mobile-menu-overlay';
+            document.body.appendChild(overlay);
         }
         
-        menuLinks += `</div>`;
-        menu.innerHTML = menuLinks;
-        
-        // Re-attach close button event
-        const closeBtn = menu.querySelector('.mobile-menu-close');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', closeMenu);
+        // Update nav-links for mobile (add close button and user info)
+        function updateMobileNav() {
+            const user = auth.currentUser;
+            
+            // Add mobile header if not exists
+            let mobileHeader = navLinks.querySelector('.mobile-menu-header');
+            if (!mobileHeader) {
+                mobileHeader = document.createElement('div');
+                mobileHeader.className = 'mobile-menu-header';
+                mobileHeader.innerHTML = `
+                    <div class="mobile-menu-logo">
+                        <i class="fas fa-star"></i>
+                        <span>ToolsNova</span>
+                    </div>
+                    <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
+                `;
+                navLinks.prepend(mobileHeader);
+            }
+            
+            // Update auth links in nav
+            const existingAuthLinks = navLinks.querySelector('.auth-links');
+            const existingUserMenu = navLinks.querySelector('.user-menu');
+            
+            if (user) {
+                if (existingAuthLinks) existingAuthLinks.style.display = 'none';
+                if (existingUserMenu) existingUserMenu.style.display = 'flex';
+                
+                // Add/update user greeting if needed
+                const greeting = navLinks.querySelector('#userGreeting');
+                if (greeting) {
+                    greeting.textContent = `Hi, ${user.email.split('@')[0]}`;
+                }
+            } else {
+                if (existingAuthLinks) existingAuthLinks.style.display = 'flex';
+                if (existingUserMenu) existingUserMenu.style.display = 'none';
+            }
+            
+            // Close button event
+            const closeBtn = mobileHeader.querySelector('.mobile-menu-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeMenu);
+            }
         }
         
-        // Mobile logout
-        const mobileLogout = document.getElementById('mobileLogout');
-        if (mobileLogout) {
-            mobileLogout.addEventListener('click', (e) => {
-                e.preventDefault();
-                logout();
-                closeMenu();
+        // Toggle menu function
+        function toggleMenu() {
+            navLinks.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+            
+            // Change button icon
+            const icon = mobileBtn.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+        
+        // Close menu function
+        function closeMenu() {
+            navLinks.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            
+            const icon = mobileBtn.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+        
+        // Mobile button click
+        mobileBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMenu();
+        });
+        
+        // Overlay click to close
+        overlay.addEventListener('click', closeMenu);
+        
+        // Close when clicking any link
+        const links = navLinks.querySelectorAll('a');
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Don't close if it's the mobile menu button
+                if (!this.closest('.mobile-menu-btn')) {
+                    closeMenu();
+                }
             });
-        }
+        });
+        
+        // Update menu when auth state changes
+        auth.onAuthStateChanged(() => {
+            updateMobileNav();
+        });
+        
+        // Initial update
+        updateMobileNav();
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMenu();
+            }
+        });
     }
+}
     
     // Initial mobile menu
     updateMobileMenu();
