@@ -579,9 +579,8 @@ if (localStorage.getItem('toolsnova_darkmode') === 'true') {
     }
 }
 
-// ===== MOBILE MENU - FIXED VERSION =====
+// ===== MOBILE MENU - SINGLE CLEAN VERSION =====
 if (mobileBtn) {
-    // Get existing nav-links (don't create new menu)
     const navLinks = document.querySelector('.nav-links');
     
     if (navLinks) {
@@ -593,48 +592,19 @@ if (mobileBtn) {
             document.body.appendChild(overlay);
         }
         
-        // Update nav-links for mobile (add close button and user info)
-        function updateMobileNav() {
-            const user = auth.currentUser;
-            
-            // Add mobile header if not exists
-            let mobileHeader = navLinks.querySelector('.mobile-menu-header');
-            if (!mobileHeader) {
-                mobileHeader = document.createElement('div');
-                mobileHeader.className = 'mobile-menu-header';
-                mobileHeader.innerHTML = `
-                    <div class="mobile-menu-logo">
-                        <i class="fas fa-star"></i>
-                        <span>ToolsNova</span>
-                    </div>
-                    <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
-                `;
-                navLinks.prepend(mobileHeader);
-            }
-            
-            // Update auth links in nav
-            const existingAuthLinks = navLinks.querySelector('.auth-links');
-            const existingUserMenu = navLinks.querySelector('.user-menu');
-            
-            if (user) {
-                if (existingAuthLinks) existingAuthLinks.style.display = 'none';
-                if (existingUserMenu) existingUserMenu.style.display = 'flex';
-                
-                // Add/update user greeting if needed
-                const greeting = navLinks.querySelector('#userGreeting');
-                if (greeting) {
-                    greeting.textContent = `Hi, ${user.email.split('@')[0]}`;
-                }
-            } else {
-                if (existingAuthLinks) existingAuthLinks.style.display = 'flex';
-                if (existingUserMenu) existingUserMenu.style.display = 'none';
-            }
-            
-            // Close button event
-            const closeBtn = mobileHeader.querySelector('.mobile-menu-close');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', closeMenu);
-            }
+        // Add mobile header if not exists
+        let mobileHeader = navLinks.querySelector('.mobile-menu-header');
+        if (!mobileHeader) {
+            mobileHeader = document.createElement('div');
+            mobileHeader.className = 'mobile-menu-header';
+            mobileHeader.innerHTML = `
+                <div class="mobile-menu-logo">
+                    <i class="fas fa-star"></i>
+                    <span>ToolsNova</span>
+                </div>
+                <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
+            `;
+            navLinks.prepend(mobileHeader);
         }
         
         // Toggle menu function
@@ -672,27 +642,20 @@ if (mobileBtn) {
             toggleMenu();
         });
         
+        // Close button click
+        const closeBtn = mobileHeader.querySelector('.mobile-menu-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeMenu);
+        }
+        
         // Overlay click to close
         overlay.addEventListener('click', closeMenu);
         
         // Close when clicking any link
         const links = navLinks.querySelectorAll('a');
         links.forEach(link => {
-            link.addEventListener('click', function(e) {
-                // Don't close if it's the mobile menu button
-                if (!this.closest('.mobile-menu-btn')) {
-                    closeMenu();
-                }
-            });
+            link.addEventListener('click', closeMenu);
         });
-        
-        // Update menu when auth state changes
-        auth.onAuthStateChanged(() => {
-            updateMobileNav();
-        });
-        
-        // Initial update
-        updateMobileNav();
         
         // Handle window resize
         window.addEventListener('resize', function() {
@@ -701,38 +664,6 @@ if (mobileBtn) {
             }
         });
     }
-}
-    
-    // Initial mobile menu
-    updateMobileMenu();
-    
-    // Update mobile menu when auth state changes
-    auth.onAuthStateChanged(() => {
-        updateMobileMenu();
-    });
-    
-    // Open menu
-    mobileBtn.addEventListener('click', function() {
-        menu.classList.add('active');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    });
-    
-    // Close menu function
-    function closeMenu() {
-        menu.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-    
-    // Close button
-    const closeBtn = menu.querySelector('.mobile-menu-close');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeMenu);
-    }
-    
-    // Click overlay to close
-    overlay.addEventListener('click', closeMenu);
 }
 
 // Initial guest display
