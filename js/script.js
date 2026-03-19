@@ -605,7 +605,7 @@ if (mobileBtn) {
             <div class="mobile-menu-links">
                 <a href="index.html" class="mobile-link">Home</a>
                 <a href="ai-assistant.html" class="mobile-link">AI Assistant</a>
-                <a href="tools.html" class="mobile-link">Tools</a>
+                <a href="./tools.html" class="mobile-link">Tools</a>
         `;
         
         if (user) {
