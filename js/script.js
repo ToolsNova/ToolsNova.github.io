@@ -237,55 +237,72 @@ if (localStorage.getItem('toolsnova_darkmode') === 'true') {
     if (themeToggle) themeToggle.querySelector('i').className = 'fas fa-sun';
 }
 
-// ===== 🔥 SIMPLE MOBILE MENU THAT WILL WORK =====
+// ===== ULTRA SIMPLE MOBILE MENU =====
 document.addEventListener('DOMContentLoaded', function() {
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
+    // Get elements
+    const btn = document.querySelector('.mobile-menu-btn');
+    const menu = document.querySelector('.nav-links');
     
-    if (menuBtn && navLinks) {
-        console.log('✅ Menu setup');
+    if (!btn || !menu) {
+        console.log('❌ Menu elements not found');
+        return;
+    }
+    
+    console.log('✅ Menu found, attaching click handler');
+    
+    // Create overlay
+    let overlay = document.querySelector('.mobile-menu-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'mobile-menu-overlay';
+        document.body.appendChild(overlay);
+    }
+    
+    // Simple toggle
+    btn.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         
-        // Create overlay
-        let overlay = document.querySelector('.mobile-menu-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.className = 'mobile-menu-overlay';
-            document.body.appendChild(overlay);
-        }
+        console.log('🔘 Button clicked!');
         
-        // Toggle function
-        function openMenu() {
-            navLinks.classList.add('active');
-            overlay.classList.add('active');
-            document.body.classList.add('menu-open');
-            menuBtn.querySelector('i').className = 'fas fa-times';
-        }
-        
-        function closeMenu() {
-            navLinks.classList.remove('active');
+        // Toggle menu
+        if (menu.classList.contains('active')) {
+            menu.classList.remove('active');
             overlay.classList.remove('active');
             document.body.classList.remove('menu-open');
-            menuBtn.querySelector('i').className = 'fas fa-bars';
+            this.querySelector('i').className = 'fas fa-bars';
+        } else {
+            menu.classList.add('active');
+            overlay.classList.add('active');
+            document.body.classList.add('menu-open');
+            this.querySelector('i').className = 'fas fa-times';
         }
-        
-        // Button click
-        menuBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            if (navLinks.classList.contains('active')) {
-                closeMenu();
-            } else {
-                openMenu();
-            }
-        });
-        
-        // Overlay click
-        overlay.addEventListener('click', closeMenu);
-        
-        // Links click
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', closeMenu);
-        });
+    };
+    
+    // Close on overlay click
+    overlay.onclick = function() {
+        menu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.classList.remove('menu-open');
+        btn.querySelector('i').className = 'fas fa-bars';
+    };
+    
+    // Make sure button is clickable
+    btn.style.cssText = `
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 48px !important;
+        height: 48px !important;
+        background: transparent !important;
+        border: none !important;
+        cursor: pointer !important;
+        z-index: 10000 !important;
+        position: relative !important;
+    `;
+    
+    console.log('✅ Menu ready');
+});
         
         // Make button visible
         menuBtn.style.cssText = 'display: flex !important; align-items: center; justify-content: center; width: 44px; height: 44px; cursor: pointer;';
