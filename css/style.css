@@ -1434,3 +1434,31 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* Force mobile menu visibility */
+.mobile-menu-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    z-index: 9999;
+}
+
+.mobile-menu-btn i {
+    font-size: 24px;
+    color: var(--text-primary);
+    pointer-events: none;
+}
+
+/* Ensure menu is above everything */
+.nav-links {
+    z-index: 10000;
+}
+
+.mobile-menu-overlay {
+    z-index: 9999;
+}
