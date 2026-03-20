@@ -237,78 +237,6 @@ if (localStorage.getItem('toolsnova_darkmode') === 'true') {
     if (themeToggle) themeToggle.querySelector('i').className = 'fas fa-sun';
 }
 
-// ===== ULTRA SIMPLE MOBILE MENU =====
-document.addEventListener('DOMContentLoaded', function() {
-    // Get elements
-    const btn = document.querySelector('.mobile-menu-btn');
-    const menu = document.querySelector('.nav-links');
-    
-    if (!btn || !menu) {
-        console.log('❌ Menu elements not found');
-        return;
-    }
-    
-    console.log('✅ Menu found, attaching click handler');
-    
-    // Create overlay
-    let overlay = document.querySelector('.mobile-menu-overlay');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.className = 'mobile-menu-overlay';
-        document.body.appendChild(overlay);
-    }
-    
-    // Simple toggle
-    btn.onclick = function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        console.log('🔘 Button clicked!');
-        
-        // Toggle menu
-        if (menu.classList.contains('active')) {
-            menu.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            this.querySelector('i').className = 'fas fa-bars';
-        } else {
-            menu.classList.add('active');
-            overlay.classList.add('active');
-            document.body.classList.add('menu-open');
-            this.querySelector('i').className = 'fas fa-times';
-        }
-    };
-    
-    // Close on overlay click
-    overlay.onclick = function() {
-        menu.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.classList.remove('menu-open');
-        btn.querySelector('i').className = 'fas fa-bars';
-    };
-    
-    // Make sure button is clickable
-    btn.style.cssText = `
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 48px !important;
-        height: 48px !important;
-        background: transparent !important;
-        border: none !important;
-        cursor: pointer !important;
-        z-index: 10000 !important;
-        position: relative !important;
-    `;
-    
-    console.log('✅ Menu ready');
-});
-        
-        // Make button visible
-        menuBtn.style.cssText = 'display: flex !important; align-items: center; justify-content: center; width: 44px; height: 44px; cursor: pointer;';
-    }
-});
-
 // Initial guest display
 updateGuestDisplay();
 
@@ -320,3 +248,61 @@ window.guestUses = guestUses;
 window.maxGuestUses = maxGuestUses;
 window.isGuestUser = () => !auth.currentUser;
 window.dispatchEvent(new Event('toolsnova-auth-ready'));
+// ===== FRESH MOBILE MENU - NO CONFLICTS =====
+(function() {
+    // Wait for everything to load
+    window.addEventListener('load', function() {
+        console.log('🚀 Setting up mobile menu');
+        
+        // Get elements fresh
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-links');
+        
+        if (!menuBtn || !navMenu) {
+            console.log('❌ Menu elements missing');
+            return;
+        }
+        
+        // Remove any existing click handlers
+        const newBtn = menuBtn.cloneNode(true);
+        menuBtn.parentNode.replaceChild(newBtn, menuBtn);
+        
+        // Create overlay if needed
+        let overlay = document.querySelector('.mobile-menu-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'mobile-menu-overlay';
+            document.body.appendChild(overlay);
+        }
+        
+        // Single click handler
+        newBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🎯 Menu clicked');
+            
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                this.querySelector('i').className = 'fas fa-bars';
+            } else {
+                navMenu.classList.add('active');
+                overlay.classList.add('active');
+                document.body.classList.add('menu-open');
+                this.querySelector('i').className = 'fas fa-times';
+            }
+        });
+        
+        // Overlay click
+        overlay.addEventListener('click', function() {
+            navMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            newBtn.querySelector('i').className = 'fas fa-bars';
+        });
+        
+        console.log('✅ Menu ready');
+    });
+})();
+
