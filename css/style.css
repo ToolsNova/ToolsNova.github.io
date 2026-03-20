@@ -1139,8 +1139,14 @@ body {
     margin-left: 8px;
 }
 
-/* ===== MOBILE MENU - SINGLE CLEAN VERSION (NO BLUR) ===== */
+/* ===== MOBILE MENU - SINGLE WORKING VERSION ===== */
 @media (max-width: 768px) {
+    /* Hide the old mobile menu completely */
+    .mobile-menu {
+        display: none !important;
+    }
+    
+    /* Style the nav-links as the mobile menu */
     .nav-links {
         position: fixed;
         top: 0;
@@ -1172,12 +1178,13 @@ body {
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
-        /* NO BLUR HERE */
+        pointer-events: none;
     }
     
     .mobile-menu-overlay.active {
         opacity: 1;
         visibility: visible;
+        pointer-events: auto;
     }
     
     body.menu-open {
