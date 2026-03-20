@@ -1270,3 +1270,37 @@ body {
         margin-left: 0;
     }
 }
+
+/* ===== MOBILE MENU FIX (DO NOT REMOVE OLD CODE) ===== */
+@media (max-width: 768px) {
+
+    /* hide menu by default */
+    .nav-links {
+        right: -100% !important;
+        display: flex !important;
+    }
+
+    /* show when active */
+    .nav-links.active {
+        right: 0 !important;
+    }
+
+    /* overlay fix */
+    .mobile-menu-overlay {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .mobile-menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    /* prevent body scroll when open */
+    body.menu-open {
+        overflow: hidden;
+    }
+
+}
