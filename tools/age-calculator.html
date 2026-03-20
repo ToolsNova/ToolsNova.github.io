@@ -241,5 +241,54 @@
     <!-- JavaScript -->
     <script src="../js/script.js"></script>
     <script src="./js/age-calculator.js"></script>
+
+    <script>
+    // Force mobile menu to work on tool pages
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (menuBtn && navLinks) {
+            let overlay = document.querySelector('.mobile-menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'mobile-menu-overlay';
+                document.body.appendChild(overlay);
+            }
+            
+            function openMenu() {
+                navLinks.classList.add('active');
+                overlay.classList.add('active');
+                document.body.classList.add('menu-open');
+                menuBtn.querySelector('i').className = 'fas fa-times';
+            }
+            
+            function closeMenu() {
+                navLinks.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                menuBtn.querySelector('i').className = 'fas fa-bars';
+            }
+            
+            menuBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (navLinks.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+            
+            overlay.addEventListener('click', closeMenu);
+            
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+            
+            console.log('✅ Mobile menu initialized on tool page');
+        }
+    });
+    </script>
 </body>
 </html>
