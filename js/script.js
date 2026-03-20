@@ -248,61 +248,69 @@ window.guestUses = guestUses;
 window.maxGuestUses = maxGuestUses;
 window.isGuestUser = () => !auth.currentUser;
 window.dispatchEvent(new Event('toolsnova-auth-ready'));
-// ===== FRESH MOBILE MENU - NO CONFLICTS =====
-(function() {
-    // Wait for everything to load
-    window.addEventListener('load', function() {
-        console.log('🚀 Setting up mobile menu');
-        
-        // Get elements fresh
-        const menuBtn = document.querySelector('.mobile-menu-btn');
-        const navMenu = document.querySelector('.nav-links');
-        
-        if (!menuBtn || !navMenu) {
-            console.log('❌ Menu elements missing');
-            return;
-        }
-        
-        // Remove any existing click handlers
-        const newBtn = menuBtn.cloneNode(true);
-        menuBtn.parentNode.replaceChild(newBtn, menuBtn);
-        
-        // Create overlay if needed
-        let overlay = document.querySelector('.mobile-menu-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.className = 'mobile-menu-overlay';
-            document.body.appendChild(overlay);
-        }
-        
-        // Single click handler
-        newBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('🎯 Menu clicked');
-            
-            if (navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.classList.remove('menu-open');
-                this.querySelector('i').className = 'fas fa-bars';
-            } else {
-                navMenu.classList.add('active');
-                overlay.classList.add('active');
-                document.body.classList.add('menu-open');
-                this.querySelector('i').className = 'fas fa-times';
-            }
-        });
-        
-        // Overlay click
-        overlay.addEventListener('click', function() {
-            navMenu.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            newBtn.querySelector('i').className = 'fas fa-bars';
-        });
-        
-        console.log('✅ Menu ready');
-    });
-})();
 
+// ===== SIMPLE MOBILE MENU - GUARANTEED TO WORK =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Get elements
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navMenu = document.querySelector('.nav-links');
+    
+    if (!menuBtn || !navMenu) {
+        console.log('Menu elements not found');
+        return;
+    }
+    
+    console.log('Mobile menu initialized');
+    
+    // Create overlay
+    let overlay = document.querySelector('.mobile-menu-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'mobile-menu-overlay';
+        document.body.appendChild(overlay);
+    }
+    
+    // Toggle function
+    function openMenu() {
+        navMenu.classList.add('active');
+        overlay.classList.add('active');
+        document.body.classList.add('menu-open');
+        menuBtn.querySelector('i').className = 'fas fa-times';
+    }
+    
+    function closeMenu() {
+        navMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.classList.remove('menu-open');
+        menuBtn.querySelector('i').className = 'fas fa-bars';
+    }
+    
+    // Button click
+    menuBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (navMenu.classList.contains('active')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+    
+    // Overlay click
+    overlay.addEventListener('click', closeMenu);
+    
+    // Links click
+    navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+    
+    // Window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            closeMenu();
+        }
+    });
+    
+    // Make button visible
+    menuBtn.style.display = 'flex';
+});
