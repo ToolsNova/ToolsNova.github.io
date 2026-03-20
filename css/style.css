@@ -1304,3 +1304,20 @@ body {
     }
 
 }
+
+/* ===== MOBILE MENU Z-INDEX FIX ===== */
+@media (max-width: 768px) {
+
+    .nav-links {
+        z-index: 10001 !important;
+    }
+
+    .mobile-menu-overlay {
+        z-index: 10000 !important;
+    }
+
+    .mobile-menu-btn {
+        z-index: 10002 !important;
+    }
+
+}
