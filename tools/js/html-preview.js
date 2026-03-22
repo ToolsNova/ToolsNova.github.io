@@ -65,6 +65,24 @@ document.addEventListener('DOMContentLoaded', function() {
         basic: `<!DOCTYPE html>
 <html>
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CL847BSHY4');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+</script>
+</body>
     <title>My Page</title>
     <style>
         body {
@@ -120,6 +138,24 @@ document.addEventListener('DOMContentLoaded', function() {
         form: `<!DOCTYPE html>
 <html>
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CL847BSHY4');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+</script>
+</body>
     <title>Contact Form</title>
     <style>
         body {
@@ -204,6 +240,24 @@ document.addEventListener('DOMContentLoaded', function() {
         dashboard: `<!DOCTYPE html>
 <html>
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CL847BSHY4');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+</script>
+</body>
     <title>Analytics Dashboard</title>
     <style>
         * {
@@ -399,7 +453,25 @@ document.addEventListener('DOMContentLoaded', function() {
     function updatePreview() {
         if (!preview || !htmlInput) return;
         
-        const html = htmlInput.value || '<!DOCTYPE html><html><head><title>Empty</title></head><body><h3>Start typing HTML to see preview...</h3></body></html>';
+        const html = htmlInput.value || '<!DOCTYPE html><html><head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CL847BSHY4');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+     crossorigin="anonymous"></script>
+</script>
+</body><title>Empty</title></head><body><h3>Start typing HTML to see preview...</h3></body></html>';
         const previewDoc = preview.contentDocument || preview.contentWindow.document;
         
         previewDoc.open();

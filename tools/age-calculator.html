@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CL847BSHY4');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
      crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -244,53 +253,54 @@
     <script src="../js/script.js"></script>
     <script src="./js/age-calculator.js"></script>
 
-    <script>
-    // Force mobile menu to work on tool pages
-    document.addEventListener('DOMContentLoaded', function() {
-        const menuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-        
-        if (menuBtn && navLinks) {
-            let overlay = document.querySelector('.mobile-menu-overlay');
-            if (!overlay) {
-                overlay = document.createElement('div');
-                overlay.className = 'mobile-menu-overlay';
-                document.body.appendChild(overlay);
-            }
-            
-            function openMenu() {
-                navLinks.classList.add('active');
-                overlay.classList.add('active');
-                document.body.classList.add('menu-open');
-                menuBtn.querySelector('i').className = 'fas fa-times';
-            }
-            
-            function closeMenu() {
-                navLinks.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.classList.remove('menu-open');
-                menuBtn.querySelector('i').className = 'fas fa-bars';
-            }
-            
-            menuBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if (navLinks.classList.contains('active')) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            });
-            
-            overlay.addEventListener('click', closeMenu);
-            
-            navLinks.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', closeMenu);
-            });
-            
-            console.log('✅ Mobile menu initialized on tool page');
+    <!-- Mobile Menu Script -->
+<script>
+(function() {
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (!menuBtn || !navLinks) return;
+    
+    // Create overlay if needed
+    let overlay = document.querySelector('.mobile-menu-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'mobile-menu-overlay';
+        document.body.appendChild(overlay);
+    }
+    
+    function openMenu() {
+        navLinks.classList.add('active');
+        overlay.classList.add('active');
+        document.body.classList.add('menu-open');
+        const icon = menuBtn.querySelector('i');
+        if (icon) icon.className = 'fas fa-times';
+    }
+    
+    function closeMenu() {
+        navLinks.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.classList.remove('menu-open');
+        const icon = menuBtn.querySelector('i');
+        if (icon) icon.className = 'fas fa-bars';
+    }
+    
+    menuBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (navLinks.classList.contains('active')) {
+            closeMenu();
+        } else {
+            openMenu();
         }
     });
-    </script>
+    
+    overlay.addEventListener('click', closeMenu);
+    
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+})();
+</script>
 </body>
 </html>
