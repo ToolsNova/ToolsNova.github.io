@@ -1434,3 +1434,50 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ===== BADGES ABOVE TOOL NAME ON MOBILE - FINAL FIX ===== */
+@media (max-width: 768px) {
+    /* Force tool item to stack vertically */
+    .tool-item {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+        padding: 12px !important;
+    }
+    
+    /* Move the badge to the TOP */
+    .tool-item .tool-badge,
+    .tool-item .coming-soon-badge {
+        order: -1 !important;
+        margin-left: 0 !important;
+        margin-bottom: 4px !important;
+        align-self: flex-start !important;
+        display: inline-block !important;
+        font-size: 0.7rem !important;
+        padding: 4px 12px !important;
+    }
+    
+    /* Stack icon and name vertically */
+    .tool-item-left {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+    
+    /* Smaller icon on mobile */
+    .tool-icon {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 1rem !important;
+    }
+    
+    /* Tool name styling */
+    .tool-name {
+        font-size: 0.9rem !important;
+        line-height: 1.4 !important;
+        text-align: left !important;
+    }
+}
