@@ -1,5 +1,3 @@
-// ===== TOOLSNOVA AI ASSISTANT - MOBILE FIXED =====
-
 // ===== CONFIGURATION =====
 const GROQ_API_KEY = "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";
 const MAX_GUEST_MESSAGES = 3;
@@ -34,7 +32,7 @@ let messageInput, sendBtn, newChatBtn, themeToggle;
 let chatHistory, currentChatTitle, attachBtn, fileInput, filePreviewContainer;
 let sidebar, sidebarToggle, mobileMenuBtn, mobileOverlay;
 
-// ===== FIXED COPY CODE FUNCTION =====
+// ===== COPY CODE FUNCTION =====
 window.copyCode = function(code) {
     const decodedCode = decodeURIComponent(code);
     
@@ -55,7 +53,7 @@ window.copyCode = function(code) {
     }).catch(() => alert('Failed to copy code'));
 };
 
-// ===== FILE PROCESSING FUNCTIONS =====
+// ===== FILE PROCESSING =====
 async function processFile(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -110,7 +108,7 @@ async function processFiles(files) {
     return processedFiles;
 }
 
-// ===== AI ASSISTANT =====
+// ===== AI ASSISTANT CLASS =====
 class AIAssistant {
     constructor() {
         this.messages = [];
@@ -118,12 +116,10 @@ class AIAssistant {
 
     loadMessages(msgs) {
         this.messages = [...msgs];
-        console.log('Loaded messages:', this.messages.length);
     }
 
     clearMessages() {
         this.messages = [];
-        console.log('Cleared messages for new chat');
     }
 
     async getResponse(userMessage, files = []) {
@@ -147,31 +143,26 @@ ${historyText}
 Current message: "${userMessage}"
 ${files.length > 0 ? `Files: ${files.length}` : ''}
 
-TABLE FORMATTING RULES - THIS IS CRITICAL:
-When the user asks for a table, you MUST output an HTML table like this EXACT format:
+TABLE FORMATTING RULES:
+When the user asks for a table, output an HTML table like this:
 
 <table class="data-table">
   <thead>
-    <tr><th>City</th><th>Population</th><th>Country</th></tr>
+     <tr><th>City</th><th>Population</th><th>Country</th></tr>
   </thead>
   <tbody>
-    <tr><td>Tokyo</td><td>38M</td><td>Japan</td></tr>
-    <tr><td>Delhi</td><td>31M</td><td>India</td></tr>
+     <tr><td>Tokyo</td><td>38M</td><td>Japan</td></tr>
   </tbody>
 </table>
 
 IMPORTANT:
-1. Use <table>, <tr>, <td> tags - NOT markdown
-2. First row should be <th> for headers
-3. Keep tables clean and simple
-4. The CSS will make it look good with borders
-5. For any type of point wise data use <ul>, <li> tags with proper spacing - NO markdown
-6. Answer ONLY what user ask, only few recomendation if needed.
-7. Remember Chats but give fresh reply.
-8. Always give accurate and latest information.
+1. Use HTML tables, NOT markdown
+2. Use <ul>, <li> tags for lists with proper spacing
+3. Answer concisely and accurately
+4. Remember chat context but give fresh replies
+5. Always provide accurate and latest information
 
-Remember: This is message #${messageCount} from the user.
-Answer based ONLY on the messages above. Be friendly and helpful.`;
+Remember: This is message #${messageCount}. Be friendly and helpful.`;
 
         try {
             const messages = [
@@ -188,7 +179,7 @@ Answer based ONLY on the messages above. Be friendly and helpful.`;
             return response.replace(/\*\*/g, '').replace(/\*/g, '').trim();
         } catch (error) {
             console.error('AI Error:', error);
-            return "❌ Error\n\nSorry, try again.";
+            return "❌ Error\n\nSorry, there was an error. Please try again.";
         }
     }
 
@@ -221,10 +212,7 @@ function toggleSidebar() {
     if (!sidebar) return;
     
     if (window.innerWidth <= 768) {
-        // Mobile: toggle open/close
         sidebar.classList.toggle('open');
-        
-        // Show/hide overlay
         if (mobileOverlay) {
             if (sidebar.classList.contains('open')) {
                 mobileOverlay.style.display = 'block';
@@ -235,11 +223,10 @@ function toggleSidebar() {
             }
         }
     } else {
-        // Desktop: toggle collapsed
         sidebar.classList.toggle('collapsed');
         const icon = sidebarToggle?.querySelector('i');
         if (icon) {
-            icon.className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-chevron-left';
+            icon.className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-bars';
         }
     }
 }
@@ -256,7 +243,7 @@ function closeSidebar() {
     }
 }
 
-// ===== LOAD CHAT =====
+// ===== CHAT MANAGEMENT =====
 function loadChat(chatId) {
     const chat = chats.find(c => c.id === chatId);
     if (!chat) return;
@@ -287,7 +274,7 @@ function loadChat(chatId) {
                 const fileHtml = msg.files.map(file => `
                     <div class="file-attachment">
                         <i class="fas fa-file"></i>
-                        <span>${file.name} (${file.size})</span>
+                        <span>${escapeHtml(file.name)} (${file.size})</span>
                     </div>
                 `).join('');
                 content = fileHtml + '<br>' + content;
@@ -334,13 +321,11 @@ function loadChat(chatId) {
     
     renderChatHistory();
     
-    // Close sidebar on mobile after selecting chat
     if (window.innerWidth <= 768) {
         closeSidebar();
     }
 }
 
-// ===== CHAT HISTORY =====
 function loadChats() {
     const saved = localStorage.getItem('toolsnova_chats');
     if (saved) {
@@ -412,7 +397,6 @@ function createNewChat() {
     loadChat(currentChatId);
     if (messageInput) messageInput.focus();
     
-    // Close sidebar on mobile after creating new chat
     if (window.innerWidth <= 768) {
         closeSidebar();
     }
@@ -530,7 +514,7 @@ async function sendMessage() {
         document.getElementById('typingIndicator')?.remove();
         currentChat.messages.push({ 
             role: 'assistant', 
-            content: '❌ Error\n\nSorry, try again.', 
+            content: '❌ Error\n\nSorry, something went wrong. Please try again.', 
             time: Date.now() 
         });
         saveChats();
@@ -542,7 +526,7 @@ async function sendMessage() {
     messageInput.focus();
 }
 
-// ===== FILE UPLOAD =====
+// ===== FILE UPLOAD UI =====
 function showFilePreviews() {
     if (!filePreviewContainer) return;
     if (attachedFiles.length === 0) { 
@@ -571,7 +555,7 @@ window.removeFile = function(index) {
     if (fileInput) fileInput.value = '';
 };
 
-// ===== AUTH =====
+// ===== AUTH UI =====
 function updateUserUI(user) {
     const authLinks = document.getElementById('sidebarAuth');
     const userMenu = document.getElementById('userInfo');
@@ -611,7 +595,6 @@ function initDOMElements() {
 }
 
 function setupEventListeners() {
-    // Sidebar toggle button
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', (e) => {
             e.preventDefault();
@@ -619,7 +602,6 @@ function setupEventListeners() {
         });
     }
     
-    // Mobile menu button
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -627,14 +609,12 @@ function setupEventListeners() {
         });
     }
     
-    // Mobile overlay click
     if (mobileOverlay) {
         mobileOverlay.addEventListener('click', () => {
             closeSidebar();
         });
     }
     
-    // Send button
     if (sendBtn) {
         sendBtn.addEventListener('click', (e) => { 
             e.preventDefault(); 
@@ -642,14 +622,12 @@ function setupEventListeners() {
         });
     }
     
-    // New chat button
     if (newChatBtn) {
         newChatBtn.addEventListener('click', () => {
             createNewChat();
         });
     }
     
-    // Attach button
     if (attachBtn && fileInput) {
         attachBtn.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', (e) => { 
@@ -658,7 +636,6 @@ function setupEventListeners() {
         });
     }
     
-    // Message input
     if (messageInput) {
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) { 
@@ -673,7 +650,6 @@ function setupEventListeners() {
         });
     }
     
-    // Theme toggle
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
@@ -685,10 +661,8 @@ function setupEventListeners() {
         });
     }
     
-    // Handle window resize to reset sidebar state
     window.addEventListener('resize', () => {
         if (window.innerWidth > 768) {
-            // Desktop: remove mobile-specific classes
             if (sidebar) {
                 sidebar.classList.remove('open');
             }
@@ -700,12 +674,11 @@ function setupEventListeners() {
     });
 }
 
-// ===== INITIALIZE APP =====
+// ===== APP START =====
 document.addEventListener('DOMContentLoaded', () => {
     initDOMElements();
     setupEventListeners();
     
-    // Load dark mode preference
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
         if (themeToggle) {
@@ -714,7 +687,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Setup logout
     document.getElementById('sidebarLogout')?.addEventListener('click', (e) => {
         e.preventDefault();
         if (typeof firebase !== 'undefined' && firebase.auth) {
@@ -722,7 +694,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Auth state observer
     if (typeof firebase !== 'undefined' && firebase.auth) {
         firebase.auth().onAuthStateChanged((user) => {
             currentUser = user;
@@ -730,15 +701,12 @@ document.addEventListener('DOMContentLoaded', () => {
             loadChats();
         });
     } else {
-        // No Firebase, just load chats
         loadChats();
     }
     
-    // Make functions globally available
     window.loadChat = loadChat;
     window.sendMessage = sendMessage;
     window.copyCode = copyCode;
     window.toggleSidebar = toggleSidebar;
     window.closeSidebar = closeSidebar;
 });
-
