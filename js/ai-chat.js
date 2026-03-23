@@ -1,7 +1,7 @@
-// ===== TOOLSNOVA AI ASSISTANT - ULTRA SIMPLE MEMORY =====
+// ===== TOOLSNOVA AI ASSISTANT - MOBILE FIXED =====
 
 // ===== CONFIGURATION =====
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "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";
 const MAX_GUEST_MESSAGES = 3;
 
 // ===== FIREBASE CONFIG =====
@@ -15,8 +15,12 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+if (typeof firebase !== 'undefined') {
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+} else {
+    console.error('Firebase not loaded');
+}
 
 // ===== GLOBAL STATE =====
 let chats = [];
@@ -32,7 +36,6 @@ let sidebar, sidebarToggle, mobileMenuBtn, mobileOverlay;
 
 // ===== FIXED COPY CODE FUNCTION =====
 window.copyCode = function(code) {
-    // Decode the URI component
     const decodedCode = decodeURIComponent(code);
     
     navigator.clipboard.writeText(decodedCode).then(() => {
@@ -107,35 +110,30 @@ async function processFiles(files) {
     return processedFiles;
 }
 
-// ===== ULTRA SIMPLE AI ASSISTANT =====
+// ===== AI ASSISTANT =====
 class AIAssistant {
     constructor() {
         this.messages = [];
     }
 
-    // Load messages for current chat
     loadMessages(msgs) {
         this.messages = [...msgs];
         console.log('Loaded messages:', this.messages.length);
     }
 
-    // Clear for new chat
     clearMessages() {
         this.messages = [];
         console.log('Cleared messages for new chat');
     }
 
     async getResponse(userMessage, files = []) {
-        // Add user message
         this.messages.push({
             role: 'user',
             content: userMessage
         });
 
-        // Create a simple prompt with exact message count
         const messageCount = this.messages.filter(m => m.role === 'user').length;
         
-        // Build conversation history in a simple format
         let historyText = '';
         this.messages.forEach((msg, i) => {
             const prefix = msg.role === 'user' ? 'User' : 'Assistant';
@@ -159,7 +157,6 @@ When the user asks for a table, you MUST output an HTML table like this EXACT fo
   <tbody>
     <tr><td>Tokyo</td><td>38M</td><td>Japan</td></tr>
     <tr><td>Delhi</td><td>31M</td><td>India</td></tr>
-    <tr><td>Shanghai</td><td>27M</td><td>China</td></tr>
   </tbody>
 </table>
 
@@ -171,10 +168,9 @@ IMPORTANT:
 5. For any type of point wise data use <ul>, <li> tags with proper spacing - NO markdown
 6. Answer ONLY what user ask, only few recomendation if needed.
 7. Remember Chats but give fresh reply.
+8. Always give accurate and latest information.
 
 Remember: This is message #${messageCount} from the user.
-The user's first message was: "${this.messages.filter(m => m.role === 'user')[0]?.content || 'nothing'}"
-
 Answer based ONLY on the messages above. Be friendly and helpful.`;
 
         try {
@@ -184,7 +180,6 @@ Answer based ONLY on the messages above. Be friendly and helpful.`;
 
             const response = await this.callGroqAPI(messages);
             
-            // Add assistant response
             this.messages.push({
                 role: 'assistant',
                 content: response
@@ -221,7 +216,47 @@ Answer based ONLY on the messages above. Be friendly and helpful.`;
 
 const aiAssistant = new AIAssistant();
 
-// ===== LOAD CHAT WITH PROPER CODE BLOCKS =====
+// ===== SIDEBAR FUNCTIONS =====
+function toggleSidebar() {
+    if (!sidebar) return;
+    
+    if (window.innerWidth <= 768) {
+        // Mobile: toggle open/close
+        sidebar.classList.toggle('open');
+        
+        // Show/hide overlay
+        if (mobileOverlay) {
+            if (sidebar.classList.contains('open')) {
+                mobileOverlay.style.display = 'block';
+                setTimeout(() => mobileOverlay.classList.add('active'), 10);
+            } else {
+                mobileOverlay.classList.remove('active');
+                setTimeout(() => mobileOverlay.style.display = 'none', 300);
+            }
+        }
+    } else {
+        // Desktop: toggle collapsed
+        sidebar.classList.toggle('collapsed');
+        const icon = sidebarToggle?.querySelector('i');
+        if (icon) {
+            icon.className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-chevron-left';
+        }
+    }
+}
+
+function closeSidebar() {
+    if (window.innerWidth <= 768) {
+        sidebar.classList.remove('open');
+        if (mobileOverlay) {
+            mobileOverlay.classList.remove('active');
+            setTimeout(() => {
+                if (mobileOverlay) mobileOverlay.style.display = 'none';
+            }, 300);
+        }
+    }
+}
+
+// ===== LOAD CHAT =====
 function loadChat(chatId) {
     const chat = chats.find(c => c.id === chatId);
     if (!chat) return;
@@ -229,7 +264,6 @@ function loadChat(chatId) {
     currentChatId = chatId;
     if (currentChatTitle) currentChatTitle.textContent = chat.title;
     
-    // Load this chat's messages into AI
     aiAssistant.loadMessages(chat.messages);
     
     if (!messagesWrapper || !welcomeScreen) return;
@@ -249,7 +283,6 @@ function loadChat(chatId) {
             
             let content = msg.content;
             
-            // Handle file attachments
             if (msg.files && msg.files.length > 0) {
                 const fileHtml = msg.files.map(file => `
                     <div class="file-attachment">
@@ -260,21 +293,9 @@ function loadChat(chatId) {
                 content = fileHtml + '<br>' + content;
             }
             
-            // Handle HTML tables
-            if (content.includes('<table')) {
-                // Already HTML, leave as is
-            }
-            // Handle markdown tables
-            else if (content.includes('|') && content.includes('\n|')) {
-                content = content.replace(/\|(.+)\|/g, '<tr><td>$1</td></tr>');
-                content = '<table class="data-table">' + content + '</table>';
-            }
-            
-            // Handle code blocks - FIXED VERSION
             if (content.includes('```')) {
                 content = content.replace(/```(\w*)\n([\s\S]*?)```/g, (match, language, code) => {
                     const cleanCode = code.trim();
-                    // Escape for HTML display
                     const displayCode = cleanCode
                         .replace(/&/g, '&amp;')
                         .replace(/</g, '&lt;')
@@ -282,13 +303,10 @@ function loadChat(chatId) {
                         .replace(/"/g, '&quot;')
                         .replace(/'/g, '&#039;');
                     
-                    // Create a safe string for the copy button
-                    const copyCode = cleanCode.replace(/`/g, '\\`').replace(/\${/g, '\\${');
-                    
                     return `
                         <div class="code-block-wrapper">
                             <pre><code class="language-${language || 'plaintext'}">${displayCode}</code></pre>
-                            <button class="copy-code-btn" data-code="${encodeURIComponent(cleanCode)}">
+                            <button class="copy-code-btn" onclick="copyCode('${encodeURIComponent(cleanCode)}')">
                                 <i class="fas fa-copy"></i> Copy code
                             </button>
                         </div>
@@ -310,9 +328,18 @@ function loadChat(chatId) {
         }).join('');
     }
     
-    if (messagesContainer) messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    if (messagesContainer) {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    
     renderChatHistory();
+    
+    // Close sidebar on mobile after selecting chat
+    if (window.innerWidth <= 768) {
+        closeSidebar();
+    }
 }
+
 // ===== CHAT HISTORY =====
 function loadChats() {
     const saved = localStorage.getItem('toolsnova_chats');
@@ -343,22 +370,30 @@ function renderChatHistory() {
     chatHistory.innerHTML = chats.map(chat => {
         const isActive = chat.id === currentChatId;
         const timeAgo = getTimeAgo(chat.createdAt);
-        return `<div class="history-item ${isActive ? 'active' : ''}" onclick="window.loadChat('${chat.id}')">
-            <i class="fas fa-comment"></i>
-            <div class="history-content">
-                <span class="history-title">${chat.title}</span>
-                <span class="history-time">${timeAgo}</span>
+        return `
+            <div class="history-item ${isActive ? 'active' : ''}" onclick="window.loadChat('${chat.id}')">
+                <i class="fas fa-comment"></i>
+                <div class="history-content">
+                    <span class="history-title">${escapeHtml(chat.title)}</span>
+                    <span class="history-time">${timeAgo}</span>
+                </div>
+                <div class="chat-actions">
+                    <button class="chat-action-btn rename" onclick="window.renameChat('${chat.id}', event)">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="chat-action-btn delete" onclick="window.deleteChat('${chat.id}', event)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             </div>
-            <div class="chat-actions">
-                <button class="chat-action-btn rename" onclick="window.renameChat('${chat.id}', event)">
-                    <i class="fas fa-pen"></i>
-                </button>
-                <button class="chat-action-btn delete" onclick="window.deleteChat('${chat.id}', event)">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        </div>`;
+        `;
     }).join('');
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 function createNewChat() {
@@ -373,11 +408,14 @@ function createNewChat() {
     saveChats();
     renderChatHistory();
     
-    // Clear AI messages for new chat
     aiAssistant.clearMessages();
-    
     loadChat(currentChatId);
     if (messageInput) messageInput.focus();
+    
+    // Close sidebar on mobile after creating new chat
+    if (window.innerWidth <= 768) {
+        closeSidebar();
+    }
 }
 
 window.deleteChat = function(chatId, event) {
@@ -516,7 +554,7 @@ function showFilePreviews() {
             <div class="file-preview-info">
                 <i class="fas ${file.type.startsWith('image/') ? 'fa-image' : 'fa-file'}"></i>
                 <div>
-                    <div>${file.name}</div>
+                    <div>${escapeHtml(file.name)}</div>
                     <div>${(file.size / 1024).toFixed(1)} KB</div>
                 </div>
             </div>
@@ -552,113 +590,6 @@ function updateUserUI(user) {
     }
 }
 
-// ===== STYLES =====
-function addCopyButtonStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-        .code-block-wrapper {
-            position: relative;
-            margin: 16px 0;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #1e1e1e;
-        }
-        
-        .code-block-wrapper pre {
-            margin: 0;
-            padding: 16px;
-            background: #1e1e1e !important;
-            color: #d4d4d4;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            overflow-x: auto;
-        }
-        
-        .copy-code-btn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            z-index: 10;
-            backdrop-filter: blur(4px);
-        }
-        
-        .copy-code-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-        
-        .file-attachment {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            margin: 8px 0;
-            border: 1px solid var(--border);
-        }
-        
-        .file-attachment i {
-            color: var(--primary);
-            font-size: 1.2rem;
-        }
-        
-        .file-preview {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 15px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin: 8px 0;
-        }
-        
-        .file-preview-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .file-preview-info i {
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-        
-        .remove-file {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 1px solid var(--border);
-            background: var(--bg-tertiary);
-            color: var(--error);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-        
-        .remove-file:hover {
-            background: var(--error);
-            color: white;
-        }
-    `;
-    document.head.appendChild(style);
-}
-
 // ===== INITIALIZE =====
 function initDOMElements() {
     sidebar = document.getElementById('sidebar');
@@ -680,145 +611,134 @@ function initDOMElements() {
 }
 
 function setupEventListeners() {
-    if (sidebarToggle) sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-        const icon = sidebarToggle.querySelector('i');
-        icon.className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-chevron-left';
-    });
-    
-    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', () => {
-        sidebar.classList.remove('collapsed');
-        mobileOverlay.style.display = 'block';
-        setTimeout(() => mobileOverlay.classList.add('active'), 10);
-    });
-    
-    if (mobileOverlay) mobileOverlay.addEventListener('click', () => {
-        sidebar.classList.add('collapsed');
-        mobileOverlay.classList.remove('active');
-        setTimeout(() => mobileOverlay.style.display = 'none', 300);
-    });
-    
-    if (sendBtn) sendBtn.addEventListener('click', (e) => { e.preventDefault(); sendMessage(); });
-    if (newChatBtn) newChatBtn.addEventListener('click', createNewChat);
-    if (attachBtn) attachBtn.addEventListener('click', () => fileInput.click());
-    if (fileInput) fileInput.addEventListener('change', (e) => { 
-        attachedFiles = Array.from(e.target.files); 
-        showFilePreviews(); 
-    });
-    
-    if (messageInput) {
-        messageInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-        });
-        messageInput.addEventListener('input', function() { 
-            this.style.height = 'auto'; 
-            this.style.height = this.scrollHeight + 'px'; 
+    // Sidebar toggle button
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleSidebar();
         });
     }
     
+    // Mobile menu button
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleSidebar();
+        });
+    }
+    
+    // Mobile overlay click
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', () => {
+            closeSidebar();
+        });
+    }
+    
+    // Send button
+    if (sendBtn) {
+        sendBtn.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            sendMessage(); 
+        });
+    }
+    
+    // New chat button
+    if (newChatBtn) {
+        newChatBtn.addEventListener('click', () => {
+            createNewChat();
+        });
+    }
+    
+    // Attach button
+    if (attachBtn && fileInput) {
+        attachBtn.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => { 
+            attachedFiles = Array.from(e.target.files); 
+            showFilePreviews(); 
+        });
+    }
+    
+    // Message input
+    if (messageInput) {
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { 
+                e.preventDefault(); 
+                sendMessage(); 
+            }
+        });
+        
+        messageInput.addEventListener('input', function() { 
+            this.style.height = 'auto'; 
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px'; 
+        });
+    }
+    
+    // Theme toggle
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const icon = themeToggle.querySelector('i');
-            icon.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'far fa-moon';
+            if (icon) {
+                icon.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'far fa-moon';
+            }
             localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
         });
     }
+    
+    // Handle window resize to reset sidebar state
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            // Desktop: remove mobile-specific classes
+            if (sidebar) {
+                sidebar.classList.remove('open');
+            }
+            if (mobileOverlay) {
+                mobileOverlay.style.display = 'none';
+                mobileOverlay.classList.remove('active');
+            }
+        }
+    });
 }
 
+// ===== INITIALIZE APP =====
 document.addEventListener('DOMContentLoaded', () => {
     initDOMElements();
-    addCopyButtonStyles();
     setupEventListeners();
     
+    // Load dark mode preference
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
-        if (themeToggle) themeToggle.querySelector('i').className = 'fas fa-sun';
+        if (themeToggle) {
+            const icon = themeToggle.querySelector('i');
+            if (icon) icon.className = 'fas fa-sun';
+        }
     }
     
+    // Setup logout
     document.getElementById('sidebarLogout')?.addEventListener('click', (e) => {
         e.preventDefault();
-        auth.signOut();
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+            firebase.auth().signOut();
+        }
     });
     
-    auth.onAuthStateChanged((user) => {
-        currentUser = user;
-        updateUserUI(user);
+    // Auth state observer
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+        firebase.auth().onAuthStateChanged((user) => {
+            currentUser = user;
+            updateUserUI(user);
+            loadChats();
+        });
+    } else {
+        // No Firebase, just load chats
         loadChats();
-    });
+    }
     
+    // Make functions globally available
     window.loadChat = loadChat;
     window.sendMessage = sendMessage;
     window.copyCode = copyCode;
+    window.toggleSidebar = toggleSidebar;
+    window.closeSidebar = closeSidebar;
 });
 
-// Update footer based on auth state
-function updateFooterUI(user) {
-    const footerGuestInfo = document.getElementById('footerGuestInfo');
-    const footerUserInfo = document.getElementById('footerUserInfo');
-    
-    // Create user info element if it doesn't exist
-    if (!footerUserInfo && footerGuestInfo) {
-        const newUserInfo = document.createElement('div');
-        newUserInfo.id = 'footerUserInfo';
-        newUserInfo.className = 'user-info-footer';
-        newUserInfo.style.display = 'none';
-        newUserInfo.innerHTML = '<i class="fas fa-crown" style="color: var(--success);"></i><span>You have unlimited access</span>';
-        footerGuestInfo.parentNode.appendChild(newUserInfo);
-    }
-}
-
-// Update your existing auth observer
-auth.onAuthStateChanged((user) => {
-    console.log('Auth state changed:', user ? 'logged in' : 'guest');
-    
-    const authLinks = document.getElementById('authLinks');
-    const userMenu = document.getElementById('userMenu');
-    const userGreeting = document.getElementById('userGreeting');
-    const footerLogin = document.getElementById('footerLogin');
-    const footerSignup = document.getElementById('footerSignup');
-    const footerLogout = document.getElementById('footerLogout');
-    const footerGuestInfo = document.getElementById('footerGuestInfo');
-    const footerUserInfo = document.getElementById('footerUserInfo');
-    
-    if (user) {
-        // User is logged in
-        if (authLinks) authLinks.style.display = 'none';
-        if (userMenu) {
-            userMenu.style.display = 'flex';
-            if (userGreeting) {
-                userGreeting.textContent = `Hi, ${user.email.split('@')[0]}`;
-            }
-        }
-        if (footerLogin) footerLogin.style.display = 'none';
-        if (footerSignup) footerSignup.style.display = 'none';
-        if (footerLogout) footerLogout.style.display = 'block';
-        
-        // Hide guest info, show user info
-        if (footerGuestInfo) footerGuestInfo.style.display = 'none';
-        if (footerUserInfo) {
-            footerUserInfo.style.display = 'flex';
-        } else {
-            // Create user info element if it doesn't exist
-            const newUserInfo = document.createElement('div');
-            newUserInfo.id = 'footerUserInfo';
-            newUserInfo.className = 'user-info-footer';
-            newUserInfo.style.display = 'flex';
-            newUserInfo.innerHTML = '<i class="fas fa-crown" style="color: var(--success);"></i><span>You have unlimited access</span>';
-            if (footerGuestInfo && footerGuestInfo.parentNode) {
-                footerGuestInfo.parentNode.appendChild(newUserInfo);
-            }
-        }
-    } else {
-        // User is guest
-        if (authLinks) authLinks.style.display = 'flex';
-        if (userMenu) userMenu.style.display = 'none';
-        if (footerLogin) footerLogin.style.display = 'block';
-        if (footerSignup) footerSignup.style.display = 'block';
-        if (footerLogout) footerLogout.style.display = 'none';
-        
-        // Show guest info, hide user info
-        if (footerGuestInfo) footerGuestInfo.style.display = 'flex';
-        if (footerUserInfo) footerUserInfo.style.display = 'none';
-    }
-});
