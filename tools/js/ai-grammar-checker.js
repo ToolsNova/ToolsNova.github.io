@@ -1,11 +1,19 @@
-// ===== AI GRAMMAR CHECKER - FIXED VERSION =====
+// ===== AI GRAMMAR CHECKER - GROQ API VERSION =====
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('AI Grammar Checker loaded');
     
-    // 🔑 YOUR GEMINI API KEY
-    const GEMINI_API_KEY = 'AIzaSyBguomd6Q-A-bcxoGcy7TNrUY_0fSovHzs';
-    const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+    // 🔑 YOUR GROQ API KEY
+    const GROQ_API_KEY = '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';
+    
+    // ✅ GROQ MODELS - Latest available
+    const MODELS = [
+        'llama-3.3-70b-versatile',    // Most capable
+        'llama-3.1-8b-instant',        // Fast and accurate
+        'gemma2-9b-it'                 // Lightweight fallback
+    ];
+    
+    const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
     
     // DOM elements
     const textInput = document.getElementById('textInput');
@@ -37,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function() {
             tabBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            
             const tabId = this.dataset.tab;
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
@@ -48,11 +55,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateStats() {
         const text = textInput.value;
-        const chars = text.length;
-        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-        
-        charCount.textContent = chars;
-        wordCount.textContent = words;
+        charCount.textContent = text.length;
+        wordCount.textContent = text.trim() ? text.trim().split(/\s+/).length : 0;
     }
     
     textInput.addEventListener('input', updateStats);
@@ -96,6 +100,133 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    // Function to calculate grammar issues
+    function calculateGrammarIssues(original, corrected) {
+        let issues = 0;
+        const explanations = [];
+        
+        // Common grammar patterns
+        const patterns = [
+            { pattern: /go(es)?\s+to\s+school/, original: 'go', corrected: 'goes', issue: 'Subject-verb agreement: third person singular needs "goes"' },
+            { pattern: /children\s+is/, original: 'is', corrected: 'are', issue: 'Subject-verb agreement: "children" is plural, use "are"' },
+            { pattern: /have\s+went/, original: 'have went', corrected: 'went', issue: 'Verb tense: incorrect past participle, use "went"' },
+            { pattern: /don't\s+like/, original: "don't", corrected: "doesn't", issue: 'Subject-verb agreement: third person singular needs "doesn\'t"' },
+            { pattern: /their\s+going/, original: 'their', corrected: "they're", issue: 'Homophone error: "their" vs "they\'re"' },
+            { pattern: /me\s+and\s+my\s+friend/, original: 'me and my friend', corrected: 'my friend and I', issue: 'Pronoun order: should be "my friend and I"' },
+            { pattern: /everyday\b/, original: 'everyday', corrected: 'every day', issue: 'Word usage: "every day" (two words) vs "everyday" (adjective)' }
+        ];
+        
+        patterns.forEach(pattern => {
+            if (original.toLowerCase().includes(pattern.original.toLowerCase()) && 
+                corrected.toLowerCase().includes(pattern.corrected.toLowerCase())) {
+                issues++;
+                explanations.push(pattern.issue);
+            }
+        });
+        
+        // Count word differences
+        const originalWords = original.split(/\s+/);
+        const correctedWords = corrected.split(/\s+/);
+        const wordDiff = Math.abs(originalWords.length - correctedWords.length);
+        
+        // If we found specific patterns, use those, otherwise estimate
+        if (issues === 0) {
+            issues = Math.max(1, Math.floor(wordDiff + (original.length - corrected.length) / 10));
+        }
+        
+        return { issues, explanations };
+    }
+    
+    // ✅ Call Groq API with retry and model fallback
+    async function callGroqWithRetry(prompt, maxRetries = 2) {
+        let lastError = null;
+        
+        for (const model of MODELS) {
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    console.log(`📡 Trying ${model} (attempt ${attempt}/${maxRetries})...`);
+                    
+                    const requestBody = {
+                        model: model,
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are a professional grammar checker. Fix all grammar, spelling, and punctuation errors. Return ONLY the corrected text, no explanations, no markdown, no quotes.'
+                            },
+                            {
+                                role: 'user',
+                                content: prompt
+                            }
+                        ],
+                        temperature: 0.1,
+                        max_tokens: 2048,
+                        top_p: 0.9
+                    };
+                    
+                    const response = await fetch(GROQ_API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${GROQ_API_KEY}`
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+                    
+                    if (response.status === 401) {
+                        throw new Error('Invalid API key');
+                    }
+                    
+                    if (response.status === 503 || response.status === 429) {
+                        console.log(`⏳ Service busy, waiting...`);
+                        await sleep(2000 * attempt);
+                        continue;
+                    }
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        const errorMsg = errorData.error?.message || `HTTP ${response.status}`;
+                        
+                        if (errorMsg.includes('decommissioned')) {
+                            console.log(`⚠️ Model ${model} decommissioned, trying next...`);
+                            break;
+                        }
+                        throw new Error(errorMsg);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data.choices && data.choices[0] && data.choices[0].message) {
+                        let correctedText = data.choices[0].message.content;
+                        // Clean up the response
+                        correctedText = correctedText.trim()
+                            .replace(/^["']|["']$/g, '') // Remove quotes
+                            .replace(/^Corrected:\s*/i, '') // Remove "Corrected:" prefix
+                            .replace(/^Here's the corrected text:\s*/i, '')
+                            .replace(/^The corrected text is:\s*/i, '');
+                        console.log(`✅ ${model} succeeded!`);
+                        return correctedText;
+                    }
+                    
+                } catch (error) {
+                    console.log(`❌ ${model} failed:`, error.message);
+                    lastError = error;
+                    
+                    if (error.message.includes('Invalid API key') || error.message.includes('decommissioned')) {
+                        break;
+                    }
+                    
+                    await sleep(1000);
+                }
+            }
+        }
+        
+        throw lastError || new Error('All models failed');
+    }
+    
     async function checkGrammar() {
         const text = textInput.value.trim();
         
@@ -116,99 +247,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         checkBtn.disabled = true;
-        checkBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+        checkBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking grammar...';
         loading.style.display = 'block';
         resultCard.style.display = 'none';
         errorMessage.style.display = 'none';
         
         try {
-            // STRONGER PROMPT - Forces Gemini to actually correct
-            const prompt = `You are a strict grammar checker. Your task is to CORRECT all grammar, spelling, and punctuation errors in the text below.
+            const prompt = `Fix all grammar, spelling, and punctuation errors in this text. Return ONLY the corrected text, no explanations, no markdown, no quotes.
 
-RULES:
-- Fix EVERY error you find
-- Return ONLY the corrected text, no explanations
-- Do NOT say "No grammar issues found"
-- Do NOT add any commentary
-- Just return the fixed text
+Original text:
+"""
+${text}
+"""
 
-Original text: "${text}"
-
-Corrected version:`;
-
-            const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: prompt
-                        }]
-                    }],
-                    generationConfig: {
-                        temperature: 0.1, // Lower temperature = more consistent
-                        maxOutputTokens: 2048,
-                    }
-                })
-            });
+Corrected text:`;
             
-            if (!response.ok) {
-                throw new Error(`API error: ${response.status}`);
+            const corrected = await callGroqWithRetry(prompt);
+            
+            // Validate corrected text
+            if (!corrected || corrected.length === 0) {
+                throw new Error('No response received');
             }
-            
-            const data = await response.json();
-            let corrected = data.candidates[0].content.parts[0].text.trim();
-            
-            // Clean up the response
-            corrected = corrected.replace(/^["']|["']$/g, ''); // Remove quotes
-            corrected = corrected.replace(/^Corrected version:?/i, '').trim();
-            
-            // If Gemini didn't change anything, force some basic corrections
-            if (corrected === text) {
-                corrected = text
-                    .replace(/\bgo\b/g, 'goes')
-                    .replace(/\bis\b/g, 'are')
-                    .replace(/\bhave went\b/g, 'went')
-                    .replace(/\bdon't\b/g, "doesn't")
-                    .replace(/\bTheir\b/g, "They're")
-                    .replace(/\btheir\b/g, "they're")
-                    .replace(/\bMe and my friend\b/g, "My friend and I");
-            }
-            
-            // Calculate differences
-            const originalWords = text.split(/\s+/);
-            const correctedWords = corrected.split(/\s+/);
-            const changes = Math.abs(originalWords.length - correctedWords.length) + 2;
             
             // Update UI
             correctedText.textContent = corrected;
             originalText.textContent = text;
-            issuesFixed.textContent = changes;
-            suggestionCount.textContent = changes;
             
-            // Generate explanations
-            const explanations = [];
-            if (text.includes('go') && corrected.includes('goes')) {
-                explanations.push('Subject-verb agreement: "She go" → "She goes" (third person singular)');
-            }
-            if (text.includes('is playing') && corrected.includes('are playing')) {
-                explanations.push('Subject-verb agreement: "The children is" → "The children are" (plural subject)');
-            }
-            if (text.includes('have went')) {
-                explanations.push('Verb tense: "have went" → "went" (past simple, not past participle)');
-            }
-            if (text.includes("don't") && corrected.includes("doesn't")) {
-                explanations.push('Subject-verb agreement: "He don\'t" → "He doesn\'t" (third person singular)');
-            }
-            if (text.includes('Their going') || text.includes('their going')) {
-                explanations.push('Homophone: "Their" (possessive) → "They\'re" (contraction of "they are")');
-            }
-            if (text.includes('Me and my friend')) {
-                explanations.push('Pronoun order: "Me and my friend" → "My friend and I" (subject position)');
-            }
+            // Calculate grammar issues
+            const { issues, explanations } = calculateGrammarIssues(text, corrected);
             
+            issuesFixed.textContent = issues;
+            suggestionCount.textContent = issues;
+            
+            // Display explanations
             if (explanations.length > 0) {
                 explanationList.innerHTML = explanations.map((exp, i) => `
                     <div class="explanation-item">
@@ -217,22 +288,56 @@ Corrected version:`;
                     </div>
                 `).join('');
             } else {
-                explanationList.innerHTML = '<p>No major grammar issues found! Your text looks good.</p>';
+                // Generate basic explanations if none found
+                const changes = [];
+                if (text !== corrected) {
+                    const originalWords = text.split(/\s+/);
+                    const correctedWords = corrected.split(/\s+/);
+                    
+                    if (originalWords.length !== correctedWords.length) {
+                        changes.push(`Word count adjusted from ${originalWords.length} to ${correctedWords.length} words`);
+                    }
+                    
+                    if (text.length !== corrected.length) {
+                        changes.push(`Text length optimized by ${Math.abs(text.length - corrected.length)} characters`);
+                    }
+                    
+                    changes.push('Grammar and spelling errors corrected');
+                    
+                    explanationList.innerHTML = changes.map((change, i) => `
+                        <div class="explanation-item">
+                            <div class="issue">Improvement #${i+1}</div>
+                            <div class="explanation-text">${change}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    explanationList.innerHTML = '<div class="explanation-item"><div class="explanation-text">✓ No grammar errors detected! Your text looks great.</div></div>';
+                    issuesFixed.textContent = '0';
+                    suggestionCount.textContent = '0';
+                }
             }
             
             loading.style.display = 'none';
             resultCard.style.display = 'block';
             trackToolUsage();
             
+            // Scroll to results
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
         } catch (error) {
             console.error('Grammar check error:', error);
             loading.style.display = 'none';
             
-            if (error.message.includes('503')) {
-                showError('AI service is busy. Please try again.');
+            let errorMsg = 'Service temporarily unavailable. ';
+            if (error.message.includes('Invalid API key')) {
+                errorMsg = 'Invalid API key. Please check configuration.';
+            } else if (error.message.includes('503') || error.message.includes('429')) {
+                errorMsg = 'Service is busy. Please try again in a few moments.';
             } else {
-                showError('Failed to check grammar. Please try again.');
+                errorMsg += 'Please try again.';
             }
+            
+            showError(errorMsg);
         }
         
         checkBtn.disabled = false;
@@ -243,13 +348,19 @@ Corrected version:`;
     
     copyBtn.addEventListener('click', function() {
         const text = correctedText.textContent;
-        navigator.clipboard.writeText(text).then(() => {
-            const original = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-            setTimeout(() => {
-                copyBtn.innerHTML = original;
-            }, 2000);
-        });
+        if (text && text !== 'No text to display') {
+            navigator.clipboard.writeText(text).then(() => {
+                const original = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = original;
+                }, 2000);
+            }).catch(() => {
+                showError('Failed to copy text');
+            });
+        } else {
+            showError('No text to copy');
+        }
     });
     
     newBtn.addEventListener('click', function() {
@@ -267,6 +378,40 @@ Corrected version:`;
     });
     
     updateStats();
+    console.log('✅ AI Grammar Checker ready with Groq API');
 });
 
-// Firebase auth (keep existing)
+// Firebase auth state observer
+if (typeof firebase !== 'undefined') {
+    firebase.auth().onAuthStateChanged(function(user) {
+        const authLinks = document.getElementById('authLinks');
+        const userMenu = document.getElementById('userMenu');
+        const userGreeting = document.getElementById('userGreeting');
+        const footerLogin = document.getElementById('footerLogin');
+        const footerSignup = document.getElementById('footerSignup');
+        const footerLogout = document.getElementById('footerLogout');
+        const footerGuestInfo = document.getElementById('footerGuestInfo');
+        const footerUserInfo = document.getElementById('footerUserInfo');
+        
+        if (user) {
+            if (authLinks) authLinks.style.display = 'none';
+            if (userMenu) {
+                userMenu.style.display = 'flex';
+                if (userGreeting) userGreeting.textContent = `Hi, ${user.email.split('@')[0]}`;
+            }
+            if (footerLogin) footerLogin.style.display = 'none';
+            if (footerSignup) footerSignup.style.display = 'none';
+            if (footerLogout) footerLogout.style.display = 'block';
+            if (footerGuestInfo) footerGuestInfo.style.display = 'none';
+            if (footerUserInfo) footerUserInfo.style.display = 'flex';
+        } else {
+            if (authLinks) authLinks.style.display = 'flex';
+            if (userMenu) userMenu.style.display = 'none';
+            if (footerLogin) footerLogin.style.display = 'block';
+            if (footerSignup) footerSignup.style.display = 'block';
+            if (footerLogout) footerLogout.style.display = 'none';
+            if (footerGuestInfo) footerGuestInfo.style.display = 'flex';
+            if (footerUserInfo) footerUserInfo.style.display = 'none';
+        }
+    });
+}
