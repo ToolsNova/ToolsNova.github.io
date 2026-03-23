@@ -3,7 +3,7 @@
     <!-- Homepage -->
     <url>
         <loc>https://toolsnova.github.io/</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
@@ -11,57 +11,81 @@
     <!-- Main Pages -->
     <url>
         <loc>https://toolsnova.github.io/tools.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/ai-assistant.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/about.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://toolsnova.github.io/privacy.html</loc>
+        <lastmod>2026-03-23</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://toolsnova.github.io/terms.html</loc>
+        <lastmod>2026-03-23</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://toolsnova.github.io/contact.html</loc>
+        <lastmod>2026-03-23</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://toolsnova.github.io/login.html</loc>
+        <lastmod>2026-03-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.3</priority>
+    </url>
+    <url>
+        <loc>https://toolsnova.github.io/signup.html</loc>
+        <lastmod>2026-03-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.3</priority>
     </url>
     
     <!-- Media Tools -->
     <url>
         <loc>https://toolsnova.github.io/tools/yt-thumbnail.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/video-to-mp3.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/yt-transcript.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/image-compressor.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/qr-generator.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
@@ -69,28 +93,25 @@
     <!-- AI Tools -->
     <url>
         <loc>https://toolsnova.github.io/tools/background-remover.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/ai-content-detector.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/ai-grammar-checker.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/ai-text-summarizer.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -98,42 +119,37 @@
     <!-- Image Editor Tools -->
     <url>
         <loc>https://toolsnova.github.io/tools/image-editor.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/image-to-png.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/ocr.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/brightness-contrast.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/crop-rotate.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/resize-image.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
@@ -141,35 +157,31 @@
     <!-- Code Tools -->
     <url>
         <loc>https://toolsnova.github.io/tools/python-editor.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/live-editor.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/json-formatter.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/css-minifier.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/html-preview.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
@@ -177,51 +189,26 @@
     <!-- Calculators -->
     <url>
         <loc>https://toolsnova.github.io/tools/age-calculator.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/discount-calculator.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/currency-converter.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
     </url>
-    
     <url>
         <loc>https://toolsnova.github.io/tools/bmi-calculator.html</loc>
-        <lastmod>2026-03-19</lastmod>
+        <lastmod>2026-03-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
-    </url>
-    
-    <!-- Auth Pages -->
-    <url>
-        <loc>https://toolsnova.github.io/login.html</loc>
-        <lastmod>2026-03-19</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.3</priority>
-    </url>
-    
-    <url>
-        <loc>https://toolsnova.github.io/signup.html</loc>
-        <lastmod>2026-03-19</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.3</priority>
-    </url>
-    
-    <url>
-        <loc>https://toolsnova.github.io/privacy.html</loc>
-        <lastmod>2026-03-19</lastmod>
-        <changefreq>yearly</changefreq>
-        <priority>0.2</priority>
     </url>
 </urlset>
