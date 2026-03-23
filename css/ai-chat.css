@@ -11,6 +11,7 @@ body {
     height: 100vh;
     overflow: hidden;
     transition: background 0.2s ease, color 0.2s ease;
+    position: relative;
 }
 
 /* Dark Mode */
@@ -24,6 +25,7 @@ body.dark-mode {
     height: 100vh;
     width: 100%;
     position: relative;
+    overflow: hidden;
 }
 
 /* ========= SIDEBAR ========= */
@@ -37,6 +39,7 @@ body.dark-mode {
     flex-shrink: 0;
     z-index: 100;
     overflow-y: auto;
+    position: relative;
 }
 
 body.dark-mode .sidebar {
@@ -85,6 +88,7 @@ body.dark-mode .sidebar {
         transform: translateX(-100%);
         box-shadow: none;
         z-index: 1050;
+        transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
     }
     .sidebar.open {
         transform: translateX(0);
@@ -266,6 +270,7 @@ body.dark-mode .sidebar-footer {
     overflow: hidden;
     position: relative;
     background: #ffffff;
+    min-width: 0; /* Prevents flex overflow */
 }
 
 body.dark-mode .main-chat {
@@ -279,6 +284,9 @@ body.dark-mode .main-chat {
     border-bottom: 1px solid #e2e8f0;
     background: inherit;
     gap: 16px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
 }
 
 body.dark-mode .chat-header {
@@ -292,11 +300,20 @@ body.dark-mode .chat-header {
     font-size: 1.4rem;
     cursor: pointer;
     color: #334155;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.mobile-menu-btn:hover {
+    background: #f1f5f9;
 }
 
 @media (max-width: 768px) {
     .mobile-menu-btn {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -304,11 +321,15 @@ body.dark-mode .chat-header {
     flex: 1;
     font-weight: 600;
     font-size: 1.1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .header-actions {
     display: flex;
     gap: 12px;
+    flex-shrink: 0;
 }
 
 .icon-btn {
@@ -320,10 +341,17 @@ body.dark-mode .chat-header {
     border-radius: 50%;
     transition: background 0.2s;
     color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .icon-btn:hover {
     background: #f1f5f9;
+}
+
+body.dark-mode .icon-btn:hover {
+    background: #334155;
 }
 
 /* ========= IMPROVED MESSAGES CONTAINER ========= */
@@ -333,6 +361,7 @@ body.dark-mode .chat-header {
     padding: 24px 20px;
     scroll-behavior: smooth;
     background: #f9fafb;
+    position: relative;
 }
 
 body.dark-mode .messages-container {
@@ -631,11 +660,14 @@ body.dark-mode .file-preview {
     background: rgba(239, 68, 68, 0.1);
 }
 
-/* ===== INPUT AREA ===== */
+/* ===== INPUT AREA - FIXED FOR MOBILE ===== */
 .input-area {
-    padding: 20px 20px 24px;
+    padding: 16px 20px 20px;
     border-top: 1px solid #e2e8f0;
     background: #ffffff;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 5;
 }
 
 body.dark-mode .input-area {
@@ -677,10 +709,43 @@ body.dark-mode .input-wrapper {
     outline: none;
     max-height: 120px;
     color: inherit;
+    line-height: 1.5;
 }
 
 .input-wrapper textarea::placeholder {
     color: #94a3b8;
+}
+
+/* Send button styling */
+.send-btn {
+    background: #3b82f6;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+}
+
+.send-btn:hover {
+    background: #2563eb;
+    transform: scale(1.05);
+}
+
+.send-btn i {
+    color: white;
+    font-size: 1rem;
+}
+
+.send-btn:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
 }
 
 /* ===== TYPING INDICATOR ===== */
@@ -764,10 +829,11 @@ body.dark-mode ::-webkit-scrollbar-thumb {
     background: #475569;
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/* ===== RESPONSIVE DESIGN - IMPROVED FOR MOBILE ===== */
 @media (max-width: 768px) {
     .messages-container {
         padding: 16px 12px;
+        padding-bottom: 80px; /* Add extra padding at bottom for better scroll */
     }
     
     .message-content {
@@ -793,13 +859,44 @@ body.dark-mode ::-webkit-scrollbar-thumb {
         font-size: 0.9rem;
     }
     
+    .input-area {
+        padding: 12px 16px 16px;
+    }
+    
     .input-wrapper {
         padding: 6px 12px;
+    }
+    
+    .input-wrapper textarea {
+        font-size: 0.9rem;
+        max-height: 100px;
+    }
+    
+    .send-btn {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .send-btn i {
+        font-size: 0.9rem;
     }
     
     .code-block-wrapper pre {
         font-size: 0.75rem;
         padding: 12px;
+    }
+    
+    .chat-header {
+        padding: 10px 16px;
+    }
+    
+    .current-title {
+        font-size: 1rem;
+    }
+    
+    .icon-btn {
+        padding: 6px;
+        font-size: 1.1rem;
     }
 }
 
@@ -810,10 +907,30 @@ body.dark-mode ::-webkit-scrollbar-thumb {
     
     .message-bubble {
         padding: 8px 12px;
+        font-size: 0.85rem;
     }
     
     .file-preview {
         font-size: 0.75rem;
+    }
+    
+    .input-area {
+        padding: 10px 12px 14px;
+    }
+    
+    .messages-container {
+        padding-bottom: 70px;
+    }
+}
+
+/* Fix for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+    .app {
+        height: -webkit-fill-available;
+    }
+    
+    body {
+        height: -webkit-fill-available;
     }
 }
 
@@ -828,4 +945,15 @@ body.dark-mode ::-webkit-scrollbar-thumb {
 
 .mb-2 {
     margin-bottom: 8px;
+}
+
+/* Ensure safe area for notched phones */
+@supports (padding: max(0px)) {
+    .input-area {
+        padding-bottom: max(16px, env(safe-area-inset-bottom));
+    }
+    
+    .chat-header {
+        padding-top: max(12px, env(safe-area-inset-top));
+    }
 }
