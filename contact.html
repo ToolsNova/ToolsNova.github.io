@@ -103,7 +103,7 @@
     .contact-card {
         background: var(--bg-secondary);
         border-radius: 24px;
-        padding: 30px;
+        padding: 30px 20px;
         text-align: center;
         border: 1px solid var(--border);
         transition: all 0.3s ease;
@@ -116,41 +116,45 @@
     }
     
     .contact-icon {
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
         background: linear-gradient(135deg, var(--primary), #8b5cf6);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 20px;
+        margin: 0 auto 15px;
     }
     
     .contact-icon i {
-        font-size: 2rem;
+        font-size: 1.8rem;
         color: white;
     }
     
     .contact-card h3 {
-        font-size: 1.3rem;
-        margin-bottom: 15px;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
         color: var(--text-primary);
     }
     
     .contact-card p {
         color: var(--text-secondary);
-        margin-bottom: 20px;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+        line-height: 1.5;
     }
     
     .contact-link {
         display: inline-block;
-        padding: 10px 24px;
+        padding: 8px 16px;
         background: var(--primary);
         color: white;
         text-decoration: none;
         border-radius: 60px;
         font-weight: 500;
         transition: all 0.2s ease;
+        font-size: 0.85rem;
+        word-break: break-all;
     }
     
     .contact-link:hover {
@@ -168,6 +172,7 @@
     .contact-info p {
         color: var(--text-secondary);
         margin-bottom: 10px;
+        font-size: 0.9rem;
     }
     
     .contact-info a {
@@ -211,25 +216,94 @@
     .response-time {
         background: var(--bg-secondary);
         border-radius: 60px;
-        padding: 12px 24px;
+        padding: 10px 20px;
         display: inline-flex;
         align-items: center;
         gap: 8px;
         margin-top: 20px;
         border: 1px solid var(--border);
         color: var(--text-secondary);
+        font-size: 0.85rem;
     }
     
+    /* Mobile Responsive */
     @media (max-width: 768px) {
         .contact-container {
-            padding: 25px;
-            margin: 30px 20px;
+            padding: 25px 20px;
+            margin: 30px 15px;
         }
+        
         .contact-header h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
         }
+        
+        .contact-header p {
+            font-size: 0.95rem;
+        }
+        
         .contact-methods {
             grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .contact-card {
+            padding: 20px 15px;
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .contact-icon i {
+            font-size: 1.5rem;
+        }
+        
+        .contact-card h3 {
+            font-size: 1.1rem;
+        }
+        
+        .contact-card p {
+            font-size: 0.85rem;
+        }
+        
+        .contact-link {
+            font-size: 0.75rem;
+            padding: 6px 12px;
+            word-break: break-all;
+            max-width: 100%;
+            display: inline-block;
+        }
+        
+        .contact-info p {
+            font-size: 0.85rem;
+        }
+        
+        .response-time {
+            font-size: 0.75rem;
+            padding: 8px 15px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .contact-container {
+            padding: 20px 15px;
+            margin: 20px 10px;
+        }
+        
+        .contact-link {
+            font-size: 0.7rem;
+            padding: 5px 10px;
+        }
+        
+        .contact-card {
+            padding: 15px 12px;
         }
     }
 </style>
@@ -322,53 +396,53 @@
         </div>
     </div>
 
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <i class="fas fa-star"></i>
-                <span>ToolsNova</span>
-                <p>Your universe of professional web tools.</p>
-                
-                <div class="guest-info" id="footerGuestInfo">
-                    <i class="fas fa-user-guest"></i>
-                    <span>Guest users get 3 free uses</span>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-star"></i>
+                    <span>ToolsNova</span>
+                    <p>Your universe of professional web tools.</p>
+                    
+                    <div class="guest-info" id="footerGuestInfo">
+                        <i class="fas fa-user-guest"></i>
+                        <span>Guest users get 3 free uses</span>
+                    </div>
+                    
+                    <div class="user-info-footer" id="footerUserInfo" style="display: none;">
+                        <i class="fas fa-crown" style="color: var(--success);"></i>
+                        <span>You have unlimited access</span>
+                    </div>
                 </div>
-                
-                <div class="user-info-footer" id="footerUserInfo" style="display: none;">
-                    <i class="fas fa-crown" style="color: var(--success);"></i>
-                    <span>You have unlimited access</span>
+                <div class="footer-links">
+                    <div class="footer-group">
+                        <h4>Tools</h4>
+                        <a href="./tools.html">All Tools</a>
+                        <a href="./tools.html#media">Media Tools</a>
+                        <a href="./tools.html#ai">AI Tools</a>
+                        <a href="./tools.html#calc">Calculators</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Company</h4>
+                        <a href="./about.html">About</a>
+                        <a href="./privacy.html">Privacy Policy</a>
+                        <a href="./terms.html">Terms of Service</a>
+                        <a href="./contact.html">Contact</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Account</h4>
+                        <a href="login.html" id="footerLogin">Login</a>
+                        <a href="signup.html" id="footerSignup">Sign Up</a>
+                        <a href="#" id="footerLogout" style="display: none;">Logout</a>
+                    </div>
                 </div>
             </div>
-            <div class="footer-links">
-                <div class="footer-group">
-                    <h4>Tools</h4>
-                    <a href="./tools.html">All Tools</a>
-                    <a href="./tools.html#media">Media Tools</a>
-                    <a href="./tools.html#ai">AI Tools</a>
-                    <a href="./tools.html#calc">Calculators</a>
-                </div>
-                <div class="footer-group">
-                    <h4>Company</h4>
-                    <a href="./about.html">About</a>
-                    <a href="./privacy.html">Privacy Policy</a>
-                    <a href="./terms.html">Terms of Service</a>
-                    <a href="./contact.html">Contact</a>
-                </div>
-                <div class="footer-group">
-                    <h4>Account</h4>
-                    <a href="login.html" id="footerLogin">Login</a>
-                    <a href="signup.html" id="footerSignup">Sign Up</a>
-                    <a href="#" id="footerLogout" style="display: none;">Logout</a>
-                </div>
+            <div class="footer-bottom">
+                <p>© 2025 ToolsNova. All rights reserved. Made for developers and creators.</p>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>© 2025 ToolsNova. All rights reserved. Made for developers and creators.</p>
-        </div>
-    </div>
-</footer>
+    </footer>
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
