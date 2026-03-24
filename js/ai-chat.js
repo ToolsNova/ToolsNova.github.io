@@ -32,6 +32,32 @@ let messageInput, sendBtn, newChatBtn, themeToggle;
 let chatHistory, currentChatTitle, attachBtn, fileInput, filePreviewContainer;
 let sidebar, sidebarToggle, mobileMenuBtn, mobileOverlay;
 
+// Add this function to check message size
+function checkMessageSize(text) {
+    const MAX_SIZE = 50000; // 50KB limit
+    if (text.length > MAX_SIZE) {
+        return {
+            valid: false,
+            message: `Message too long (${Math.round(text.length/1000)}KB). Please keep under 50KB.`
+        };
+    }
+    return { valid: true };
+}
+
+// In your sendMessage function, add:
+async function sendMessage() {
+    const message = messageInput.value.trim();
+    
+    // Check size
+    const sizeCheck = checkMessageSize(message);
+    if (!sizeCheck.valid) {
+        addMessage(sizeCheck.message, false);
+        return;
+    }
+    
+    // Rest of your code...
+}
+
 // ===== COPY CODE FUNCTION =====
 window.copyCode = function(code) {
     const decodedCode = decodeURIComponent(code);
