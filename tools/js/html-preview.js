@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="dashboard">
         <div class="header">
             <h1>Analytics Dashboard</h1>
-            <div class="date">March 18, 2025</div>
+            <div class="date">March 18, 2026</div>
         </div>
         
         <div class="stats-grid">
