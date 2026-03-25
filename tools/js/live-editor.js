@@ -178,13 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
 <link rel="manifest" href="/assets/site.webmanifest">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
 
-.app {
-    display: flex;
-    min-height: 100dvh;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-}
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
      crossorigin="anonymous"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
@@ -356,13 +349,6 @@ ${js}
 <link rel="manifest" href="/assets/site.webmanifest">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
 
-.app {
-    display: flex;
-    min-height: 100dvh;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-}
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
      crossorigin="anonymous"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
