@@ -161,13 +161,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499" crossorigin="anonymous"></script>
-.app {
-    display: flex;
-    min-height: 100dvh;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-}
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
@@ -346,13 +339,6 @@ ${js}
 
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499" crossorigin="anonymous"></script>
-.app {
-    display: flex;
-    min-height: 100dvh;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-}
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
