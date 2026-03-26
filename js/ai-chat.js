@@ -1,6 +1,4 @@
-// ===== CONFIGURATION =====
-const GROQ_API_KEY = "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";
-const MAX_GUEST_MESSAGES = 3;
+// ===== AI CHAT ASSISTANT - SECURE VERSION (Firebase AI Logic) =====
 
 // ===== FIREBASE CONFIG =====
 const firebaseConfig = {
@@ -15,10 +13,12 @@ const firebaseConfig = {
 // Initialize Firebase
 if (typeof firebase !== 'undefined') {
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
 } else {
     console.error('Firebase not loaded');
 }
+
+// ===== CONFIGURATION =====
+const MAX_GUEST_MESSAGES = 3;
 
 // ===== GLOBAL STATE =====
 let chats = [];
@@ -32,9 +32,9 @@ let messageInput, sendBtn, newChatBtn, themeToggle;
 let chatHistory, currentChatTitle, attachBtn, fileInput, filePreviewContainer;
 let sidebar, sidebarToggle, mobileMenuBtn, mobileOverlay;
 
-// Add this function to check message size
+// ===== CHECK MESSAGE SIZE =====
 function checkMessageSize(text) {
-    const MAX_SIZE = 50000; // 50KB limit
+    const MAX_SIZE = 50000;
     if (text.length > MAX_SIZE) {
         return {
             valid: false,
@@ -42,20 +42,6 @@ function checkMessageSize(text) {
         };
     }
     return { valid: true };
-}
-
-// In your sendMessage function, add:
-async function sendMessage() {
-    const message = messageInput.value.trim();
-    
-    // Check size
-    const sizeCheck = checkMessageSize(message);
-    if (!sizeCheck.valid) {
-        addMessage(sizeCheck.message, false);
-        return;
-    }
-    
-    // Rest of your code...
 }
 
 // ===== COPY CODE FUNCTION =====
@@ -134,7 +120,7 @@ async function processFiles(files) {
     return processedFiles;
 }
 
-// ===== AI ASSISTANT CLASS =====
+// ===== 🔥 AI ASSISTANT CLASS - USING FIREBASE AI LOGIC (NO API KEY!) =====
 class AIAssistant {
     constructor() {
         this.messages = [];
@@ -177,7 +163,7 @@ When the user asks for a table, output an HTML table like this:
      <tr><th>City</th><th>Population</th><th>Country</th></tr>
   </thead>
   <tbody>
-     <tr><td>Tokyo</td><td>38M</td><td>Japan</td></tr>
+      <tr><td>Tokyo</td><td>38M</td><td>Japan</td></tr>
   </tbody>
 </table>
 
@@ -191,43 +177,27 @@ IMPORTANT:
 Remember: This is message #${messageCount}. Be friendly and helpful.`;
 
         try {
-            const messages = [
-                { role: "system", content: systemPrompt }
-            ];
-
-            const response = await this.callGroqAPI(messages);
+            // 🔥 FIREBASE AI LOGIC - NO API KEY NEEDED!
+            const ai = firebase.ai();
+            const model = ai.generativeModel('gemini-2.5-flash-lite');
+            
+            const prompt = `${systemPrompt}\n\nUser: ${userMessage}\n\nAssistant:`;
+            const result = await model.generateContent(prompt);
+            let response = result.response.text().trim();
+            
+            response = response.replace(/\*\*/g, '').replace(/\*/g, '').trim();
             
             this.messages.push({
                 role: 'assistant',
                 content: response
             });
             
-            return response.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+            return response;
+            
         } catch (error) {
             console.error('AI Error:', error);
-            return "❌ Error\n\nSorry, there was an error. Please try again.";
+            return "❌ Error\n\nSorry, the AI service is temporarily unavailable. Please try again in a few moments.";
         }
-    }
-
-    async callGroqAPI(messages) {
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${GROQ_API_KEY}`
-            },
-            body: JSON.stringify({
-                model: "llama-3.3-70b-versatile",
-                messages: messages,
-                temperature: 0.1,
-                max_tokens: 1500
-            })
-        });
-        
-        if (!response.ok) throw new Error(`API error: ${response.status}`);
-        
-        const data = await response.json();
-        return data.choices[0].message.content;
     }
 }
 
