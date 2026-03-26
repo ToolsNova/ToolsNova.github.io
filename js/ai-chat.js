@@ -1,4 +1,4 @@
-// ===== AI CHAT ASSISTANT - SECURE VERSION (Firebase AI Logic) =====
+// ===== AI CHAT ASSISTANT - CLOUDFLARE WORKER VERSION =====
 
 // ===== FIREBASE CONFIG =====
 const firebaseConfig = {
@@ -19,6 +19,8 @@ if (typeof firebase !== 'undefined') {
 
 // ===== CONFIGURATION =====
 const MAX_GUEST_MESSAGES = 3;
+// 🔥 YOUR CLOUDFLARE WORKER URL
+const WORKER_URL = 'https://proxy.toolsnova.workers.dev';
 
 // ===== GLOBAL STATE =====
 let chats = [];
@@ -120,7 +122,7 @@ async function processFiles(files) {
     return processedFiles;
 }
 
-// ===== 🔥 AI ASSISTANT CLASS - USING FIREBASE AI LOGIC (NO API KEY!) =====
+// ===== 🔥 AI ASSISTANT CLASS - CLOUDFLARE WORKER VERSION =====
 class AIAssistant {
     constructor() {
         this.messages = [];
@@ -177,22 +179,31 @@ IMPORTANT:
 Remember: This is message #${messageCount}. Be friendly and helpful.`;
 
         try {
-            // 🔥 FIREBASE AI LOGIC - NO API KEY NEEDED!
-            const ai = firebase.ai();
-            const model = ai.generativeModel('gemini-2.5-flash-lite');
-            
-            const prompt = `${systemPrompt}\n\nUser: ${userMessage}\n\nAssistant:`;
-            const result = await model.generateContent(prompt);
-            let response = result.response.text().trim();
-            
-            response = response.replace(/\*\*/g, '').replace(/\*/g, '').trim();
-            
-            this.messages.push({
-                role: 'assistant',
-                content: response
+            // 🔥 CALL YOUR CLOUDFLARE WORKER (NO API KEY!)
+            const response = await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMessage }],
+                    action: 'chat'
+                })
             });
             
-            return response;
+            const data = await response.json();
+            
+            if (data.success) {
+                let responseText = data.result;
+                responseText = responseText.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+                
+                this.messages.push({
+                    role: 'assistant',
+                    content: responseText
+                });
+                
+                return responseText;
+            } else {
+                throw new Error(data.error);
+            }
             
         } catch (error) {
             console.error('AI Error:', error);
@@ -239,7 +250,7 @@ function closeSidebar() {
     }
 }
 
-// ===== CHAT MANAGEMENT =====
+// ===== CHAT MANAGEMENT FUNCTIONS =====
 function loadChat(chatId) {
     const chat = chats.find(c => c.id === chatId);
     if (!chat) return;
