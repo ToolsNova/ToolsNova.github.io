@@ -1,4 +1,4 @@
-// ===== AI TEXT SUMMARIZER - SECURE VERSION (Firebase AI Logic) =====
+// ===== AI TEXT SUMMARIZER - CLOUDFLARE WORKER VERSION =====
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('AI Text Summarizer loaded');
@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const lengthSelect = document.getElementById('lengthSelect');
     const formatSelect = document.getElementById('formatSelect');
     const sampleBtns = document.querySelectorAll('.sample-btn');
+    
+    // 🔥 YOUR CLOUDFLARE WORKER URL
+    const WORKER_URL = 'https://proxy.toolsnova.workers.dev';
     
     const samples = {
         article: `Climate change is one of the most pressing issues facing our planet today. Rising global temperatures, caused primarily by human activities such as burning fossil fuels and deforestation, are leading to a cascade of environmental impacts. These include more frequent and severe weather events like hurricanes, droughts, and floods; rising sea levels that threaten coastal communities; and disruptions to ecosystems and biodiversity. The scientific consensus is clear: urgent action is needed to reduce greenhouse gas emissions and transition to sustainable energy sources. International agreements like the Paris Agreement aim to unite countries in this effort, but implementation remains a challenge.`,
@@ -77,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return text.trim() ? text.trim().split(/\s+/).length : 0;
     }
     
-    // 🔥 SECURE SUMMARIZATION USING FIREBASE AI LOGIC
+    // 🔥 SECURE SUMMARIZATION USING CLOUDFLARE WORKER
     async function summarizeText() {
         const text = textInput.value.trim();
         
@@ -101,81 +104,66 @@ document.addEventListener('DOMContentLoaded', function() {
         const format = formatSelect.value;
         const originalWordCount = countWords(text);
         
-        let lengthInstruction = '';
-        switch(length) {
-            case 'short':
-                lengthInstruction = 'Maximum 2 sentences or 20 words.';
-                break;
-            case 'medium':
-                lengthInstruction = 'Maximum 4 sentences or 50 words.';
-                break;
-            case 'long':
-                lengthInstruction = 'Maximum 6 sentences or 80 words.';
-                break;
-        }
-        
-        let formatInstruction = format === 'bullet' ? 'Format as 2-4 bullet points with •.' : 'Format as a single paragraph.';
-        
         summarizeBtn.disabled = true;
         summarizeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Summarizing...';
         loading.style.display = 'block';
         resultCard.style.display = 'none';
         
         try {
-            // 🔥 FIREBASE AI LOGIC - NO API KEY NEEDED!
-            const ai = firebase.ai();
-            const model = ai.generativeModel('gemini-2.5-flash-lite');
+            // 🔥 CALL YOUR CLOUDFLARE WORKER (NO API KEY!)
+            const response = await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    text: text, 
+                    action: 'summarize',
+                    length: length,
+                    format: format
+                })
+            });
             
-            const prompt = `Summarize the text below. CRITICAL RULES:
-1. ${lengthInstruction}
-2. ${formatInstruction}
-3. Keep only the core message
-4. Remove examples and details
-
-Text:
-"""
-${text}
-"""
-
-Summary:`;
+            const data = await response.json();
             
-            const result = await model.generateContent(prompt);
-            let summary = result.response.text().trim();
-            
-            const summaryWordCount = countWords(summary);
-            const reduction = Math.round(((originalWordCount - summaryWordCount) / originalWordCount) * 100);
-            
-            summaryContent.textContent = summary;
-            originalWords.textContent = originalWordCount;
-            summaryWords.textContent = summaryWordCount;
-            reductionPercent.textContent = Math.max(0, reduction);
-            
-            const reductionElement = document.getElementById('reductionPercent');
-            if (reduction < 30) {
-                reductionElement.style.color = '#ef4444';
-            } else if (reduction < 50) {
-                reductionElement.style.color = '#f59e0b';
+            if (data.success) {
+                let summary = data.result;
+                const summaryWordCount = countWords(summary);
+                const reduction = Math.round(((originalWordCount - summaryWordCount) / originalWordCount) * 100);
+                
+                summaryContent.textContent = summary;
+                originalWords.textContent = originalWordCount;
+                summaryWords.textContent = summaryWordCount;
+                reductionPercent.textContent = Math.max(0, reduction);
+                
+                const reductionElement = document.getElementById('reductionPercent');
+                if (reduction < 30) {
+                    reductionElement.style.color = '#ef4444';
+                } else if (reduction < 50) {
+                    reductionElement.style.color = '#f59e0b';
+                } else {
+                    reductionElement.style.color = '#10b981';
+                }
+                
+                // Extract key points
+                const sentences = summary.split(/[.!?]+/).filter(s => s.trim().length > 10);
+                const keyPoints = sentences.slice(0, 3).map(s => s.trim());
+                
+                if (keyPoints.length > 0) {
+                    keyPointsList.innerHTML = keyPoints.map(point => 
+                        `<li><i class="fas fa-circle" style="font-size: 0.5rem; color: #3b82f6;"></i> <span>${point}</span></li>`
+                    ).join('');
+                    document.getElementById('keyPointsSection').style.display = 'block';
+                } else {
+                    document.getElementById('keyPointsSection').style.display = 'none';
+                }
+                
+                loading.style.display = 'none';
+                resultCard.style.display = 'block';
+                trackToolUsage();
+                resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
             } else {
-                reductionElement.style.color = '#10b981';
+                throw new Error(data.error);
             }
-            
-            // Extract key points
-            const sentences = summary.split(/[.!?]+/).filter(s => s.trim().length > 10);
-            const keyPoints = sentences.slice(0, 3).map(s => s.trim());
-            
-            if (keyPoints.length > 0) {
-                keyPointsList.innerHTML = keyPoints.map(point => 
-                    `<li><i class="fas fa-circle" style="font-size: 0.5rem; color: #3b82f6;"></i> <span>${point}</span></li>`
-                ).join('');
-                document.getElementById('keyPointsSection').style.display = 'block';
-            } else {
-                document.getElementById('keyPointsSection').style.display = 'none';
-            }
-            
-            loading.style.display = 'none';
-            resultCard.style.display = 'block';
-            trackToolUsage();
-            resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
             
         } catch (error) {
             console.error('Summarization error:', error);
@@ -219,7 +207,7 @@ Summary:`;
     });
     
     updateStats();
-    console.log('✅ AI Text Summarizer ready with Firebase AI Logic');
+    console.log('✅ AI Text Summarizer ready with Cloudflare Worker');
 });
 
 // Firebase auth state observer

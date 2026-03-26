@@ -1,4 +1,4 @@
-// ===== AI CONTENT DETECTOR - SECURE VERSION (Firebase AI Logic) =====
+// ===== AI CONTENT DETECTOR - CLOUDFLARE WORKER VERSION =====
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('AI Content Detector loaded');
@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const charCount = document.getElementById('charCount');
     const wordCount = document.getElementById('wordCount');
     const sampleBtns = document.querySelectorAll('.sample-btn');
+    
+    // 🔥 YOUR CLOUDFLARE WORKER URL
+    const WORKER_URL = 'https://proxy.toolsnova.workers.dev';
     
     const samples = {
         ai: `The rapid advancement of artificial intelligence has precipitated a paradigm shift across multiple sectors of the global economy. This transformative technology, characterized by its ability to simulate human cognitive functions, is poised to revolutionize industries ranging from healthcare to finance.`,
@@ -102,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return result;
     }
     
-    // 🔥 SECURE DETECTION USING FIREBASE AI LOGIC
+    // 🔥 SECURE DETECTION USING CLOUDFLARE WORKER
     async function analyzeContent() {
         const text = textInput.value.trim();
         
@@ -128,40 +131,50 @@ document.addEventListener('DOMContentLoaded', function() {
         resultCard.style.display = 'none';
         
         try {
-            // 🔥 FIREBASE AI LOGIC - NO API KEY NEEDED!
-            const ai = firebase.ai();
-            const model = ai.generativeModel('gemini-2.5-flash-lite');
+            // 🔥 CALL YOUR CLOUDFLARE WORKER (NO API KEY!)
+            const response = await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    text: text, 
+                    action: 'detect' 
+                })
+            });
             
-            const prompt = `Analyze if this text was written by AI. Return ONLY one of these three exact responses: "Likely AI-written", "Likely Human-written", or "Uncertain". Do not add any other text:\n\n${text}`;
-            const result = await model.generateContent(prompt);
-            const detection = result.response.text().trim();
+            const data = await response.json();
             
-            const parsed = parseResponse(detection);
-            
-            aiScore.textContent = parsed.aiProbability + '%';
-            humanScore.textContent = parsed.humanProbability + '%';
-            
-            const confidenceColors = {
-                'High': '#10b981',
-                'Medium': '#f59e0b',
-                'Low': '#ef4444'
-            };
-            confidenceBadge.innerHTML = `<i class="fas fa-check-circle"></i> ${parsed.confidence} Confidence`;
-            confidenceBadge.style.color = confidenceColors[parsed.confidence];
-            confidenceBadge.style.backgroundColor = confidenceColors[parsed.confidence] + '20';
-            
-            analysisText.textContent = parsed.analysis;
-            
-            const isAI = parsed.aiProbability > 70;
-            indicatorsList.innerHTML = parsed.indicators.map(ind => {
-                const icon = isAI ? 'exclamation-triangle' : 'check-circle';
-                const color = isAI ? '#ef4444' : '#10b981';
-                return `<li><i class="fas fa-${icon}" style="color: ${color}; margin-right: 10px; width: 20px;"></i> ${ind}</li>`;
-            }).join('');
-            
-            loading.style.display = 'none';
-            resultCard.style.display = 'block';
-            trackToolUsage();
+            if (data.success) {
+                const detection = data.result;
+                const parsed = parseResponse(detection);
+                
+                aiScore.textContent = parsed.aiProbability + '%';
+                humanScore.textContent = parsed.humanProbability + '%';
+                
+                const confidenceColors = {
+                    'High': '#10b981',
+                    'Medium': '#f59e0b',
+                    'Low': '#ef4444'
+                };
+                confidenceBadge.innerHTML = `<i class="fas fa-check-circle"></i> ${parsed.confidence} Confidence`;
+                confidenceBadge.style.color = confidenceColors[parsed.confidence];
+                confidenceBadge.style.backgroundColor = confidenceColors[parsed.confidence] + '20';
+                
+                analysisText.textContent = parsed.analysis;
+                
+                const isAI = parsed.aiProbability > 70;
+                indicatorsList.innerHTML = parsed.indicators.map(ind => {
+                    const icon = isAI ? 'exclamation-triangle' : 'check-circle';
+                    const color = isAI ? '#ef4444' : '#10b981';
+                    return `<li><i class="fas fa-${icon}" style="color: ${color}; margin-right: 10px; width: 20px;"></i> ${ind}</li>`;
+                }).join('');
+                
+                loading.style.display = 'none';
+                resultCard.style.display = 'block';
+                trackToolUsage();
+                
+            } else {
+                throw new Error(data.error);
+            }
             
         } catch (error) {
             console.error('Analysis error:', error);
@@ -190,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     updateStats();
-    console.log('✅ AI Content Detector ready with Firebase AI Logic');
+    console.log('✅ AI Content Detector ready with Cloudflare Worker');
 });
 
 // Firebase auth state observer

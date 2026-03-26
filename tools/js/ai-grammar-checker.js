@@ -1,4 +1,4 @@
-// ===== AI GRAMMAR CHECKER - SECURE VERSION (Firebase AI Logic) =====
+// ===== AI GRAMMAR CHECKER - CLOUDFLARE WORKER VERSION =====
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('AI Grammar Checker loaded');
@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const wordCount = document.getElementById('wordCount');
     const sampleBtns = document.querySelectorAll('.sample-btn');
     const tabBtns = document.querySelectorAll('.tab-btn');
+    
+    // 🔥 YOUR CLOUDFLARE WORKER URL
+    const WORKER_URL = 'https://proxy.toolsnova.workers.dev';
     
     // Sample texts
     const samples = {
@@ -115,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return { issues, explanations };
     }
     
-    // 🔥 SECURE GRAMMAR CHECK USING FIREBASE AI LOGIC
+    // 🔥 SECURE GRAMMAR CHECK USING CLOUDFLARE WORKER
     async function checkGrammar() {
         const text = textInput.value.trim();
         
@@ -142,49 +145,56 @@ document.addEventListener('DOMContentLoaded', function() {
         errorMessage.style.display = 'none';
         
         try {
-            // 🔥 FIREBASE AI LOGIC - NO API KEY NEEDED!
-            const ai = firebase.ai();
-            const model = ai.generativeModel('gemini-2.5-flash-lite');
+            // 🔥 CALL YOUR CLOUDFLARE WORKER (NO API KEY!)
+            const response = await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    text: text, 
+                    action: 'grammar' 
+                })
+            });
             
-            const prompt = `Fix grammar and spelling. Return only corrected text. No explanations, no quotes:\n\n${text}`;
-            const result = await model.generateContent(prompt);
-            const corrected = result.response.text().trim();
+            const data = await response.json();
             
-            if (!corrected || corrected.length === 0) {
-                throw new Error('No response received');
-            }
-            
-            correctedText.textContent = corrected;
-            originalText.textContent = text;
-            
-            const { issues, explanations } = calculateGrammarIssues(text, corrected);
-            issuesFixed.textContent = issues;
-            suggestionCount.textContent = issues;
-            
-            if (explanations.length > 0) {
-                explanationList.innerHTML = explanations.map((exp, i) => `
-                    <div class="explanation-item">
-                        <div class="issue">Issue #${i+1}</div>
-                        <div class="explanation-text">${exp}</div>
-                    </div>
-                `).join('');
-            } else if (text !== corrected) {
-                explanationList.innerHTML = `
-                    <div class="explanation-item">
-                        <div class="issue">Grammar Fixed</div>
-                        <div class="explanation-text">Your text has been corrected for grammar and spelling.</div>
-                    </div>
-                `;
+            if (data.success) {
+                const corrected = data.result;
+                
+                correctedText.textContent = corrected;
+                originalText.textContent = text;
+                
+                const { issues, explanations } = calculateGrammarIssues(text, corrected);
+                issuesFixed.textContent = issues;
+                suggestionCount.textContent = issues;
+                
+                if (explanations.length > 0) {
+                    explanationList.innerHTML = explanations.map((exp, i) => `
+                        <div class="explanation-item">
+                            <div class="issue">Issue #${i+1}</div>
+                            <div class="explanation-text">${exp}</div>
+                        </div>
+                    `).join('');
+                } else if (text !== corrected) {
+                    explanationList.innerHTML = `
+                        <div class="explanation-item">
+                            <div class="issue">Grammar Fixed</div>
+                            <div class="explanation-text">Your text has been corrected for grammar and spelling.</div>
+                        </div>
+                    `;
+                } else {
+                    explanationList.innerHTML = '<div class="explanation-item"><div class="explanation-text">✓ No grammar errors detected! Your text looks great.</div></div>';
+                    issuesFixed.textContent = '0';
+                    suggestionCount.textContent = '0';
+                }
+                
+                loading.style.display = 'none';
+                resultCard.style.display = 'block';
+                trackToolUsage();
+                resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
             } else {
-                explanationList.innerHTML = '<div class="explanation-item"><div class="explanation-text">✓ No grammar errors detected! Your text looks great.</div></div>';
-                issuesFixed.textContent = '0';
-                suggestionCount.textContent = '0';
+                throw new Error(data.error);
             }
-            
-            loading.style.display = 'none';
-            resultCard.style.display = 'block';
-            trackToolUsage();
-            resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
             
         } catch (error) {
             console.error('Grammar check error:', error);
@@ -228,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     updateStats();
-    console.log('✅ AI Grammar Checker ready with Firebase AI Logic');
+    console.log('✅ AI Grammar Checker ready with Cloudflare Worker');
 });
 
 // Firebase auth state observer
