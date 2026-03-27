@@ -65,6 +65,10 @@ document.addEventListener('DOMContentLoaded', function() {
         basic: `<!DOCTYPE html>
 <html>
 <head>
+<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
+
+<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -134,6 +138,10 @@ document.addEventListener('DOMContentLoaded', function() {
         form: `<!DOCTYPE html>
 <html>
 <head>
+<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
+
+<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -232,6 +240,10 @@ document.addEventListener('DOMContentLoaded', function() {
         dashboard: `<!DOCTYPE html>
 <html>
 <head>
+<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
+
+<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -444,6 +456,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let html = htmlInput.value;
         if (!html || html.trim() === '') {
             html = '<!DOCTYPE html><html><head>
+<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
+
+<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
