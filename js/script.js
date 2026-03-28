@@ -335,14 +335,34 @@ if (mobileBtn) {
     overlay.addEventListener('click', closeMenu);
 }
 
-    // ===== DRAGGABLE MOBILE MENU BUTTON =====
-if (mobileBtn && window.innerWidth <= 768) {
+// ===== DRAGGABLE MOBILE MENU BUTTON =====
+if (mobileBtn) {
 
     let isDragging = false;
     let moved = false;
     let offsetX = 0;
     let offsetY = 0;
 
+    // ===== RESTORE POSITION =====
+    const savedX = localStorage.getItem('btn_x');
+    const savedY = localStorage.getItem('btn_y');
+
+    if (savedX && savedY) {
+        let x = parseInt(savedX);
+        let y = parseInt(savedY);
+
+        const maxX = window.innerWidth - mobileBtn.offsetWidth;
+        const maxY = window.innerHeight - mobileBtn.offsetHeight;
+
+        x = Math.max(0, Math.min(x, maxX));
+        y = Math.max(0, Math.min(y, maxY));
+
+        mobileBtn.style.left = x + "px";
+        mobileBtn.style.top = y + "px";
+        mobileBtn.style.right = "auto";
+    }
+
+    // ===== TOUCH START =====
     mobileBtn.addEventListener("touchstart", (e) => {
         isDragging = true;
         moved = false;
@@ -352,6 +372,7 @@ if (mobileBtn && window.innerWidth <= 768) {
         offsetY = touch.clientY - mobileBtn.offsetTop;
     });
 
+    // ===== TOUCH MOVE =====
     mobileBtn.addEventListener("touchmove", (e) => {
         if (!isDragging) return;
 
@@ -362,7 +383,6 @@ if (mobileBtn && window.innerWidth <= 768) {
         let x = touch.clientX - offsetX;
         let y = touch.clientY - offsetY;
 
-        // prevent going outside screen
         const maxX = window.innerWidth - mobileBtn.offsetWidth;
         const maxY = window.innerHeight - mobileBtn.offsetHeight;
 
@@ -371,32 +391,45 @@ if (mobileBtn && window.innerWidth <= 768) {
 
         mobileBtn.style.left = x + "px";
         mobileBtn.style.top = y + "px";
-        mobileBtn.style.right = "auto"; // important
+        mobileBtn.style.right = "auto";
         mobileBtn.style.bottom = "auto";
     });
 
-    mobileBtn.addEventListener("touchend", () => {
+    // ===== TOUCH END =====
+    mobileBtn.addEventListener("touchend", (e) => {
         isDragging = false;
 
-        // 👉 tap = open menu
+        // 👉 Tap = open menu
         if (!moved) {
-            openMenu();
+            e.preventDefault();
+            if (window.openMenu) window.openMenu();
         }
 
+        // ===== SNAP LEFT / RIGHT =====
         const screenWidth = window.innerWidth;
         const rect = mobileBtn.getBoundingClientRect();
 
+        let finalX;
+
         if (rect.left < screenWidth / 2) {
-            mobileBtn.style.left = "10px";
+            finalX = 10;
         } else {
-            mobileBtn.style.left = (screenWidth - 65) + "px";
+            finalX = screenWidth - mobileBtn.offsetWidth - 10;
         }
+
+        mobileBtn.style.left = finalX + "px";
+
+        // ===== SAVE POSITION =====
+        const finalRect = mobileBtn.getBoundingClientRect();
+        localStorage.setItem('btn_x', finalRect.left);
+        localStorage.setItem('btn_y', finalRect.top);
     });
 
+    // ===== CLICK SUPPORT (for safety) =====
     mobileBtn.addEventListener("click", () => {
-    if (!isDragging && !moved) {
-        if (window.openMenu) window.openMenu();
-    }
+        if (!isDragging && !moved) {
+            if (window.openMenu) window.openMenu();
+        }
     });
 }
 
