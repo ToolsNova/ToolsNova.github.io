@@ -312,11 +312,11 @@ if (mobileBtn) {
     });
     
     // Open menu
-    mobileBtn.addEventListener('click', function() {
+    function openMenu() {
         menu.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
-    });
+    }
     
     // Close menu function
     function closeMenu() {
@@ -333,6 +333,71 @@ if (mobileBtn) {
     
     // Click overlay to close
     overlay.addEventListener('click', closeMenu);
+}
+
+    // ===== DRAGGABLE MOBILE MENU BUTTON =====
+if (mobileBtn && window.innerWidth <= 768) {
+
+    let isDragging = false;
+    let moved = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    mobileBtn.addEventListener("touchstart", (e) => {
+        isDragging = true;
+        moved = false;
+
+        const touch = e.touches[0];
+        offsetX = touch.clientX - mobileBtn.offsetLeft;
+        offsetY = touch.clientY - mobileBtn.offsetTop;
+    });
+
+    mobileBtn.addEventListener("touchmove", (e) => {
+        if (!isDragging) return;
+
+        moved = true;
+
+        const touch = e.touches[0];
+
+        let x = touch.clientX - offsetX;
+        let y = touch.clientY - offsetY;
+
+        // prevent going outside screen
+        const maxX = window.innerWidth - mobileBtn.offsetWidth;
+        const maxY = window.innerHeight - mobileBtn.offsetHeight;
+
+        x = Math.max(0, Math.min(x, maxX));
+        y = Math.max(0, Math.min(y, maxY));
+
+        mobileBtn.style.left = x + "px";
+        mobileBtn.style.top = y + "px";
+        mobileBtn.style.right = "auto"; // important
+        mobileBtn.style.bottom = "auto";
+    });
+
+    mobileBtn.addEventListener("touchend", () => {
+        isDragging = false;
+
+        // 👉 tap = open menu
+        if (!moved) {
+            openMenu();
+        }
+
+        const screenWidth = window.innerWidth;
+        const rect = mobileBtn.getBoundingClientRect();
+
+        if (rect.left < screenWidth / 2) {
+            mobileBtn.style.left = "10px";
+        } else {
+            mobileBtn.style.left = (screenWidth - 65) + "px";
+        }
+    });
+
+    mobileBtn.addEventListener("click", () => {
+    if (!isDragging && !moved) {
+        if (window.openMenu) window.openMenu();
+    }
+    });
 }
 
 // Initial guest display
