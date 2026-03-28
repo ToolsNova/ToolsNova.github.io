@@ -1020,6 +1020,18 @@ body {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
         gap: 16px;
     }
+
+    .mobile-menu-btn {
+        position: fixed;
+        top: 200%;     /* ✅ Works for you! */
+        right: 10px;
+        transform: translateY(-50%);
+        width: 55px;
+        height: 55px;
+        z-index: 9999;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        touch-action: none;
+    }
 }
 
 @media (max-width: 480px) {
