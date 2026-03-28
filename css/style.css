@@ -1023,7 +1023,7 @@ body {
 
     .mobile-menu-btn {
         position: fixed;
-        top: 200%;     /* ✅ Works for you! */
+        top: 275%;     /* ✅ Works for you! */
         right: 10px;
         transform: translateY(-50%);
         width: 55px;
