@@ -1023,9 +1023,9 @@ body {
 
     .mobile-menu-btn {
         position: fixed;
-        top: 275%;     /* ✅ Works for you! */
+        top: 200px;     /* ✅ Works for you! */
         right: 10px;
-        transform: translateY(-50%);
+        transform: none;
         width: 55px;
         height: 55px;
         z-index: 9999;
