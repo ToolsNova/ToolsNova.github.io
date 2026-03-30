@@ -264,8 +264,7 @@ if (mobileBtn) {
                 <a href="../index.html" class="mobile-link">Home</a>
                 <a href="../ai-assistant.html" class="mobile-link">AI Assistant</a>
                 <a href="../tools.html" class="mobile-link">Tools</a>
-        `;
-        
+                        <button class="mobile-link" id="mobileDarkToggle">🌙 Dark Mode</button>`;
         if (user) {
             menuLinks += `
                 <div class="mobile-user-info">
@@ -432,6 +431,24 @@ if (mobileBtn) {
         }
     });
 }
+
+// Mobile menu buttons functionality
+document.addEventListener('click', function(e) {
+    // Dark mode toggle
+    if (e.target.id === 'mobileDarkToggle' || e.target.parentElement?.id === 'mobileDarkToggle') {
+        const btn = document.getElementById('mobileDarkToggle');
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        if (btn) {
+            btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+        }
+        // Also update main toggle icon
+        const mainIcon = document.querySelector('.theme-toggle i');
+        if (mainIcon) {
+            mainIcon.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'far fa-moon';
+        }
+    }
+});
 
 // Initial guest display
 updateGuestDisplay();
