@@ -1493,3 +1493,20 @@ body {
         text-align: left !important;
     }
 }
+
+.mobile-link {
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    font-size: inherit;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mobile-link i {
+    width: 20px;
+}
