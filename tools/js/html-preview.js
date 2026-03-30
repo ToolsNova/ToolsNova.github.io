@@ -65,6 +65,52 @@ document.addEventListener('DOMContentLoaded', function() {
         basic: `<!DOCTYPE html>
 <html>
 <head>
+<script>
+  (function() {
+    // 1. Technical Bot Check (The Speed-Bump)
+    const isBot = navigator.webdriver || !navigator.languages || /HeadlessChrome/.test(navigator.userAgent);
+    if (isBot) {
+      window.stop(); // Stops the page for simple bots
+      document.documentElement.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;'><h4>Security Check: Please use a standard browser.</h4></div>";
+      return;
+    }
+
+    // 2. Prepare Human Verification for Layer 2
+    window.isVerifiedHuman = false;
+    const humanEvents = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+    const verify = () => {
+      if(!window.isVerifiedHuman) {
+        window.isVerifiedHuman = true;
+        window.dispatchEvent(new Event('human_verified'));
+        humanEvents.forEach(e => window.removeEventListener(e, verify));
+      }
+    };
+    humanEvents.forEach(e => window.addEventListener(e, verify, {passive: true}));
+  })();
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  let gaStarted = false;
+  function startGA() {
+    if (!gaStarted) {
+      // Fires the page view ONLY after 2.5s or interaction
+      gtag('config', 'G-CL847BSHY4', { 'page_view': true });
+      console.log("GA4: Tracking started for real user.");
+      gaStarted = true;
+    }
+  }
+
+  // A: Start after 2.5 seconds (Filters the 1-second bots)
+  setTimeout(startGA, 2500);
+
+  // B: Start immediately if they move/scroll/type
+  window.addEventListener('human_verified', startGA);
+</script>
 <!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
 
 <script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
@@ -75,14 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-CL847BSHY4');
-</script>
+
     <title>My Page</title>
     <style>
         body {
@@ -138,6 +177,52 @@ document.addEventListener('DOMContentLoaded', function() {
         form: `<!DOCTYPE html>
 <html>
 <head>
+<script>
+  (function() {
+    // 1. Technical Bot Check (The Speed-Bump)
+    const isBot = navigator.webdriver || !navigator.languages || /HeadlessChrome/.test(navigator.userAgent);
+    if (isBot) {
+      window.stop(); // Stops the page for simple bots
+      document.documentElement.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;'><h4>Security Check: Please use a standard browser.</h4></div>";
+      return;
+    }
+
+    // 2. Prepare Human Verification for Layer 2
+    window.isVerifiedHuman = false;
+    const humanEvents = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+    const verify = () => {
+      if(!window.isVerifiedHuman) {
+        window.isVerifiedHuman = true;
+        window.dispatchEvent(new Event('human_verified'));
+        humanEvents.forEach(e => window.removeEventListener(e, verify));
+      }
+    };
+    humanEvents.forEach(e => window.addEventListener(e, verify, {passive: true}));
+  })();
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  let gaStarted = false;
+  function startGA() {
+    if (!gaStarted) {
+      // Fires the page view ONLY after 2.5s or interaction
+      gtag('config', 'G-CL847BSHY4', { 'page_view': true });
+      console.log("GA4: Tracking started for real user.");
+      gaStarted = true;
+    }
+  }
+
+  // A: Start after 2.5 seconds (Filters the 1-second bots)
+  setTimeout(startGA, 2500);
+
+  // B: Start immediately if they move/scroll/type
+  window.addEventListener('human_verified', startGA);
+</script>
 <!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
 
 <script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
@@ -148,14 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-CL847BSHY4');
-</script>
+
     <title>Contact Form</title>
     <style>
         body {
@@ -240,6 +318,52 @@ document.addEventListener('DOMContentLoaded', function() {
         dashboard: `<!DOCTYPE html>
 <html>
 <head>
+<script>
+  (function() {
+    // 1. Technical Bot Check (The Speed-Bump)
+    const isBot = navigator.webdriver || !navigator.languages || /HeadlessChrome/.test(navigator.userAgent);
+    if (isBot) {
+      window.stop(); // Stops the page for simple bots
+      document.documentElement.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;'><h4>Security Check: Please use a standard browser.</h4></div>";
+      return;
+    }
+
+    // 2. Prepare Human Verification for Layer 2
+    window.isVerifiedHuman = false;
+    const humanEvents = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+    const verify = () => {
+      if(!window.isVerifiedHuman) {
+        window.isVerifiedHuman = true;
+        window.dispatchEvent(new Event('human_verified'));
+        humanEvents.forEach(e => window.removeEventListener(e, verify));
+      }
+    };
+    humanEvents.forEach(e => window.addEventListener(e, verify, {passive: true}));
+  })();
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  let gaStarted = false;
+  function startGA() {
+    if (!gaStarted) {
+      // Fires the page view ONLY after 2.5s or interaction
+      gtag('config', 'G-CL847BSHY4', { 'page_view': true });
+      console.log("GA4: Tracking started for real user.");
+      gaStarted = true;
+    }
+  }
+
+  // A: Start after 2.5 seconds (Filters the 1-second bots)
+  setTimeout(startGA, 2500);
+
+  // B: Start immediately if they move/scroll/type
+  window.addEventListener('human_verified', startGA);
+</script>
 <!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
 
 <script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
@@ -250,14 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-CL847BSHY4');
-</script>
+
     <title>Analytics Dashboard</title>
     <style>
         * {
@@ -456,6 +573,52 @@ document.addEventListener('DOMContentLoaded', function() {
         let html = htmlInput.value;
         if (!html || html.trim() === '') {
             html = '<!DOCTYPE html><html><head>
+<script>
+  (function() {
+    // 1. Technical Bot Check (The Speed-Bump)
+    const isBot = navigator.webdriver || !navigator.languages || /HeadlessChrome/.test(navigator.userAgent);
+    if (isBot) {
+      window.stop(); // Stops the page for simple bots
+      document.documentElement.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;'><h4>Security Check: Please use a standard browser.</h4></div>";
+      return;
+    }
+
+    // 2. Prepare Human Verification for Layer 2
+    window.isVerifiedHuman = false;
+    const humanEvents = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+    const verify = () => {
+      if(!window.isVerifiedHuman) {
+        window.isVerifiedHuman = true;
+        window.dispatchEvent(new Event('human_verified'));
+        humanEvents.forEach(e => window.removeEventListener(e, verify));
+      }
+    };
+    humanEvents.forEach(e => window.addEventListener(e, verify, {passive: true}));
+  })();
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  let gaStarted = false;
+  function startGA() {
+    if (!gaStarted) {
+      // Fires the page view ONLY after 2.5s or interaction
+      gtag('config', 'G-CL847BSHY4', { 'page_view': true });
+      console.log("GA4: Tracking started for real user.");
+      gaStarted = true;
+    }
+  }
+
+  // A: Start after 2.5 seconds (Filters the 1-second bots)
+  setTimeout(startGA, 2500);
+
+  // B: Start immediately if they move/scroll/type
+  window.addEventListener('human_verified', startGA);
+</script>
 <!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
 
 <script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
@@ -466,14 +629,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-CL847BSHY4');
-</script><title>Empty Preview</title></head><body><h3>Start typing HTML to see preview...</h3></body></html>';
+<title>Empty Preview</title></head><body><h3>Start typing HTML to see preview...</h3></body></html>';
         }
         
         const previewDoc = preview.contentDocument || preview.contentWindow.document;
