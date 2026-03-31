@@ -122,7 +122,7 @@ window.handleToolClick = function(event, toolId) {
         window.location.href = 'signup.html';
         return false;
     }
-    trackToolUse();
+    // REMOVE trackToolUse() from here
     return true;
 };
 
@@ -179,8 +179,17 @@ function canUseTool() {
 function trackToolUse() {
     const user = auth.currentUser;
     if (!user) {
-        guestUses++;
-        localStorage.setItem('toolsnova_guest_uses', guestUses);
+        // Check if user is on a tool page
+        const isToolPage = window.location.pathname.includes('/tools/');
+        if (!isToolPage) return;
+        
+        // Check if they actually got a result
+        const hasResult = document.querySelector('.result-card, .thumbnails-grid, #result, .output');
+        if (!hasResult) return;
+        
+        let used = parseInt(localStorage.getItem('toolsnova_tools_used') || '0');
+        used++;
+        localStorage.setItem('toolsnova_tools_used', used);
         updateGuestDisplay();
     }
 }
