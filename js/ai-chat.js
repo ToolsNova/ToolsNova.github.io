@@ -22,6 +22,30 @@ const MAX_GUEST_MESSAGES = 3;
 // 🔥 YOUR CLOUDFLARE WORKER URL
 const WORKER_URL = 'https://proxy.toolsnova.workers.dev';
 
+// ===== GUEST MESSAGE TRACKING =====
+function canGuestSend() {
+    const user = firebase.auth().currentUser;
+    if (user) return true;
+    const messagesSent = parseInt(localStorage.getItem('toolsnova_guest_messages') || '0');
+    return messagesSent < MAX_GUEST_MESSAGES;
+}
+
+function trackGuestMessage() {
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        let messagesSent = parseInt(localStorage.getItem('toolsnova_guest_messages') || '0');
+        messagesSent++;
+        localStorage.setItem('toolsnova_guest_messages', messagesSent);
+        
+        const remaining = MAX_GUEST_MESSAGES - messagesSent;
+        if (remaining === 0) {
+            alert('You have used all 3 free messages. Sign up for unlimited access!');
+        } else if (remaining > 0) {
+            alert(`You have ${remaining} free ${remaining === 1 ? 'message' : 'messages'} left. Sign up for unlimited!`);
+        }
+    }
+}
+
 // ===== GLOBAL STATE =====
 let chats = [];
 let currentChatId = null;
@@ -162,7 +186,7 @@ When the user asks for a table, output an HTML table like this:
 
 <table class="data-table">
   <thead>
-     <tr><th>City</th><th>Population</th><th>Country</th></tr>
+      <tr><th>City</th><th>Population</th><th>Country</th></tr>
   </thead>
   <tbody>
       <tr><td>Tokyo</td><td>38M</td><td>Japan</td></tr>
@@ -453,17 +477,17 @@ async function sendMessage() {
     const text = messageInput.value.trim();
     if (!text && attachedFiles.length === 0) return;
     
+    // 🔥 CHECK GUEST LIMIT BEFORE SENDING
+    if (!canGuestSend()) {
+        alert('You have used all 3 free messages. Please sign up for unlimited access!');
+        window.location.href = 'signup.html';
+        return;
+    }
+    
     const currentChat = chats.find(c => c.id === currentChatId);
     if (!currentChat) return;
     
-    if (!currentUser) {
-        const aiMsgCount = currentChat.messages.filter(m => m.role === 'assistant').length;
-        if (aiMsgCount >= MAX_GUEST_MESSAGES) {
-            alert('3 messages used. Sign up for unlimited!');
-            window.location.href = 'signup.html';
-            return;
-        }
-    }
+    // Remove old guest check (we already did above)
     
     let processedFiles = [];
     if (attachedFiles.length > 0) {
@@ -515,6 +539,9 @@ async function sendMessage() {
         
         saveChats();
         loadChat(currentChatId);
+        
+        // 🔥 TRACK GUEST MESSAGE AFTER SUCCESSFUL RESPONSE
+        trackGuestMessage();
         
     } catch (error) {
         console.error('Error:', error);
