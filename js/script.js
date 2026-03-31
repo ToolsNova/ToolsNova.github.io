@@ -246,7 +246,7 @@ if (localStorage.getItem('toolsnova_darkmode') === 'true') {
     if (themeToggle) themeToggle.querySelector('i').className = 'fas fa-sun';
 }
 
-// ===== MOBILE MENU - WITH FIXED PATHS =====
+// ===== MOBILE MENU - WITH SAME LINKS AS DESKTOP SIDEBAR =====
 if (mobileBtn) {
     // Create menu elements
     const overlay = document.createElement('div');
@@ -259,57 +259,103 @@ if (mobileBtn) {
     document.body.appendChild(menu);
     
     // Update mobile menu based on auth state
-    function updateMobileMenu() {
-        const user = auth.currentUser;
-        let menuLinks = `
-            <div class="mobile-menu-header">
-                <div class="mobile-menu-logo">
-                    <i class="fas fa-star"></i>
-                    <span>ToolsNova</span>
-                </div>
-                <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
+function updateMobileMenu() {
+    const user = auth.currentUser;
+    let menuLinks = `
+        <div class="mobile-menu-header">
+            <div class="mobile-menu-logo">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
             </div>
-            <div class="mobile-menu-links">
-                <a href="../index.html" class="mobile-link">Home</a>
-                <a href="../ai-assistant.html" class="mobile-link">AI Assistant</a>
-                <a href="../tools.html" class="mobile-link">Tools</a>
-                        <button class="mobile-link" id="mobileDarkToggle">🌙 Dark Mode</button>`;
-        if (user) {
-            menuLinks += `
-                <div class="mobile-user-info">
-                    <i class="fas fa-user"></i>
-                    <span>${user.email}</span>
-                </div>
-                <a href="#" class="mobile-link mobile-logout" id="mobileLogout">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            `;
+            <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="../index.html" class="mobile-link">Home</a>
+            <a href="../ai-assistant.html" class="mobile-link">AI Assistant</a>
+            <a href="../tools.html" class="mobile-link">Tools</a>
+            <a href="../about.html" class="mobile-link">About</a>
+            <a href="../privacy.html" class="mobile-link">Privacy</a>
+            <a href="../terms.html" class="mobile-link">Terms</a>
+            <a href="../contact.html" class="mobile-link">Contact</a>
+            <div class="mobile-menu-divider"></div>
+            <button class="mobile-link" id="mobileDarkToggle">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+            <div class="mobile-menu-divider"></div>
+    `;
+    
+    if (user) {
+        menuLinks += `
+            <div class="mobile-user-info">
+                <i class="fas fa-user"></i>
+                <span>${user.email}</span>
+            </div>
+            <a href="#" class="mobile-link mobile-logout" id="mobileLogout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            <a href="#" class="mobile-link mobile-delete" id="mobileDeleteAccount">
+                <i class="fas fa-trash-alt"></i> Delete Account
+            </a>
+        `;
+    } else {
+        menuLinks += `
+            <a href="../login.html" class="mobile-link">Login</a>
+            <a href="../signup.html" class="mobile-link mobile-cta">Sign Up</a>
+        `;
+    }
+    
+    menuLinks += `</div>`;
+    menu.innerHTML = menuLinks;
+    
+    // Re-attach close button event
+    const closeBtn = menu.querySelector('.mobile-menu-close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeMenu);
+    }
+    
+    // Mobile logout
+    const mobileLogout = document.getElementById('mobileLogout');
+    if (mobileLogout) {
+        mobileLogout.addEventListener('click', (e) => {
+            e.preventDefault();
+            logout();
+            closeMenu();
+        });
+    }
+    
+    // Mobile delete account
+    const mobileDelete = document.getElementById('mobileDeleteAccount');
+    if (mobileDelete) {
+        mobileDelete.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeMenu();
+            deleteUserAccount();
+        });
+    }
+    
+    // Mobile dark mode toggle
+    const mobileDarkToggle = document.getElementById('mobileDarkToggle');
+    if (mobileDarkToggle) {
+        mobileDarkToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            mobileDarkToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
+            
+            const mainIcon = document.querySelector('.theme-toggle i');
+            if (mainIcon) {
+                mainIcon.className = isDark ? 'fas fa-sun' : 'far fa-moon';
+            }
+        });
+        
+        // Set initial text
+        if (document.body.classList.contains('dark-mode')) {
+            mobileDarkToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
         } else {
-            menuLinks += `
-                <a href="../login.html" class="mobile-link">Login</a>
-                <a href="../signup.html" class="mobile-link mobile-cta">Sign Up</a>
-            `;
-        }
-        
-        menuLinks += `</div>`;
-        menu.innerHTML = menuLinks;
-        
-        // Re-attach close button event
-        const closeBtn = menu.querySelector('.mobile-menu-close');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', closeMenu);
-        }
-        
-        // Mobile logout
-        const mobileLogout = document.getElementById('mobileLogout');
-        if (mobileLogout) {
-            mobileLogout.addEventListener('click', (e) => {
-                e.preventDefault();
-                logout();
-                closeMenu();
-            });
+            mobileDarkToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
         }
     }
+}
     
     // Initial mobile menu
     updateMobileMenu();
@@ -341,6 +387,10 @@ if (mobileBtn) {
     
     // Click overlay to close
     overlay.addEventListener('click', closeMenu);
+    
+    // Expose openMenu globally
+    window.openMenu = openMenu;
+    window.closeMenu = closeMenu;
 }
 
 // ===== DRAGGABLE MOBILE MENU BUTTON =====
@@ -459,6 +509,296 @@ document.addEventListener('click', function(e) {
     }
 });
 
+// ===== DESKTOP SIDEBAR (Dynamically Created with Draggable Button) =====
+function initDesktopSidebar() {
+    // Check if already exists
+    if (document.querySelector('.desktop-sidebar')) return;
+    
+    // Create floating button
+    const btn = document.createElement('button');
+    btn.className = 'desktop-menu-btn';
+    btn.innerHTML = '<i class="fas fa-bars"></i>';
+    document.body.appendChild(btn);
+    
+    // Hide on mobile using CSS
+    if (window.innerWidth <= 768) {
+        btn.style.display = 'none';
+    }
+    
+    // ===== DRAGGABLE FUNCTIONALITY =====
+    let isDragging = false;
+    let moved = false;
+    let offsetX = 0;
+    let offsetY = 0;
+    
+    // Restore saved position
+    const savedX = localStorage.getItem('desktop_btn_x');
+    const savedY = localStorage.getItem('desktop_btn_y');
+    
+    if (savedX && savedY) {
+        btn.style.left = savedX + "px";
+        btn.style.top = savedY + "px";
+        btn.style.right = "auto";
+        btn.style.bottom = "auto";
+    } else {
+        btn.style.left = "20px";
+        btn.style.top = "20px";
+    }
+    
+    function startDrag(e) {
+        isDragging = true;
+        moved = false;
+        e.preventDefault();
+        
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        offsetX = clientX - btn.offsetLeft;
+        offsetY = clientY - btn.offsetTop;
+        
+        document.addEventListener("mousemove", onDrag);
+        document.addEventListener("mouseup", endDrag);
+        document.addEventListener("touchmove", onDrag, { passive: false });
+        document.addEventListener("touchend", endDrag);
+    }
+    
+    function onDrag(e) {
+        if (!isDragging) return;
+        moved = true;
+        e.preventDefault();
+        
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        let x = clientX - offsetX;
+        let y = clientY - offsetY;
+        
+        const maxX = window.innerWidth - btn.offsetWidth;
+        const maxY = window.innerHeight - btn.offsetHeight;
+        
+        x = Math.max(0, Math.min(x, maxX));
+        y = Math.max(0, Math.min(y, maxY));
+        
+        btn.style.left = x + "px";
+        btn.style.top = y + "px";
+        btn.style.right = "auto";
+        btn.style.bottom = "auto";
+        btn.style.position = "fixed";
+        btn.style.transform = "none";
+    }
+    
+    function endDrag() {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        document.removeEventListener("mousemove", onDrag);
+        document.removeEventListener("mouseup", endDrag);
+        document.removeEventListener("touchmove", onDrag);
+        document.removeEventListener("touchend", endDrag);
+        
+        if (!moved) return;
+        
+        // Snap to edge
+        const screenWidth = window.innerWidth;
+        const rect = btn.getBoundingClientRect();
+        let finalX = rect.left < screenWidth / 2 ? 10 : screenWidth - btn.offsetWidth - 10;
+        const finalY = rect.top;
+        
+        btn.style.left = finalX + "px";
+        btn.style.top = finalY + "px";
+        
+        // Save position
+        localStorage.setItem('desktop_btn_x', finalX);
+        localStorage.setItem('desktop_btn_y', finalY);
+        
+        setTimeout(() => { moved = false; }, 150);
+    }
+    
+    btn.addEventListener("mousedown", startDrag);
+    btn.addEventListener("touchstart", startDrag, { passive: true });
+    
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'desktop-sidebar-overlay';
+    document.body.appendChild(overlay);
+    
+    // Create sidebar
+    const sidebar = document.createElement('div');
+    sidebar.className = 'desktop-sidebar';
+    sidebar.id = 'desktopSidebar';
+    document.body.appendChild(sidebar);
+    
+function updateSidebar() {
+    const user = auth.currentUser;
+    let html = `
+        <div class="desktop-sidebar-header">
+            <div class="desktop-sidebar-logo">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+            </div>
+            <button class="desktop-sidebar-close" id="desktopSidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="desktop-sidebar-links">
+            <a href="index.html" class="desktop-sidebar-link">Home</a>
+            <a href="ai-assistant.html" class="desktop-sidebar-link">AI Assistant</a>
+            <a href="tools.html" class="desktop-sidebar-link">Tools</a>
+            <a href="about.html" class="desktop-sidebar-link">About</a>
+            <a href="privacy.html" class="desktop-sidebar-link">Privacy</a>
+            <a href="terms.html" class="desktop-sidebar-link">Terms</a>
+            <a href="contact.html" class="desktop-sidebar-link">Contact</a>
+            <div class="desktop-sidebar-divider"></div>
+            <button class="desktop-sidebar-link" id="desktopDarkToggle">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+            <div class="desktop-sidebar-divider"></div>
+    `;
+    
+    if (user) {
+        html += `
+            <div class="desktop-sidebar-user-info">
+                <i class="fas fa-user"></i>
+                <span>${user.email.split('@')[0]}</span>
+            </div>
+            <a href="#" class="desktop-sidebar-link desktop-sidebar-logout" id="desktopSidebarLogout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            <a href="#" class="desktop-sidebar-link desktop-sidebar-delete" id="desktopDeleteAccount">
+                <i class="fas fa-trash-alt"></i> Delete Account
+            </a>
+        `;
+    } else {
+        html += `
+            <a href="login.html" class="desktop-sidebar-link">Login</a>
+            <a href="signup.html" class="desktop-sidebar-link desktop-sidebar-cta">Sign Up</a>
+        `;
+    }
+    
+    html += `</div>`;
+    sidebar.innerHTML = html;
+    
+    // Attach events
+    document.getElementById('desktopSidebarClose')?.addEventListener('click', closeSidebar);
+    document.getElementById('desktopDarkToggle')?.addEventListener('click', toggleDarkMode);
+    document.getElementById('desktopSidebarLogout')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        closeSidebar();
+    });
+    
+    // 🔥 ADD DELETE BUTTON EVENT HERE
+    const desktopDelete = document.getElementById('desktopDeleteAccount');
+    if (desktopDelete) {
+        desktopDelete.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeSidebar();
+            deleteUserAccount();
+        });
+    }
+}
+    
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        
+        const btnToggle = document.getElementById('desktopDarkToggle');
+        if (btnToggle) {
+            btnToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
+        }
+        
+        const mainIcon = document.querySelector('.theme-toggle i');
+        if (mainIcon) {
+            mainIcon.className = isDark ? 'fas fa-sun' : 'far fa-moon';
+        }
+    }
+    
+    function openSidebar() {
+        if (window.innerWidth <= 768) return; // Don't open on mobile
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeSidebar() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    // Click to open sidebar (only if not dragging)
+    btn.addEventListener('click', (e) => {
+        if (moved) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
+        openSidebar();
+    });
+    
+    overlay.addEventListener('click', closeSidebar);
+    
+    // Update sidebar when auth changes
+    auth.onAuthStateChanged(() => updateSidebar());
+    
+    // Initial load
+    updateSidebar();
+    
+    // Set dark mode button initial text
+    const darkToggle = document.getElementById('desktopDarkToggle');
+    if (darkToggle && document.body.classList.contains('dark-mode')) {
+        darkToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+    }
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth <= 768) {
+            btn.style.display = 'none';
+        } else {
+            btn.style.display = 'flex';
+        }
+    });
+}
+
+// ===== DELETE ACCOUNT FUNCTION =====
+function deleteUserAccount() {
+    const user = auth.currentUser;
+    if (!user) {
+        alert('You need to be logged in to delete your account.');
+        return;
+    }
+    
+    const confirmed = confirm(
+        '⚠️ WARNING: This will PERMANENTLY delete:\n\n' +
+        '• Your account and email\n' +
+        '• All your chat history\n' +
+        '• All your saved data\n\n' +
+        'This action CANNOT be undone!\n\n' +
+        'Click OK to delete your account forever.'
+    );
+    
+    if (!confirmed) return;
+    
+    user.delete().then(() => {
+        localStorage.clear();
+        alert('✅ Your account has been deleted successfully.');
+        window.location.href = 'index.html';
+    }).catch((error) => {
+        if (error.code === 'auth/requires-recent-login') {
+            alert('⚠️ For security, please log out and log in again, then try deleting your account.');
+        } else {
+            alert('❌ Error: ' + error.message);
+        }
+    });
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDesktopSidebar);
+} else {
+    initDesktopSidebar();
+}
 // Initial guest display
 updateGuestDisplay();
 
