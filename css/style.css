@@ -1510,3 +1510,258 @@ body {
 .mobile-link i {
     width: 20px;
 }
+
+/* ===== DESKTOP FLOATING MENU BUTTON ===== */
+.desktop-menu-btn {
+    position: fixed;
+    top: 100px; /* starting position */
+    left: 20px;
+
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.5rem;
+    z-index: 1001;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+    transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+
+    /* IMPORTANT: allow dragging */
+    touch-action: auto;
+}
+
+/* Hover like mobile */
+.desktop-menu-btn:hover {
+    transform: scale(1.05);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+/* Dragging state */
+.desktop-menu-btn:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+}
+
+/* Hide on mobile */
+@media (max-width: 768px) {
+    .desktop-menu-btn {
+        display: none !important;
+    }
+}
+
+/* ===== DESKTOP SIDEBAR ===== */
+.desktop-sidebar {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    height: 100%;
+
+    background: var(--bg-primary);
+    z-index: 1002;
+
+    padding: 30px 25px;
+    overflow-y: auto;
+
+    border-right: 1px solid var(--border);
+    box-shadow: var(--shadow-xl);
+
+    transition: left 0.3s ease;
+}
+
+.desktop-sidebar.active {
+    left: 0;
+}
+
+/* ===== OVERLAY ===== */
+.desktop-sidebar-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+
+    z-index: 1001;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: all 0.3s ease;
+}
+
+.desktop-sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ===== HEADER ===== */
+.desktop-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.desktop-sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-weight: 700;
+    font-size: 1.3rem;
+
+    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.desktop-sidebar-logo i {
+    color: var(--primary);
+    -webkit-text-fill-color: initial;
+    font-size: 1.5rem;
+}
+
+.desktop-sidebar-close {
+    background: var(--bg-secondary);
+    border: none;
+
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    color: var(--text-secondary);
+
+    transition: all 0.2s ease;
+}
+
+.desktop-sidebar-close:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+/* ===== LINKS ===== */
+.desktop-sidebar-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.desktop-sidebar-link {
+    padding: 12px 16px;
+    border-radius: 60px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+
+    color: var(--text-primary);
+    background: none;
+    border: 1px solid transparent;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.desktop-sidebar-link i {
+    width: 22px;
+}
+
+.desktop-sidebar-link:hover,
+.desktop-sidebar-link.active {
+    background: var(--bg-secondary);
+    border-color: var(--border);
+    color: var(--primary);
+}
+
+/* CTA */
+.desktop-sidebar-cta {
+    background: var(--primary);
+    color: white !important;
+    justify-content: center;
+}
+
+.desktop-sidebar-cta:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* Divider */
+.desktop-sidebar-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 10px 0;
+}
+
+/* User Info */
+.desktop-sidebar-user-info {
+    padding: 12px 16px;
+    border-radius: 60px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+
+    color: var(--text-primary);
+}
+
+.desktop-sidebar-user-info i {
+    color: var(--primary);
+}
+
+/* Logout */
+.desktop-sidebar-logout {
+    color: var(--error) !important;
+}
+
+.desktop-sidebar-logout:hover {
+    background: var(--error) !important;
+    color: white !important;
+}
+
+/* Dark Mode */
+.dark-mode .desktop-sidebar {
+    background: var(--bg-secondary);
+}
+
+/* Delete Account Button */
+.mobile-delete,
+.desktop-sidebar-delete {
+    color: #ef4444 !important;
+    border-top: 1px solid var(--border);
+    margin-top: 10px;
+    border-radius: 60px !important;
+}
+
+.mobile-delete:hover,
+.desktop-sidebar-delete:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #ef4444 !important;
+}
