@@ -333,15 +333,26 @@ function updateMobileMenu() {
         });
     }
     
-    // Mobile dark mode toggle
+    // 🔥 FIX: Mobile dark mode toggle (stop propagation and prevent global listener)
     const mobileDarkToggle = document.getElementById('mobileDarkToggle');
     if (mobileDarkToggle) {
-        mobileDarkToggle.addEventListener('click', () => {
+        // Remove any existing listeners
+        const newToggle = mobileDarkToggle.cloneNode(true);
+        mobileDarkToggle.parentNode.replaceChild(newToggle, mobileDarkToggle);
+        
+        newToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Toggle dark mode
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
             localStorage.setItem('darkMode', isDark);
-            mobileDarkToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
             
+            // Update button text
+            newToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
+            
+            // Update main toggle icon
             const mainIcon = document.querySelector('.theme-toggle i');
             if (mainIcon) {
                 mainIcon.className = isDark ? 'fas fa-sun' : 'far fa-moon';
@@ -350,13 +361,12 @@ function updateMobileMenu() {
         
         // Set initial text
         if (document.body.classList.contains('dark-mode')) {
-            mobileDarkToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+            newToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
         } else {
-            mobileDarkToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+            newToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
         }
     }
-}
-    
+}   
     // Initial mobile menu
     updateMobileMenu();
     
