@@ -216,8 +216,6 @@ auth.onAuthStateChanged((user) => {
         if (footerLogin) footerLogin.style.display = 'block';
         if (footerSignup) footerSignup.style.display = 'block';
         if (footerLogout) footerLogout.style.display = 'none';
-        
-        // Show guest info, hide user info
         if (footerGuestInfo) footerGuestInfo.style.display = 'flex';
         if (footerUserInfo) footerUserInfo.style.display = 'none';
     }
