@@ -41,6 +41,8 @@ const logoutBtn = document.getElementById('logoutBtn');
 const footerLogout = document.getElementById('footerLogout');
 const footerUserInfo = document.getElementById('footerUserInfo');
 const footerGuestInfo = document.getElementById('footerGuestInfo');
+const footerLogin = document.getElementById('footerLogin');
+const footerSignup = document.getElementById('footerSignup');
 
 // ===== GUEST USAGE TRACKING =====
 let guestUses = localStorage.getItem('toolsnova_guest_uses') ? parseInt(localStorage.getItem('toolsnova_guest_uses')) : 0;
@@ -48,20 +50,15 @@ const maxGuestUses = 3;
 
 // ===== TOOLS DATABASE =====
 const tools = [
-    // Media Tools
     { id: 1, name: "YouTube Thumbnail Downloader", desc: "Download any video thumbnail in HD quality", icon: "fa-brands fa-youtube", cat: "media", popular: true, url: "tools/yt-thumbnail.html" },
     { id: 2, name: "YouTube to MP3", desc: "Convert YouTube videos to MP3 audio", icon: "fa-solid fa-music", cat: "media", popular: true, url: "tools/video-to-mp3.html" },
     { id: 3, name: "YouTube Transcript Generator", desc: "Get transcripts from any YouTube video", icon: "fa-solid fa-closed-captioning", cat: "media", popular: true, url: "tools/yt-transcript.html" },
     { id: 4, name: "Video Compressor", desc: "Reduce video file size without losing quality", icon: "fa-solid fa-compress", cat: "media", popular: false, url: "tools/video-compressor.html" },
     { id: 6, name: "QR Code Generator", desc: "Create QR codes for URLs, text, WiFi", icon: "fa-solid fa-qrcode", cat: "media", popular: true, url: "tools/qr-generator.html" },
-    
-    // AI Tools
     { id: 8, name: "Background Remover", desc: "Remove image backgrounds with AI", icon: "fa-solid fa-eraser", cat: "ai", popular: true, url: "tools/background-remover.html" },
     { id: 9, name: "AI Content Detector", desc: "Check if text was written by AI", icon: "fa-solid fa-robot", cat: "ai", popular: true, url: "tools/ai-content-detector.html" },
     { id: 10, name: "AI Grammar Checker", desc: "Fix grammar and spelling mistakes", icon: "fa-solid fa-spell-check", cat: "ai", popular: false, url: "tools/ai-grammar-checker.html" },
     { id: 11, name: "AI Text Summarizer", desc: "Summarize long articles and texts", icon: "fa-solid fa-compress", cat: "ai", popular: false, url: "tools/ai-text-summarizer.html" },
-    
-    // Image Editor Tools
     { id: 12, name: "Image Editor", desc: "Crop, rotate, adjust images", icon: "fa-solid fa-paint-brush", cat: "image", popular: true, url: "tools/image-editor.html" },
     { id: 13, name: "Image to PNG Converter", desc: "Convert images to PNG format", icon: "fa-solid fa-file-image", cat: "image", popular: true, url: "tools/image-to-png.html" },
     { id: 14, name: "Screenshot to Text (OCR)", desc: "Extract text from images", icon: "fa-solid fa-text", cat: "image", popular: true, url: "tools/ocr.html" },
@@ -70,21 +67,15 @@ const tools = [
     { id: 17, name: "Image Filters", desc: "Apply filters like grayscale, sepia", icon: "fa-solid fa-filters", cat: "image", popular: false, url: "tools/image-filters.html" },
     { id: 18, name: "Resize Image", desc: "Change image dimensions", icon: "fa-solid fa-expand", cat: "image", popular: true, url: "tools/resize-image.html" },
     { id: 19, name: "Add Text to Image", desc: "Overlay text on images", icon: "fa-solid fa-font", cat: "image", popular: false, url: "tools/add-text.html" },
-    
-    // Code Editors
     { id: 20, name: "Python Editor", desc: "Write and run Python code online", icon: "fa-brands fa-python", cat: "code", popular: true, url: "tools/python-editor.html" },
     { id: 21, name: "Live HTML/CSS/JS Editor", desc: "Live preview HTML, CSS, JavaScript", icon: "fa-brands fa-html5", cat: "code", popular: true, url: "tools/live-editor.html" },
     { id: 22, name: "JSON Formatter", desc: "Format and validate JSON data", icon: "fa-solid fa-brackets-curly", cat: "code", popular: true, url: "tools/json-formatter.html" },
     { id: 23, name: "CSS Minifier", desc: "Compress CSS code", icon: "fa-brands fa-css3", cat: "code", popular: false, url: "tools/css-minifier.html" },
     { id: 24, name: "HTML Preview", desc: "Live HTML rendering", icon: "fa-brands fa-html5", cat: "code", popular: false, url: "tools/html-preview.html" },
-    
-    // Calculators
     { id: 25, name: "Age Calculator", desc: "Calculate exact age in years, months, days", icon: "fa-solid fa-cake-candles", cat: "calc", popular: true, url: "tools/age-calculator.html" },
     { id: 26, name: "Discount Calculator", desc: "Calculate sale prices and discounts", icon: "fa-solid fa-tags", cat: "calc", popular: true, url: "tools/discount-calculator.html" },
     { id: 27, name: "Currency Converter", desc: "Convert between currencies with live rates", icon: "fa-solid fa-coins", cat: "calc", popular: true, url: "tools/currency-converter.html" },
     { id: 28, name: "BMI Calculator", desc: "Calculate Body Mass Index", icon: "fa-solid fa-weight-scale", cat: "calc", popular: false, url: "tools/bmi-calculator.html" },
-    
-    // New Tools
     { id: 29, name: "Password Generator", desc: "Generate secure, random passwords", icon: "fa-solid fa-key", cat: "security", popular: true, url: "tools/password-generator.html" },
     { id: 30, name: "Text to Speech", desc: "Convert text to speech", icon: "fa-solid fa-volume-high", cat: "audio", popular: true, url: "tools/text-to-speech.html" },
     { id: 31, name: "PDF Merger", desc: "Combine multiple PDF files", icon: "fa-solid fa-file-pdf", cat: "pdf", popular: true, url: "tools/pdf-merger.html" },
@@ -122,7 +113,6 @@ window.handleToolClick = function(event, toolId) {
         window.location.href = 'signup.html';
         return false;
     }
-    // REMOVE trackToolUse() from here
     return true;
 };
 
@@ -179,11 +169,9 @@ function canUseTool() {
 function trackToolUse() {
     const user = auth.currentUser;
     if (!user) {
-        // Check if user is on a tool page
         const isToolPage = window.location.pathname.includes('/tools/');
         if (!isToolPage) return;
         
-        // Check if they actually got a result
         const hasResult = document.querySelector('.result-card, .thumbnails-grid, #result, .output');
         if (!hasResult) return;
         
@@ -246,9 +234,8 @@ if (localStorage.getItem('toolsnova_darkmode') === 'true') {
     if (themeToggle) themeToggle.querySelector('i').className = 'fas fa-sun';
 }
 
-// ===== MOBILE MENU - WITH SAME LINKS AS DESKTOP SIDEBAR =====
+// ===== MOBILE MENU =====
 if (mobileBtn) {
-    // Create menu elements
     const overlay = document.createElement('div');
     overlay.className = 'mobile-menu-overlay';
     
@@ -258,300 +245,232 @@ if (mobileBtn) {
     document.body.appendChild(overlay);
     document.body.appendChild(menu);
     
-    // Update mobile menu based on auth state
-function updateMobileMenu() {
-    const user = auth.currentUser;
-    const currentPath = window.location.pathname;
-    // Get the base path (for root vs tools folder)
-    const isInTools = currentPath.includes('/tools/');
-    const basePath = isInTools ? '../' : './';
-    
-    let menuLinks = `
-        <div class="mobile-menu-header">
-            <div class="mobile-menu-logo">
-                <i class="fas fa-star"></i>
-                <span>ToolsNova</span>
-            </div>
-            <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="mobile-menu-links">
-            <a href="${basePath}index.html" class="mobile-link">Home</a>
-            <a href="${basePath}ai-assistant.html" class="mobile-link">AI Assistant</a>
-            <a href="${basePath}tools.html" class="mobile-link">All Tools</a>
-            
-            <!-- 🔥 CATEGORIES SECTION - FOR YOU! -->
-            <div class="mobile-menu-category-title">For You! 🔥</div>
-            <a href="${basePath}tools.html#media" class="mobile-link">📹 Media Tools</a>
-            <a href="${basePath}tools.html#ai" class="mobile-link">🤖 AI Tools</a>
-            <a href="${basePath}tools.html#image" class="mobile-link">🎨 Image Editor</a>
-            <a href="${basePath}tools.html#code" class="mobile-link">💻 Code Editors</a>
-            <a href="${basePath}tools.html#calc" class="mobile-link">🧮 Calculators</a>
-            
-            <div class="mobile-menu-divider"></div>
-            <a href="${basePath}about.html" class="mobile-link">About</a>
-            <a href="${basePath}privacy.html" class="mobile-link">Privacy</a>
-            <a href="${basePath}terms.html" class="mobile-link">Terms</a>
-            <a href="${basePath}contact.html" class="mobile-link">Contact</a>
-            
-            <div class="mobile-menu-divider"></div>
-            <button class="mobile-link" id="mobileDarkToggle">
-                <i class="fas fa-moon"></i> Dark Mode
-            </button>
-            <div class="mobile-menu-divider"></div>
-    `;
-    
-    if (user) {
-        menuLinks += `
-            <div class="mobile-user-info">
-                <i class="fas fa-user"></i>
-                <span>${user.email}</span>
-            </div>
-            <a href="#" class="mobile-link mobile-logout" id="mobileLogout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-            <a href="#" class="mobile-link mobile-delete" id="mobileDeleteAccount">
-                <i class="fas fa-trash-alt"></i> Delete Account
-            </a>
-        `;
-    } else {
-        menuLinks += `
-            <a href="${basePath}login.html" class="mobile-link">Login</a>
-            <a href="${basePath}signup.html" class="mobile-link mobile-cta">Sign Up</a>
-        `;
-    }
-    
-    menuLinks += `</div>`;
-    menu.innerHTML = menuLinks;
-    
-    // Re-attach close button event
-    const closeBtn = menu.querySelector('.mobile-menu-close');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeMenu);
-    }
-    
-    // Mobile logout
-    const mobileLogout = document.getElementById('mobileLogout');
-    if (mobileLogout) {
-        mobileLogout.addEventListener('click', (e) => {
-            e.preventDefault();
-            logout();
-            closeMenu();
-        });
-    }
-    
-    // Mobile delete account
-    const mobileDelete = document.getElementById('mobileDeleteAccount');
-    if (mobileDelete) {
-        mobileDelete.addEventListener('click', (e) => {
-            e.preventDefault();
-            closeMenu();
-            deleteUserAccount();
-        });
-    }
-    
-    // 🔥 FIX: Mobile dark mode toggle (stop propagation and prevent global listener)
-    const mobileDarkToggle = document.getElementById('mobileDarkToggle');
-    if (mobileDarkToggle) {
-        // Remove any existing listeners
-        const newToggle = mobileDarkToggle.cloneNode(true);
-        mobileDarkToggle.parentNode.replaceChild(newToggle, mobileDarkToggle);
+    function updateMobileMenu() {
+        const user = auth.currentUser;
+        const isInTools = window.location.pathname.includes('/tools/');
+        const basePath = isInTools ? '../' : './';
         
-        newToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Toggle dark mode
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark);
-            
-            // Update button text
-            newToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
-            
-            // Update main toggle icon
-            const mainIcon = document.querySelector('.theme-toggle i');
-            if (mainIcon) {
-                mainIcon.className = isDark ? 'fas fa-sun' : 'far fa-moon';
-            }
-        });
+        let menuLinks = `
+            <div class="mobile-menu-header">
+                <div class="mobile-menu-logo">
+                    <i class="fas fa-star"></i>
+                    <span>ToolsNova</span>
+                </div>
+                <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="mobile-menu-links">
+                <a href="${basePath}index.html" class="mobile-link">Home</a>
+                <a href="${basePath}ai-assistant.html" class="mobile-link">AI Assistant</a>
+                <a href="${basePath}tools.html" class="mobile-link">All Tools</a>
+                
+                <div class="mobile-menu-category-title">For You! 🔥</div>
+                <a href="${basePath}tools.html#media" class="mobile-link">📹 Media Tools</a>
+                <a href="${basePath}tools.html#ai" class="mobile-link">🤖 AI Tools</a>
+                <a href="${basePath}tools.html#image" class="mobile-link">🎨 Image Editor</a>
+                <a href="${basePath}tools.html#code" class="mobile-link">💻 Code Editors</a>
+                <a href="${basePath}tools.html#calc" class="mobile-link">🧮 Calculators</a>
+                
+                <div class="mobile-menu-divider"></div>
+                <a href="${basePath}about.html" class="mobile-link">About</a>
+                <a href="${basePath}privacy.html" class="mobile-link">Privacy</a>
+                <a href="${basePath}terms.html" class="mobile-link">Terms</a>
+                <a href="${basePath}contact.html" class="mobile-link">Contact</a>
+                
+                <div class="mobile-menu-divider"></div>
+                <button class="mobile-link" id="mobileDarkToggle">
+                    <i class="fas fa-moon"></i> Dark Mode
+                </button>
+                <div class="mobile-menu-divider"></div>
+        `;
         
-        // Set initial text
-        if (document.body.classList.contains('dark-mode')) {
-            newToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+        if (user) {
+            menuLinks += `
+                <div class="mobile-user-info">
+                    <i class="fas fa-user"></i>
+                    <span>${user.email}</span>
+                </div>
+                <a href="#" class="mobile-link mobile-logout" id="mobileLogout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+                <a href="#" class="mobile-link mobile-delete" id="mobileDeleteAccount">
+                    <i class="fas fa-trash-alt"></i> Delete Account
+                </a>
+            `;
         } else {
-            newToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+            menuLinks += `
+                <a href="${basePath}login.html" class="mobile-link">Login</a>
+                <a href="${basePath}signup.html" class="mobile-link mobile-cta">Sign Up</a>
+            `;
+        }
+        
+        menuLinks += `</div>`;
+        menu.innerHTML = menuLinks;
+        
+        const closeBtn = menu.querySelector('.mobile-menu-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeMenu);
+        }
+        
+        const mobileLogout = document.getElementById('mobileLogout');
+        if (mobileLogout) {
+            mobileLogout.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+                closeMenu();
+            });
+        }
+        
+        const mobileDelete = document.getElementById('mobileDeleteAccount');
+        if (mobileDelete) {
+            mobileDelete.addEventListener('click', (e) => {
+                e.preventDefault();
+                closeMenu();
+                deleteUserAccount();
+            });
+        }
+        
+        const mobileDarkToggle = document.getElementById('mobileDarkToggle');
+        if (mobileDarkToggle) {
+            const newToggle = mobileDarkToggle.cloneNode(true);
+            mobileDarkToggle.parentNode.replaceChild(newToggle, mobileDarkToggle);
+            
+            newToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('darkMode', isDark);
+                newToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
+                const mainIcon = document.querySelector('.theme-toggle i');
+                if (mainIcon) {
+                    mainIcon.className = isDark ? 'fas fa-sun' : 'far fa-moon';
+                }
+            });
+            
+            if (document.body.classList.contains('dark-mode')) {
+                newToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+            }
         }
     }
-}   
-    // Initial mobile menu
+    
     updateMobileMenu();
     
-    // Update mobile menu when auth state changes
     auth.onAuthStateChanged(() => {
         updateMobileMenu();
     });
     
-    // Open menu
-    function openMenu() {
-        menu.classList.add('active');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-    
-    // Close menu function
     function closeMenu() {
         menu.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = '';
     }
     
-    // Close button
+    window.closeMenu = closeMenu;
+    
     const closeBtn = menu.querySelector('.mobile-menu-close');
     if (closeBtn) {
         closeBtn.addEventListener('click', closeMenu);
     }
     
-    // Click overlay to close
     overlay.addEventListener('click', closeMenu);
-    
-    // Expose openMenu globally
-    window.openMenu = openMenu;
-    window.closeMenu = closeMenu;
 }
 
 // ===== DRAGGABLE MOBILE MENU BUTTON =====
 if (mobileBtn) {
-
     let isDragging = false;
     let moved = false;
     let offsetX = 0;
     let offsetY = 0;
-
-    // ===== RESTORE POSITION =====
+    
     const savedX = localStorage.getItem('btn_x');
     const savedY = localStorage.getItem('btn_y');
-
+    
     if (savedX && savedY) {
         let x = parseInt(savedX);
         let y = parseInt(savedY);
-
         const maxX = window.innerWidth - mobileBtn.offsetWidth;
         const maxY = window.innerHeight - mobileBtn.offsetHeight;
-
         x = Math.max(0, Math.min(x, maxX));
         y = Math.max(0, Math.min(y, maxY));
-
         mobileBtn.style.left = x + "px";
         mobileBtn.style.top = y + "px";
         mobileBtn.style.right = "auto";
     }
-
-    // ===== TOUCH START =====
+    
+    function openMenu() {
+        const menu = document.querySelector('.mobile-menu');
+        const overlay = document.querySelector('.mobile-menu-overlay');
+        if (menu) {
+            menu.classList.add('active');
+            if (overlay) overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    
+    window.openMenu = openMenu;
+    
     mobileBtn.addEventListener("touchstart", (e) => {
         isDragging = true;
         moved = false;
-
         const touch = e.touches[0];
         offsetX = touch.clientX - mobileBtn.offsetLeft;
         offsetY = touch.clientY - mobileBtn.offsetTop;
     });
-
-    // ===== TOUCH MOVE =====
+    
     mobileBtn.addEventListener("touchmove", (e) => {
         if (!isDragging) return;
-
         moved = true;
-
         const touch = e.touches[0];
-
         let x = touch.clientX - offsetX;
         let y = touch.clientY - offsetY;
-
         const maxX = window.innerWidth - mobileBtn.offsetWidth;
         const maxY = window.innerHeight - mobileBtn.offsetHeight;
-
         x = Math.max(0, Math.min(x, maxX));
         y = Math.max(0, Math.min(y, maxY));
-
         mobileBtn.style.left = x + "px";
         mobileBtn.style.top = y + "px";
         mobileBtn.style.right = "auto";
         mobileBtn.style.bottom = "auto";
     });
-
-    // ===== TOUCH END =====
+    
     mobileBtn.addEventListener("touchend", (e) => {
         isDragging = false;
-
-        // 👉 Tap = open menu
         if (!moved) {
             e.preventDefault();
-            if (window.openMenu) window.openMenu();
+            openMenu();
         }
-
-        // ===== SNAP LEFT / RIGHT =====
         const screenWidth = window.innerWidth;
         const rect = mobileBtn.getBoundingClientRect();
-
-        let finalX;
-
-        if (rect.left < screenWidth / 2) {
-            finalX = 10;
-        } else {
-            finalX = screenWidth - mobileBtn.offsetWidth - 10;
-        }
-
+        let finalX = rect.left < screenWidth / 2 ? 10 : screenWidth - mobileBtn.offsetWidth - 10;
         mobileBtn.style.left = finalX + "px";
-
-        // ===== SAVE POSITION =====
         const finalRect = mobileBtn.getBoundingClientRect();
         localStorage.setItem('btn_x', finalRect.left);
         localStorage.setItem('btn_y', finalRect.top);
     });
-
-    // ===== CLICK SUPPORT (for safety) =====
+    
     mobileBtn.addEventListener("click", () => {
         if (!isDragging && !moved) {
-            if (window.openMenu) window.openMenu();
+            openMenu();
         }
     });
 }
 
-// Mobile menu buttons functionality
-document.addEventListener('click', function(e) {
-    // Dark mode toggle
-    if (e.target.id === 'mobileDarkToggle' || e.target.parentElement?.id === 'mobileDarkToggle') {
-        const btn = document.getElementById('mobileDarkToggle');
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        if (btn) {
-            btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
-        }
-        // Also update main toggle icon
-        const mainIcon = document.querySelector('.theme-toggle i');
-        if (mainIcon) {
-            mainIcon.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'far fa-moon';
-        }
-    }
-});
-
 // ===== COLLAPSIBLE DESKTOP SIDEBAR =====
 function initDesktopSidebar() {
+        // Don't create sidebar on mobile
+    if (window.innerWidth <= 768) return;
     if (document.querySelector('.desktop-sidebar')) return;
     
-    // Create toggle button (floating)
     const toggleBtn = document.createElement('button');
     toggleBtn.className = 'desktop-sidebar-toggle';
     toggleBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
     document.body.appendChild(toggleBtn);
     
-    // Create sidebar
     const sidebar = document.createElement('div');
     sidebar.className = 'desktop-sidebar';
     sidebar.id = 'desktopSidebar';
     document.body.appendChild(sidebar);
     
-    // Check localStorage for sidebar state
     const isSidebarOpen = localStorage.getItem('desktopSidebarOpen') !== 'false';
     
     function updateSidebarState(open) {
@@ -566,11 +485,9 @@ function initDesktopSidebar() {
             document.body.classList.add('sidebar-collapsed');
             localStorage.setItem('desktopSidebarOpen', 'false');
         }
-        // Trigger window resize to fix any layout issues
         window.dispatchEvent(new Event('resize'));
     }
     
-    // Set initial state
     updateSidebarState(isSidebarOpen);
     
     function toggleSidebar() {
@@ -581,108 +498,106 @@ function initDesktopSidebar() {
     toggleBtn.addEventListener('click', toggleSidebar);
     
     function updateSidebar() {
-    const user = auth.currentUser;
-    const currentPath = window.location.pathname;
-    // Get the base path (for root vs tools folder)
-    const isInTools = currentPath.includes('/tools/');
-    const basePath = isInTools ? '../' : './';
-    
-    function isActive(href) {
-        if (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html')) return true;
-        if (href === 'ai-assistant.html' && currentPath.includes('ai-assistant')) return true;
-        if (href === 'tools.html' && currentPath.includes('tools.html')) return true;
-        if (href === 'about.html' && currentPath.includes('about')) return true;
-        if (href === 'privacy.html' && currentPath.includes('privacy')) return true;
-        if (href === 'terms.html' && currentPath.includes('terms')) return true;
-        if (href === 'contact.html' && currentPath.includes('contact')) return true;
-        return false;
-    }
-    
-    let html = `
-        <div class="desktop-sidebar-header">
-            <div class="desktop-sidebar-logo">
-                <i class="fas fa-star"></i>
-                <span>ToolsNova</span>
+        const user = auth.currentUser;
+        const currentPath = window.location.pathname;
+        const isInTools = currentPath.includes('/tools/');
+        const basePath = isInTools ? '../' : './';
+        
+        function isActive(href) {
+            if (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html')) return true;
+            if (href === 'ai-assistant.html' && currentPath.includes('ai-assistant')) return true;
+            if (href === 'tools.html' && currentPath.includes('tools.html')) return true;
+            if (href === 'about.html' && currentPath.includes('about')) return true;
+            if (href === 'privacy.html' && currentPath.includes('privacy')) return true;
+            if (href === 'terms.html' && currentPath.includes('terms')) return true;
+            if (href === 'contact.html' && currentPath.includes('contact')) return true;
+            return false;
+        }
+        
+        let html = `
+            <div class="desktop-sidebar-header">
+                <div class="desktop-sidebar-logo">
+                    <i class="fas fa-star"></i>
+                    <span>ToolsNova</span>
+                </div>
             </div>
-        </div>
-        <div class="desktop-sidebar-links">
-            <a href="${basePath}index.html" class="desktop-sidebar-link ${isActive('index.html') ? 'active' : ''}">
-                <i class="fas fa-home"></i> <span>Home</span>
-            </a>
-            <a href="${basePath}ai-assistant.html" class="desktop-sidebar-link ${isActive('ai-assistant.html') ? 'active' : ''}">
-                <i class="fas fa-robot"></i> <span>AI Assistant</span>
-            </a>
-            <a href="${basePath}tools.html" class="desktop-sidebar-link ${isActive('tools.html') ? 'active' : ''}">
-                <i class="fas fa-tools"></i> <span>All Tools</span>
-            </a>
-            
-            <div class="desktop-sidebar-category-title">For You! 🔥</div>
-            <a href="${basePath}tools.html#media" class="desktop-sidebar-link"><i class="fas fa-video"></i> <span>Media Tools</span></a>
-            <a href="${basePath}tools.html#ai" class="desktop-sidebar-link"><i class="fas fa-robot"></i> <span>AI Tools</span></a>
-            <a href="${basePath}tools.html#image" class="desktop-sidebar-link"><i class="fas fa-paint-brush"></i> <span>Image Editor</span></a>
-            <a href="${basePath}tools.html#code" class="desktop-sidebar-link"><i class="fas fa-code"></i> <span>Code Editors</span></a>
-            <a href="${basePath}tools.html#calc" class="desktop-sidebar-link"><i class="fas fa-calculator"></i> <span>Calculators</span></a>
-            
-            <div class="desktop-sidebar-divider"></div>
-            <a href="${basePath}about.html" class="desktop-sidebar-link ${isActive('about.html') ? 'active' : ''}">
-                <i class="fas fa-info-circle"></i> <span>About</span>
-            </a>
-            <a href="${basePath}privacy.html" class="desktop-sidebar-link ${isActive('privacy.html') ? 'active' : ''}">
-                <i class="fas fa-shield-alt"></i> <span>Privacy</span>
-            </a>
-            <a href="${basePath}terms.html" class="desktop-sidebar-link ${isActive('terms.html') ? 'active' : ''}">
-                <i class="fas fa-file-contract"></i> <span>Terms</span>
-            </a>
-            <a href="${basePath}contact.html" class="desktop-sidebar-link ${isActive('contact.html') ? 'active' : ''}">
-                <i class="fas fa-envelope"></i> <span>Contact</span>
-            </a>
-            
-            <div class="desktop-sidebar-divider"></div>
-            <button class="desktop-sidebar-link" id="desktopDarkToggle">
-                <i class="fas fa-moon"></i> <span>Dark Mode</span>
-            </button>
-    `;
-    
-    if (user) {
-        html += `
-            <div class="desktop-sidebar-divider"></div>
-            <div class="desktop-sidebar-user-info">
-                <i class="fas fa-user-circle"></i>
-                <span>${user.email.split('@')[0]}</span>
-            </div>
-            <a href="#" class="desktop-sidebar-link desktop-sidebar-logout" id="desktopSidebarLogout">
-                <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
-            </a>
-            <a href="#" class="desktop-sidebar-link desktop-sidebar-delete" id="desktopDeleteAccount">
-                <i class="fas fa-trash-alt"></i> <span>Delete Account</span>
-            </a>
+            <div class="desktop-sidebar-links">
+                <a href="${basePath}index.html" class="desktop-sidebar-link ${isActive('index.html') ? 'active' : ''}">
+                    <i class="fas fa-home"></i> <span>Home</span>
+                </a>
+                <a href="${basePath}ai-assistant.html" class="desktop-sidebar-link ${isActive('ai-assistant.html') ? 'active' : ''}">
+                    <i class="fas fa-robot"></i> <span>AI Assistant</span>
+                </a>
+                <a href="${basePath}tools.html" class="desktop-sidebar-link ${isActive('tools.html') ? 'active' : ''}">
+                    <i class="fas fa-tools"></i> <span>All Tools</span>
+                </a>
+                
+                <div class="desktop-sidebar-category-title">For You! 🔥</div>
+                <a href="${basePath}tools.html#media" class="desktop-sidebar-link"><i class="fas fa-video"></i> <span>Media Tools</span></a>
+                <a href="${basePath}tools.html#ai" class="desktop-sidebar-link"><i class="fas fa-robot"></i> <span>AI Tools</span></a>
+                <a href="${basePath}tools.html#image" class="desktop-sidebar-link"><i class="fas fa-paint-brush"></i> <span>Image Editor</span></a>
+                <a href="${basePath}tools.html#code" class="desktop-sidebar-link"><i class="fas fa-code"></i> <span>Code Editors</span></a>
+                <a href="${basePath}tools.html#calc" class="desktop-sidebar-link"><i class="fas fa-calculator"></i> <span>Calculators</span></a>
+                
+                <div class="desktop-sidebar-divider"></div>
+                <a href="${basePath}about.html" class="desktop-sidebar-link ${isActive('about.html') ? 'active' : ''}">
+                    <i class="fas fa-info-circle"></i> <span>About</span>
+                </a>
+                <a href="${basePath}privacy.html" class="desktop-sidebar-link ${isActive('privacy.html') ? 'active' : ''}">
+                    <i class="fas fa-shield-alt"></i> <span>Privacy</span>
+                </a>
+                <a href="${basePath}terms.html" class="desktop-sidebar-link ${isActive('terms.html') ? 'active' : ''}">
+                    <i class="fas fa-file-contract"></i> <span>Terms</span>
+                </a>
+                <a href="${basePath}contact.html" class="desktop-sidebar-link ${isActive('contact.html') ? 'active' : ''}">
+                    <i class="fas fa-envelope"></i> <span>Contact</span>
+                </a>
+                
+                <div class="desktop-sidebar-divider"></div>
+                <button class="desktop-sidebar-link" id="desktopDarkToggle">
+                    <i class="fas fa-moon"></i> <span>Dark Mode</span>
+                </button>
         `;
-    } else {
-        html += `
-            <div class="desktop-sidebar-divider"></div>
-            <a href="${basePath}login.html" class="desktop-sidebar-link"><i class="fas fa-sign-in-alt"></i> <span>Login</span></a>
-            <a href="${basePath}signup.html" class="desktop-sidebar-link desktop-sidebar-cta"><i class="fas fa-user-plus"></i> <span>Sign Up</span></a>
-        `;
-    }
-    
-    html += `</div>`;
-    sidebar.innerHTML = html;
-    
-    // Attach events
-    document.getElementById('desktopDarkToggle')?.addEventListener('click', toggleDarkMode);
-    document.getElementById('desktopSidebarLogout')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        logout();
-    });
-    
-    const desktopDelete = document.getElementById('desktopDeleteAccount');
-    if (desktopDelete) {
-        desktopDelete.addEventListener('click', (e) => {
+        
+        if (user) {
+            html += `
+                <div class="desktop-sidebar-divider"></div>
+                <div class="desktop-sidebar-user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>${user.email.split('@')[0]}</span>
+                </div>
+                <a href="#" class="desktop-sidebar-link desktop-sidebar-logout" id="desktopSidebarLogout">
+                    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                </a>
+                <a href="#" class="desktop-sidebar-link desktop-sidebar-delete" id="desktopDeleteAccount">
+                    <i class="fas fa-trash-alt"></i> <span>Delete Account</span>
+                </a>
+            `;
+        } else {
+            html += `
+                <div class="desktop-sidebar-divider"></div>
+                <a href="${basePath}login.html" class="desktop-sidebar-link"><i class="fas fa-sign-in-alt"></i> <span>Login</span></a>
+                <a href="${basePath}signup.html" class="desktop-sidebar-link desktop-sidebar-cta"><i class="fas fa-user-plus"></i> <span>Sign Up</span></a>
+            `;
+        }
+        
+        html += `</div>`;
+        sidebar.innerHTML = html;
+        
+        document.getElementById('desktopDarkToggle')?.addEventListener('click', toggleDarkMode);
+        document.getElementById('desktopSidebarLogout')?.addEventListener('click', (e) => {
             e.preventDefault();
-            deleteUserAccount();
+            logout();
         });
+        
+        const desktopDelete = document.getElementById('desktopDeleteAccount');
+        if (desktopDelete) {
+            desktopDelete.addEventListener('click', (e) => {
+                e.preventDefault();
+                deleteUserAccount();
+            });
+        }
     }
-}
     
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
@@ -703,36 +618,56 @@ function initDesktopSidebar() {
     auth.onAuthStateChanged(() => updateSidebar());
     updateSidebar();
     
-    // Set dark mode button initial text
-    const darkToggle = document.getElementById('desktopDarkToggle');
-    if (darkToggle && document.body.classList.contains('dark-mode')) {
-        darkToggle.innerHTML = '<i class="fas fa-sun"></i> <span>Light Mode</span>';
-    }
-    
-    // Handle window resize for mobile
     window.addEventListener('resize', () => {
         if (window.innerWidth <= 768) {
-            // On mobile, reset sidebar state
             sidebar.classList.remove('collapsed');
             document.body.classList.remove('sidebar-collapsed');
-            toggleBtn.style.display = 'none';
         } else {
-            toggleBtn.style.display = 'flex';
             const savedState = localStorage.getItem('desktopSidebarOpen') !== 'false';
             updateSidebarState(savedState);
         }
     });
-    
-    // Trigger resize to set initial state
-    window.dispatchEvent(new Event('resize'));
 }
 
-// Initialize when DOM is ready
+// ===== DELETE ACCOUNT FUNCTION =====
+function deleteUserAccount() {
+    const user = auth.currentUser;
+    if (!user) {
+        alert('You need to be logged in to delete your account.');
+        return;
+    }
+    
+    const confirmed = confirm(
+        '⚠️ WARNING: This will PERMANENTLY delete:\n\n' +
+        '• Your account and email\n' +
+        '• All your chat history\n' +
+        '• All your saved data\n\n' +
+        'This action CANNOT be undone!\n\n' +
+        'Click OK to delete your account forever.'
+    );
+    
+    if (!confirmed) return;
+    
+    user.delete().then(() => {
+        localStorage.clear();
+        alert('✅ Your account has been deleted successfully.');
+        window.location.href = 'index.html';
+    }).catch((error) => {
+        if (error.code === 'auth/requires-recent-login') {
+            alert('⚠️ For security, please log out and log in again, then try deleting your account.');
+        } else {
+            alert('❌ Error: ' + error.message);
+        }
+    });
+}
+
+// Initialize desktop sidebar
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initDesktopSidebar);
 } else {
     initDesktopSidebar();
 }
+
 // Initial guest display
 updateGuestDisplay();
 
@@ -747,5 +682,4 @@ window.isGuestUser = function() {
     return !user;
 };
 
-// Dispatch an event when auth is ready
 window.dispatchEvent(new Event('toolsnova-auth-ready'));

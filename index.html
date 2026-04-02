@@ -3,16 +3,15 @@
 <head>
 <script>
   (function() {
-    // Check for bots without breaking page
-    const isBot = /bot|crawl|spider|scraper|headless/i.test(navigator.userAgent);
-    
+    // 1. Technical Bot Check (The Speed-Bump)
+    const isBot = navigator.webdriver || !navigator.languages || /HeadlessChrome/.test(navigator.userAgent);
     if (isBot) {
-      // Don't load analytics for bots
-      console.log('Bot detected, analytics skipped');
+      window.stop(); // Stops the page for simple bots
+      document.documentElement.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;'><h4>Security Check: Please use a standard browser.</h4></div>";
       return;
     }
 
-    // Human verification for GA
+    // 2. Prepare Human Verification for Layer 2
     window.isVerifiedHuman = false;
     const humanEvents = ['mousedown', 'touchstart', 'scroll', 'keydown'];
     const verify = () => {
@@ -52,12 +51,15 @@
 
 <script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 <script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-<!-- Favicon - Files in /assets/images/ folder -->
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
-<link rel="manifest" href="/assets/images/site.webmanifest">
-<link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Google tag (gtag.js) - SINGLE VERSION -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
@@ -71,10 +73,11 @@
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499" crossorigin="anonymous"></script>
 
+<!-- Favicon -->
+
+
 <!-- Title and Meta -->
 <title>ToolsNova - Professional web tools</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="title" content="ToolsNova - 100+ Free Professional Web Tools | YouTube Downloader, QR Code, AI Tools">
 <meta name="description" content="ToolsNova offers 25+ free web tools including YouTube to MP3, AI grammar checker, background remover, QR generator. Guest users get 3 free uses.">
 <meta name="keywords" content="web tools, online tools, free tools, youtube downloader, youtube thumbnail downloader, youtube to mp3, ai content detector, currency converter, qr code generator, ai tools, background remover, image editor, crop image, resize image, code editor, python editor, html editor">
@@ -107,15 +110,6 @@
 <meta name="theme-color" content="#3b82f6">
 <meta name="msapplication-TileColor" content="#3b82f6">
 <meta name="msapplication-TileImage" content="/assets/images/ms-icon-144x144.png">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "ToolsNova",
-  "url": "https://toolsnova.github.io/"
-}
-</script>
 
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -386,8 +380,6 @@
 <!-- Your existing Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-
-
     
     <!-- Custom JavaScript -->
     <script src="./js/script.js"></script>
