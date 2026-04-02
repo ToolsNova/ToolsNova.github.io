@@ -3,15 +3,16 @@
 <head>
 <script>
   (function() {
-    // 1. Technical Bot Check (The Speed-Bump)
-    const isBot = navigator.webdriver || !navigator.languages || /HeadlessChrome/.test(navigator.userAgent);
+    // Check for bots without breaking page
+    const isBot = /bot|crawl|spider|scraper|headless/i.test(navigator.userAgent);
+    
     if (isBot) {
-      window.stop(); // Stops the page for simple bots
-      document.documentElement.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;'><h4>Security Check: Please use a standard browser.</h4></div>";
+      // Don't load analytics for bots
+      console.log('Bot detected, analytics skipped');
       return;
     }
 
-    // 2. Prepare Human Verification for Layer 2
+    // Human verification for GA
     window.isVerifiedHuman = false;
     const humanEvents = ['mousedown', 'touchstart', 'scroll', 'keydown'];
     const verify = () => {
@@ -73,7 +74,7 @@
 <!-- Title and Meta -->
 <title>ToolsNova - Professional web tools</title>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="title" content="ToolsNova - 100+ Free Professional Web Tools | YouTube Downloader, QR Code, AI Tools">
 <meta name="description" content="ToolsNova offers 25+ free web tools including YouTube to MP3, AI grammar checker, background remover, QR generator. Guest users get 3 free uses.">
 <meta name="keywords" content="web tools, online tools, free tools, youtube downloader, youtube thumbnail downloader, youtube to mp3, ai content detector, currency converter, qr code generator, ai tools, background remover, image editor, crop image, resize image, code editor, python editor, html editor">
