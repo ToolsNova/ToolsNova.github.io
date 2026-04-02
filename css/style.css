@@ -1,4 +1,4 @@
-/* ===== TOOLSNOVA - COMPLETE CSS ===== */
+/* ===== TOOLSNOVA - COMPLETE CSS (FIXED) ===== */
 
 /* ===== RESET & BASE ===== */
 * {
@@ -1026,225 +1026,116 @@ body {
     margin-top: 10px;
 }
 
-/* ===== DESKTOP SIDEBAR - ATTRACTIVE DESIGN ===== */
+/* ===== COLLAPSIBLE DESKTOP SIDEBAR ===== */
 .desktop-sidebar {
     position: fixed;
     top: 0;
-    left: -380px;
-    width: 320px;
+    left: 0;
+    width: 280px;
     height: 100%;
     background: var(--bg-primary);
-    z-index: 1002;
-    padding: 35px 25px;
-    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.15);
-    border-right: none;
+    z-index: 1000;
+    padding: 30px 20px;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    border-right: 1px solid var(--border);
+    overflow-x: hidden;
     overflow-y: auto;
 }
 
-.desktop-sidebar.active {
-    left: 0;
+/* Collapsed state */
+.desktop-sidebar.collapsed {
+    width: 70px;
 }
 
-/* Desktop Sidebar Header */
-.desktop-sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 35px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid var(--primary);
+.desktop-sidebar.collapsed .desktop-sidebar-logo span,
+.desktop-sidebar.collapsed .desktop-sidebar-link span,
+.desktop-sidebar.collapsed .desktop-sidebar-category-title,
+.desktop-sidebar.collapsed .desktop-sidebar-user-info span {
+    display: none;
 }
 
-.desktop-sidebar-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 800;
-    font-size: 1.4rem;
-    background: linear-gradient(135deg, var(--primary), #8b5cf6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.desktop-sidebar-logo i {
-    color: var(--primary);
-    -webkit-text-fill-color: initial;
-    background: none;
-    font-size: 1.6rem;
-}
-
-.desktop-sidebar-close {
-    background: var(--bg-secondary);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
+.desktop-sidebar.collapsed .desktop-sidebar-link {
     justify-content: center;
-    cursor: pointer;
-    color: var(--text-secondary);
+    padding: 12px;
+}
+
+.desktop-sidebar.collapsed .desktop-sidebar-link i {
+    margin: 0;
     font-size: 1.2rem;
-    transition: all 0.2s ease;
 }
 
-.desktop-sidebar-close:hover {
-    background: var(--bg-tertiary);
-    color: var(--error);
-    transform: rotate(90deg);
-}
-
-/* Desktop Sidebar Links Container */
-.desktop-sidebar-links {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-/* Desktop Links */
-.desktop-sidebar-link {
-    padding: 12px 18px;
-    text-decoration: none;
-    color: var(--text-primary);
-    font-weight: 500;
-    border-radius: 50px;
-    transition: all 0.25s ease;
-    font-size: 0.95rem;
-    border: 1px solid transparent;
-    background: none;
-    cursor: pointer;
-    text-align: left;
-    width: 100%;
-    font-family: inherit;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: relative;
-}
-
-.desktop-sidebar-link i {
-    width: 22px;
-    font-size: 1rem;
-    transition: transform 0.2s ease;
-}
-
-.desktop-sidebar-link:hover {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
-    border-color: var(--primary);
-    transform: translateX(5px);
-}
-
-.desktop-sidebar-link:hover i {
-    transform: translateX(3px);
-    color: var(--primary);
-}
-
-.desktop-sidebar-link.active {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
-    border-color: var(--primary);
-    color: var(--primary);
-}
-
-.desktop-sidebar-link.active::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 3px;
-    height: 60%;
-    background: var(--primary);
-    border-radius: 0 3px 3px 0;
-}
-
-/* Desktop CTA Button */
-.desktop-sidebar-cta {
-    background: linear-gradient(135deg, var(--primary), #8b5cf6);
-    color: white !important;
-    text-align: center;
+.desktop-sidebar.collapsed .desktop-sidebar-user-info {
     justify-content: center;
-    margin-top: 10px;
+    padding: 12px;
+}
+
+.desktop-sidebar.collapsed .desktop-sidebar-user-info i {
+    margin: 0;
+}
+
+/* Toggle Button */
+.desktop-sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 290px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
     border: none;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-}
-
-.desktop-sidebar-cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-}
-
-/* Desktop User Info */
-.desktop-sidebar-user-info {
-    padding: 12px 18px;
-    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
-    border-radius: 50px;
-    margin: 15px 0 5px;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 12px;
-    color: var(--text-primary);
-    border: 1px solid var(--border);
-    font-weight: 500;
+    justify-content: center;
+    font-size: 0.8rem;
+    z-index: 1001;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.desktop-sidebar-user-info i {
-    color: var(--primary);
-    font-size: 1.1rem;
+.desktop-sidebar-toggle:hover {
+    transform: scale(1.1);
+    background: var(--primary-dark);
 }
 
-/* Desktop Logout & Delete */
-.desktop-sidebar-logout,
-.desktop-sidebar-delete {
-    color: var(--error) !important;
-    border: 1px solid var(--error) !important;
-    background: transparent !important;
+/* When sidebar is collapsed, move toggle button */
+.desktop-sidebar.collapsed + .desktop-sidebar-toggle {
+    left: 85px;
 }
 
-.desktop-sidebar-logout:hover,
-.desktop-sidebar-delete:hover {
-    background: var(--error) !important;
-    color: white !important;
-    transform: translateX(5px);
+/* Hide toggle on mobile */
+@media (max-width: 768px) {
+    .desktop-sidebar-toggle {
+        display: none;
+    }
 }
 
-/* Desktop Divider */
-.desktop-sidebar-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-    margin: 15px 0;
+/* ===== PAGE ADJUSTMENT FOR SIDEBAR ===== */
+body {
+    padding-left: 280px;
+    transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Desktop Category Title */
-.desktop-sidebar-category-title {
-    padding: 8px 18px 4px 18px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: var(--primary);
-    text-transform: uppercase;
-    margin-top: 10px;
+body.sidebar-collapsed {
+    padding-left: 70px;
 }
 
-/* Scrollbar Styling for Menus */
-.mobile-menu::-webkit-scrollbar,
-.desktop-sidebar::-webkit-scrollbar {
-    width: 4px;
+.navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 280px;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 50;
 }
 
-.mobile-menu::-webkit-scrollbar-track,
-.desktop-sidebar::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
+body.sidebar-collapsed .navbar {
+    left: 70px;
 }
 
-.mobile-menu::-webkit-scrollbar-thumb,
-.desktop-sidebar::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 4px;
-}
-
-/* ===== DESKTOP FLOATING MENU BUTTON ===== */
+/* Desktop floating button */
 .desktop-menu-btn {
     position: fixed;
     top: 100px;
@@ -1281,6 +1172,23 @@ body {
 @media (max-width: 768px) {
     .desktop-menu-btn {
         display: none !important;
+    }
+    
+    body {
+        padding-left: 0 !important;
+    }
+    
+    .navbar {
+        left: 0 !important;
+    }
+    
+    .desktop-sidebar {
+        left: -280px;
+        width: 280px;
+    }
+    
+    .desktop-sidebar.active {
+        left: 0;
     }
 }
 
@@ -1325,6 +1233,15 @@ body {
     
     .mobile-menu-btn {
         display: flex;
+        position: fixed;
+        top: 200px;
+        right: 10px;
+        transform: none;
+        width: 55px;
+        height: 55px;
+        z-index: 9999;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        touch-action: none;
     }
     
     .hero-title {
@@ -1365,18 +1282,6 @@ body {
     .category-grid {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
         gap: 16px;
-    }
-
-    .mobile-menu-btn {
-        position: fixed;
-        top: 200px;
-        right: 10px;
-        transform: none;
-        width: 55px;
-        height: 55px;
-        z-index: 9999;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        touch-action: none;
     }
 }
 
@@ -1511,7 +1416,6 @@ body {
     font-size: 1rem;
 }
 
-/* Dark mode support */
 .dark-mode .user-info-footer {
     background: var(--bg-secondary);
 }
@@ -1741,148 +1645,4 @@ body {
 
 .mobile-link i {
     width: 20px;
-}
-
-/* ===== COLLAPSIBLE DESKTOP SIDEBAR - PERFECT LAYOUT ===== */
-.desktop-sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 280px;
-    height: 100%;
-    background: var(--bg-primary);
-    z-index: 1000;
-    padding: 30px 20px;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-    border-right: 1px solid var(--border);
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-/* Collapsed state */
-.desktop-sidebar.collapsed {
-    width: 70px;
-}
-
-.desktop-sidebar.collapsed .desktop-sidebar-logo span,
-.desktop-sidebar.collapsed .desktop-sidebar-link span,
-.desktop-sidebar.collapsed .desktop-sidebar-category-title,
-.desktop-sidebar.collapsed .desktop-sidebar-user-info span {
-    display: none;
-}
-
-.desktop-sidebar.collapsed .desktop-sidebar-link {
-    justify-content: center;
-    padding: 12px;
-}
-
-.desktop-sidebar.collapsed .desktop-sidebar-link i {
-    margin: 0;
-    font-size: 1.2rem;
-}
-
-.desktop-sidebar.collapsed .desktop-sidebar-user-info {
-    justify-content: center;
-    padding: 12px;
-}
-
-.desktop-sidebar.collapsed .desktop-sidebar-user-info i {
-    margin: 0;
-}
-
-/* Toggle Button (floating, same as before) */
-.desktop-sidebar-toggle {
-    position: fixed;
-    top: 20px;
-    left: 290px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    z-index: 1001;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.desktop-sidebar-toggle:hover {
-    transform: scale(1.1);
-    background: var(--primary-dark);
-}
-
-/* When sidebar is collapsed, move toggle button */
-.desktop-sidebar.collapsed + .desktop-sidebar-toggle {
-    left: 85px;
-}
-
-/* Hide toggle on mobile */
-@media (max-width: 768px) {
-    .desktop-sidebar-toggle {
-        display: none;
-    }
-}
-
-/* ===== PAGE ADJUSTMENT FOR SIDEBAR ===== */
-/* Add padding to body to account for sidebar */
-body {
-    padding-left: 280px;
-    transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-body.sidebar-collapsed {
-    padding-left: 70px;
-}
-
-/* Navbar adjustment - make it full width with sidebar offset */
-.navbar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 280px;
-    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 50;
-}
-
-body.sidebar-collapsed .navbar {
-    left: 70px;
-}
-
-/* Main content containers - they automatically adjust because of body padding */
-/* No extra margin needed - body padding handles everything */
-
-/* Override for any full-width elements that need to stay within padded area */
-.hero,
-.container,
-.tools-section,
-.categories-section,
-.footer,
-.ad-container {
-    max-width: 100%;
-}
-
-/* Mobile: reset everything */
-@media (max-width: 768px) {
-    body {
-        padding-left: 0 !important;
-    }
-    
-    .navbar {
-        left: 0 !important;
-    }
-    
-    .desktop-sidebar {
-        left: -280px;
-        width: 280px;
-    }
-    
-    .desktop-sidebar.active {
-        left: 0;
-    }
 }
