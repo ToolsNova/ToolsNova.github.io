@@ -2,50 +2,39 @@
 <html lang="en">
 <head>
 <script>
-  (function() {
-    // 1. Technical Bot Check (The Speed-Bump)
-    const isBot = navigator.webdriver || !navigator.languages || /HeadlessChrome/.test(navigator.userAgent);
-    if (isBot) {
-      window.stop(); // Stops the page for simple bots
-      document.documentElement.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;'><h4>Security Check: Please use a standard browser.</h4></div>";
-      return;
-    }
-
-    // 2. Prepare Human Verification for Layer 2
-    window.isVerifiedHuman = false;
-    const humanEvents = ['mousedown', 'touchstart', 'scroll', 'keydown'];
-    const verify = () => {
-      if(!window.isVerifiedHuman) {
-        window.isVerifiedHuman = true;
-        window.dispatchEvent(new Event('human_verified'));
-        humanEvents.forEach(e => window.removeEventListener(e, verify));
-      }
-    };
-    humanEvents.forEach(e => window.addEventListener(e, verify, {passive: true}));
-  })();
-</script>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  let gaStarted = false;
-  function startGA() {
-    if (!gaStarted) {
-      // Fires the page view ONLY after 2.5s or interaction
-      gtag('config', 'G-CL847BSHY4', { 'page_view': true });
-      console.log("GA4: Tracking started for real user.");
-      gaStarted = true;
-    }
-  }
+  // 1. CAPTURE DATA IMMEDIATELY
+  // This ensures you see the 2 clicks from GSC and your LinkedIn traffic
+  gtag('config', 'G-CL847BSHY4', { 
+    'page_view': true,
+    'user_type': 'unverified' 
+  });
 
-  // A: Start after 2.5 seconds (Filters the 1-second bots)
-  setTimeout(startGA, 2500);
+  // 2. THE HUMAN VERIFIER
+  (function() {
+    // Simple check for basic automation bots
+    const isBot = navigator.webdriver || /HeadlessChrome/.test(navigator.userAgent);
+    if (isBot) return;
 
-  // B: Start immediately if they move/scroll/type
-  window.addEventListener('human_verified', startGA);
+    const humanEvents = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+    
+    const verifyHuman = () => {
+      // Sends a "Human" tag to your GA4 dashboard
+      gtag('event', 'human_verified', {
+        'status': 'confirmed_human'
+      });
+      
+      // Cleanup: Stop listening once verified
+      humanEvents.forEach(e => window.removeEventListener(e, verifyHuman));
+    };
+
+    humanEvents.forEach(e => window.addEventListener(e, verifyHuman, {passive: true}));
+  })();
 </script>
 <!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
 
