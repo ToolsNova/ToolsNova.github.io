@@ -2,39 +2,54 @@
 <html lang="en">
 <head>
 <script>
+<!-- Google Analytics (ONLY ONCE, TOP OF HEAD) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+
   gtag('js', new Date());
 
-  // 1. CAPTURE DATA IMMEDIATELY
-  // This ensures you see the 2 clicks from GSC and your LinkedIn traffic
-  gtag('config', 'G-CL847BSHY4', { 
-    'page_view': true,
-    'user_type': 'unverified' 
+  // ===== BOT DETECTION (RUN FIRST) =====
+  const isBot = (
+    navigator.webdriver || 
+    /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent)
+  );
+
+  // ===== ALWAYS FIRE PAGEVIEW (IMPORTANT) =====
+  // Even bots get pageview → so GA doesn't miss users
+  gtag('config', 'G-CL847BSHY4', {
+    page_view: true
   });
 
-  // 2. THE HUMAN VERIFIER
-  (function() {
-    // Simple check for basic automation bots
-    const isBot = navigator.webdriver || /HeadlessChrome/.test(navigator.userAgent);
-    if (isBot) return;
+  // ===== MARK USER TYPE =====
+  gtag('event', 'user_type_detected', {
+    user_type: isBot ? 'bot' : 'human_candidate'
+  });
 
-    const humanEvents = ['mousedown', 'touchstart', 'scroll', 'keydown'];
-    
+  // ===== HUMAN VERIFICATION (REAL USERS ONLY) =====
+  if (!isBot) {
+    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+
     const verifyHuman = () => {
-      // Sends a "Human" tag to your GA4 dashboard
       gtag('event', 'human_verified', {
-        'status': 'confirmed_human'
+        status: 'confirmed_human'
       });
-      
-      // Cleanup: Stop listening once verified
-      humanEvents.forEach(e => window.removeEventListener(e, verifyHuman));
+
+      // stop after first interaction
+      events.forEach(e => window.removeEventListener(e, verifyHuman));
     };
 
-    humanEvents.forEach(e => window.addEventListener(e, verifyHuman, {passive: true}));
-  })();
+    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
+
+    // ===== BACKUP: AUTO CONFIRM AFTER 3s =====
+    // (Fixes your "GSC clicks but no GA data" issue)
+    setTimeout(() => {
+      gtag('event', 'human_verified', {
+        status: 'auto_confirmed'
+      });
+    }, 3000);
+  }
 </script>
 
 
