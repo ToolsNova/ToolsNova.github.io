@@ -66,22 +66,61 @@ document.addEventListener('DOMContentLoaded', function() {
 <html>
 <head>
 <script>
+<!-- Google Analytics (TOP FIRST) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
 
-  <!-- ✅ Google Analytics (TOP MOST) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+  gtag('js', new Date());
 
-    // FASTEST possible tracking
-    gtag('config', 'G-CL847BSHY4');
+  // ===== BASIC TRACKING (ALWAYS FIRES) =====
+  gtag('config', 'G-CL847BSHY4');
 
-    // instant ping (very important)
-    gtag('event', 'visit', {
-      time: Date.now()
-    });
-  </script>
+  // Instant visit event (captures fast users)
+  gtag('event', 'visit', {
+    time: Date.now()
+  });
+
+  // ===== BOT DETECTION =====
+  const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
+                || navigator.webdriver;
+
+  // Tag traffic type
+  gtag('event', 'traffic_type', {
+    type: isBot ? 'bot' : 'human_candidate'
+  });
+
+  // ===== HUMAN VERIFICATION =====
+  if (!isBot) {
+    let interacted = false;
+
+    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+
+    const verifyHuman = () => {
+      if (!interacted) {
+        interacted = true;
+
+        gtag('event', 'human_verified', {
+          status: 'confirmed_human'
+        });
+      }
+
+      events.forEach(e => window.removeEventListener(e, verifyHuman));
+    };
+
+    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
+
+    // Backup: if no interaction after 3s
+    setTimeout(() => {
+      if (!interacted) {
+        gtag('event', 'human_verified', {
+          status: 'passive_user'
+        });
+      }
+    }, 3000);
+  }
+</script>
 
 
 <!-- Favicon - For tool pages (inside /tools/ folder) -->
@@ -152,22 +191,61 @@ document.addEventListener('DOMContentLoaded', function() {
 <html>
 <head>
 <script>
+<!-- Google Analytics (TOP FIRST) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
 
-  <!-- ✅ Google Analytics (TOP MOST) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+  gtag('js', new Date());
 
-    // FASTEST possible tracking
-    gtag('config', 'G-CL847BSHY4');
+  // ===== BASIC TRACKING (ALWAYS FIRES) =====
+  gtag('config', 'G-CL847BSHY4');
 
-    // instant ping (very important)
-    gtag('event', 'visit', {
-      time: Date.now()
-    });
-  </script>
+  // Instant visit event (captures fast users)
+  gtag('event', 'visit', {
+    time: Date.now()
+  });
+
+  // ===== BOT DETECTION =====
+  const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
+                || navigator.webdriver;
+
+  // Tag traffic type
+  gtag('event', 'traffic_type', {
+    type: isBot ? 'bot' : 'human_candidate'
+  });
+
+  // ===== HUMAN VERIFICATION =====
+  if (!isBot) {
+    let interacted = false;
+
+    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+
+    const verifyHuman = () => {
+      if (!interacted) {
+        interacted = true;
+
+        gtag('event', 'human_verified', {
+          status: 'confirmed_human'
+        });
+      }
+
+      events.forEach(e => window.removeEventListener(e, verifyHuman));
+    };
+
+    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
+
+    // Backup: if no interaction after 3s
+    setTimeout(() => {
+      if (!interacted) {
+        gtag('event', 'human_verified', {
+          status: 'passive_user'
+        });
+      }
+    }, 3000);
+  }
+</script>
 
 
 <!-- Favicon - For tool pages (inside /tools/ folder) -->
@@ -267,22 +345,61 @@ document.addEventListener('DOMContentLoaded', function() {
 <html>
 <head>
 <script>
+<!-- Google Analytics (TOP FIRST) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
 
-  <!-- ✅ Google Analytics (TOP MOST) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+  gtag('js', new Date());
 
-    // FASTEST possible tracking
-    gtag('config', 'G-CL847BSHY4');
+  // ===== BASIC TRACKING (ALWAYS FIRES) =====
+  gtag('config', 'G-CL847BSHY4');
 
-    // instant ping (very important)
-    gtag('event', 'visit', {
-      time: Date.now()
-    });
-  </script>
+  // Instant visit event (captures fast users)
+  gtag('event', 'visit', {
+    time: Date.now()
+  });
+
+  // ===== BOT DETECTION =====
+  const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
+                || navigator.webdriver;
+
+  // Tag traffic type
+  gtag('event', 'traffic_type', {
+    type: isBot ? 'bot' : 'human_candidate'
+  });
+
+  // ===== HUMAN VERIFICATION =====
+  if (!isBot) {
+    let interacted = false;
+
+    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+
+    const verifyHuman = () => {
+      if (!interacted) {
+        interacted = true;
+
+        gtag('event', 'human_verified', {
+          status: 'confirmed_human'
+        });
+      }
+
+      events.forEach(e => window.removeEventListener(e, verifyHuman));
+    };
+
+    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
+
+    // Backup: if no interaction after 3s
+    setTimeout(() => {
+      if (!interacted) {
+        gtag('event', 'human_verified', {
+          status: 'passive_user'
+        });
+      }
+    }, 3000);
+  }
+</script>
 
 
 <!-- Favicon - For tool pages (inside /tools/ folder) -->
@@ -496,22 +613,61 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!html || html.trim() === '') {
             html = '<!DOCTYPE html><html><head>
 <script>
+<!-- Google Analytics (TOP FIRST) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
 
-  <!-- ✅ Google Analytics (TOP MOST) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+  gtag('js', new Date());
 
-    // FASTEST possible tracking
-    gtag('config', 'G-CL847BSHY4');
+  // ===== BASIC TRACKING (ALWAYS FIRES) =====
+  gtag('config', 'G-CL847BSHY4');
 
-    // instant ping (very important)
-    gtag('event', 'visit', {
-      time: Date.now()
-    });
-  </script>
+  // Instant visit event (captures fast users)
+  gtag('event', 'visit', {
+    time: Date.now()
+  });
+
+  // ===== BOT DETECTION =====
+  const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
+                || navigator.webdriver;
+
+  // Tag traffic type
+  gtag('event', 'traffic_type', {
+    type: isBot ? 'bot' : 'human_candidate'
+  });
+
+  // ===== HUMAN VERIFICATION =====
+  if (!isBot) {
+    let interacted = false;
+
+    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+
+    const verifyHuman = () => {
+      if (!interacted) {
+        interacted = true;
+
+        gtag('event', 'human_verified', {
+          status: 'confirmed_human'
+        });
+      }
+
+      events.forEach(e => window.removeEventListener(e, verifyHuman));
+    };
+
+    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
+
+    // Backup: if no interaction after 3s
+    setTimeout(() => {
+      if (!interacted) {
+        gtag('event', 'human_verified', {
+          status: 'passive_user'
+        });
+      }
+    }, 3000);
+  }
+</script>
 
 
 <!-- Favicon - For tool pages (inside /tools/ folder) -->
