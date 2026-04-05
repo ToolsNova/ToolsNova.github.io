@@ -77,7 +77,7 @@ if (!isBot) {
       }
     }, 3000);
   }
-
+}
 // Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyC6rF7Pg7j-NPioZ8Ei70GCj_megjD7UQw",
