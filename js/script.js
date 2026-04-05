@@ -5,16 +5,12 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-CL847BSHY4');
 
-gtag('event', 'visit', {
-  time: Date.now()
-});
+gtag('event', 'visit', { time: Date.now() });
 
 const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview|facebookexternalhit|WhatsApp|preview/i.test(navigator.userAgent) 
               || navigator.webdriver;
 
-gtag('event', 'traffic_type', {
-  type: isBot ? 'bot' : 'human_candidate'
-});
+gtag('event', 'traffic_type', { type: isBot ? 'bot' : 'human_candidate' });
 
 if (!isBot) {
   const hasVisitedBefore = localStorage.getItem('has_visited_before');
@@ -53,7 +49,7 @@ if (!isBot) {
 
 // ===== TOOLSNOVA - COMPLETE WITH FIREBASE AUTH =====
 
-// Initialize Firebase
+// Initialize Firebase (ONCE!)
 const firebaseConfig = {
     apiKey: "AIzaSyC6rF7Pg7j-NPioZ8Ei70GCj_megjD7UQw",
     authDomain: "toolsnova-user.firebaseapp.com",
@@ -67,7 +63,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-// ===== DOM ELEMENTS =====
+// ===== DOM ELEMENTS (ONCE!) =====
 const popularGrid = document.getElementById('popularToolsGrid');
 const searchGrid = document.getElementById('searchResultsGrid');
 const mediaGrid = document.getElementById('mediaToolsGrid');
@@ -100,7 +96,7 @@ const footerSignup = document.getElementById('footerSignup');
 let guestUses = localStorage.getItem('toolsnova_guest_uses') ? parseInt(localStorage.getItem('toolsnova_guest_uses')) : 0;
 const maxGuestUses = 3;
 
-// ===== TOOLS DATABASE =====
+// ===== TOOLS DATABASE (ONCE!) =====
 const tools = [
     { id: 1, name: "YouTube Thumbnail Downloader", desc: "Download any video thumbnail in HD quality", icon: "fa-brands fa-youtube", cat: "media", popular: true, url: "tools/yt-thumbnail.html" },
     { id: 2, name: "YouTube to MP3", desc: "Convert YouTube videos to MP3 audio", icon: "fa-solid fa-music", cat: "media", popular: true, url: "tools/video-to-mp3.html" },
