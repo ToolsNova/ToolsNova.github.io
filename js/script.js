@@ -1,5 +1,83 @@
 // ===== TOOLSNOVA - COMPLETE WITH FIREBASE AUTH =====
 
+// ===== GOOGLE ANALYTICS SETUP =====
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+
+gtag('js', new Date());
+gtag('config', 'G-CL847BSHY4');
+
+// ===== TRACK EVERY VISIT =====
+gtag('event', 'visit', {
+  time: Date.now()
+});
+
+// ===== BOT DETECTION =====
+const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview|facebookexternalhit|WhatsApp|preview/i.test(navigator.userAgent) 
+              || navigator.webdriver;
+
+// Track bot vs human
+gtag('event', 'traffic_type', {
+  type: isBot ? 'bot' : 'human_candidate'
+});
+
+// ===== USER TYPE TRACKING =====
+if (!isBot) {
+
+  const hasVisitedBefore = localStorage.getItem('has_visited_before');
+  const isUniqueUser = !localStorage.getItem('unique_user_tracked');
+
+  // First-time user
+  if (!hasVisitedBefore) {
+    gtag('event', 'new_user', {
+      status: 'first_time'
+    });
+    localStorage.setItem('has_visited_before', 'true');
+  } 
+  // Returning user
+  else {
+    gtag('event', 'returning_user', {
+      status: 'returning'
+    });
+  }
+
+  // ===== UNIQUE HUMAN VERIFICATION =====
+  if (isUniqueUser) {
+
+    let verified = false;
+
+    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+
+    const verifyHuman = () => {
+      if (!verified) {
+        verified = true;
+
+        gtag('event', 'human_verified', {
+          status: 'unique_user'
+        });
+
+        localStorage.setItem('unique_user_tracked', 'true');
+      }
+
+      // remove listeners after verification
+      events.forEach(e => window.removeEventListener(e, verifyHuman));
+    };
+
+    // listen for real interaction
+    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
+
+    // fallback (user didn't interact)
+    setTimeout(() => {
+      if (!verified) {
+        gtag('event', 'human_verified', {
+          status: 'unique_user'
+        });
+
+        localStorage.setItem('unique_user_tracked', 'true');
+      }
+    }, 3000);
+  }
+
 // Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyC6rF7Pg7j-NPioZ8Ei70GCj_megjD7UQw",
@@ -81,86 +159,7 @@ const tools = [
     { id: 31, name: "PDF Merger", desc: "Combine multiple PDF files", icon: "fa-solid fa-file-pdf", cat: "pdf", popular: true, url: "tools/pdf-merger.html" },
     { id: 32, name: "Image to PDF", desc: "Convert images to PDF", icon: "fa-solid fa-image", cat: "pdf", popular: true, url: "tools/image-to-pdf.html" },
     { id: 33, name: "Unit Converter", desc: "Convert length, weight, volume", icon: "fa-solid fa-scale-balanced", cat: "converter", popular: true, url: "tools/unit-converter.html" }
-];
-
-// ===== GOOGLE ANALYTICS SETUP =====
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-
-gtag('js', new Date());
-gtag('config', 'G-CL847BSHY4');
-
-// ===== TRACK EVERY VISIT =====
-gtag('event', 'visit', {
-  time: Date.now()
-});
-
-// ===== BOT DETECTION =====
-const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview|facebookexternalhit|WhatsApp|preview/i.test(navigator.userAgent) 
-              || navigator.webdriver;
-
-// Track bot vs human
-gtag('event', 'traffic_type', {
-  type: isBot ? 'bot' : 'human_candidate'
-});
-
-// ===== USER TYPE TRACKING =====
-if (!isBot) {
-
-  const hasVisitedBefore = localStorage.getItem('has_visited_before');
-  const isUniqueUser = !localStorage.getItem('unique_user_tracked');
-
-  // First-time user
-  if (!hasVisitedBefore) {
-    gtag('event', 'new_user', {
-      status: 'first_time'
-    });
-    localStorage.setItem('has_visited_before', 'true');
-  } 
-  // Returning user
-  else {
-    gtag('event', 'returning_user', {
-      status: 'returning'
-    });
-  }
-
-  // ===== UNIQUE HUMAN VERIFICATION =====
-  if (isUniqueUser) {
-
-    let verified = false;
-
-    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
-
-    const verifyHuman = () => {
-      if (!verified) {
-        verified = true;
-
-        gtag('event', 'human_verified', {
-          status: 'unique_user'
-        });
-
-        localStorage.setItem('unique_user_tracked', 'true');
-      }
-
-      // remove listeners after verification
-      events.forEach(e => window.removeEventListener(e, verifyHuman));
-    };
-
-    // listen for real interaction
-    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
-
-    // fallback (user didn't interact)
-    setTimeout(() => {
-      if (!verified) {
-        gtag('event', 'human_verified', {
-          status: 'unique_user'
-        });
-
-        localStorage.setItem('unique_user_tracked', 'true');
-      }
-    }, 3000);
-  }
-}
+]
 
 // ===== DISPLAY TOOLS =====
 function displayTools(grid, items) {
