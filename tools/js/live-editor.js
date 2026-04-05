@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <html>
 <head>
 <script>
-<!-- Google Analytics (TOP FIRST) -->
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -129,10 +129,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   gtag('js', new Date());
 
-  // ===== BASIC TRACKING (ALWAYS FIRES) =====
+  // ===== BASIC TRACKING =====
   gtag('config', 'G-CL847BSHY4');
 
-  // Instant visit event (captures fast users)
+  // Track every visit (even repeat)
   gtag('event', 'visit', {
     time: Date.now()
   });
@@ -141,24 +141,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
                 || navigator.webdriver;
 
-  // Tag traffic type
+  // Track traffic type
   gtag('event', 'traffic_type', {
     type: isBot ? 'bot' : 'human_candidate'
   });
 
-  // ===== HUMAN VERIFICATION =====
+  // ===== UNIQUE HUMAN TRACKING =====
   if (!isBot) {
+
+    const alreadyCounted = localStorage.getItem('unique_user_tracked');
     let interacted = false;
 
     const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
 
     const verifyHuman = () => {
-      if (!interacted) {
+      if (!interacted && !alreadyCounted) {
         interacted = true;
 
         gtag('event', 'human_verified', {
-          status: 'confirmed_human'
+          status: 'unique_user'
         });
+
+        // Mark this user as counted
+        localStorage.setItem('unique_user_tracked', 'true');
       }
 
       events.forEach(e => window.removeEventListener(e, verifyHuman));
@@ -166,12 +171,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
 
-    // Backup: if no interaction after 3s
+    // Fallback (if no interaction)
     setTimeout(() => {
-      if (!interacted) {
+      if (!interacted && !alreadyCounted) {
         gtag('event', 'human_verified', {
-          status: 'passive_user'
+          status: 'unique_user'
         });
+
+        localStorage.setItem('unique_user_tracked', 'true');
       }
     }, 3000);
   }
@@ -330,7 +337,7 @@ ${js}
 <html>
 <head>
 <script>
-<!-- Google Analytics (TOP FIRST) -->
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -338,10 +345,10 @@ ${js}
 
   gtag('js', new Date());
 
-  // ===== BASIC TRACKING (ALWAYS FIRES) =====
+  // ===== BASIC TRACKING =====
   gtag('config', 'G-CL847BSHY4');
 
-  // Instant visit event (captures fast users)
+  // Track every visit (even repeat)
   gtag('event', 'visit', {
     time: Date.now()
   });
@@ -350,24 +357,29 @@ ${js}
   const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
                 || navigator.webdriver;
 
-  // Tag traffic type
+  // Track traffic type
   gtag('event', 'traffic_type', {
     type: isBot ? 'bot' : 'human_candidate'
   });
 
-  // ===== HUMAN VERIFICATION =====
+  // ===== UNIQUE HUMAN TRACKING =====
   if (!isBot) {
+
+    const alreadyCounted = localStorage.getItem('unique_user_tracked');
     let interacted = false;
 
     const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
 
     const verifyHuman = () => {
-      if (!interacted) {
+      if (!interacted && !alreadyCounted) {
         interacted = true;
 
         gtag('event', 'human_verified', {
-          status: 'confirmed_human'
+          status: 'unique_user'
         });
+
+        // Mark this user as counted
+        localStorage.setItem('unique_user_tracked', 'true');
       }
 
       events.forEach(e => window.removeEventListener(e, verifyHuman));
@@ -375,12 +387,14 @@ ${js}
 
     events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
 
-    // Backup: if no interaction after 3s
+    // Fallback (if no interaction)
     setTimeout(() => {
-      if (!interacted) {
+      if (!interacted && !alreadyCounted) {
         gtag('event', 'human_verified', {
-          status: 'passive_user'
+          status: 'unique_user'
         });
+
+        localStorage.setItem('unique_user_tracked', 'true');
       }
     }, 3000);
   }
