@@ -121,59 +121,23 @@ document.addEventListener("DOMContentLoaded", () => {
 <html>
 <head>
 <script>
-<!-- Google Analytics (ONLY ONCE, TOP OF HEAD) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
 
-  gtag('js', new Date());
+  <!-- ✅ Google Analytics (TOP MOST) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  // ===== BOT DETECTION (RUN FIRST) =====
-  const isBot = (
-    navigator.webdriver || 
-    /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent)
-  );
+    // FASTEST possible tracking
+    gtag('config', 'G-CL847BSHY4');
 
-  // ===== ALWAYS FIRE PAGEVIEW (IMPORTANT) =====
-  // Even bots get pageview → so GA doesn't miss users
-  gtag('config', 'G-CL847BSHY4', {
-    page_view: true
-  });
+    // instant ping (very important)
+    gtag('event', 'visit', {
+      time: Date.now()
+    });
+  </script>
 
-  // ===== MARK USER TYPE =====
-  gtag('event', 'user_type_detected', {
-    user_type: isBot ? 'bot' : 'human_candidate'
-  });
-
-  // ===== HUMAN VERIFICATION (REAL USERS ONLY) =====
-  if (!isBot) {
-    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
-
-    const verifyHuman = () => {
-      gtag('event', 'human_verified', {
-        status: 'confirmed_human'
-      });
-
-      // stop after first interaction
-      events.forEach(e => window.removeEventListener(e, verifyHuman));
-    };
-
-    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
-
-    // ===== BACKUP: AUTO CONFIRM AFTER 3s =====
-    // (Fixes your "GSC clicks but no GA data" issue)
-    setTimeout(() => {
-      gtag('event', 'human_verified', {
-        status: 'auto_confirmed'
-      });
-    }, 3000);
-  }
-</script>
-<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
-
-<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-<script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -212,8 +176,13 @@ document.addEventListener("DOMContentLoaded", () => {
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
      crossorigin="anonymous"></script>
 </script>
+<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
+
+<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 <style>${css}</style>
+
 </head>
 <body>
 
@@ -237,6 +206,10 @@ ${js}
 
 <\/script>
 
+<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
+
+<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 </html>
 `;
@@ -318,59 +291,23 @@ ${js}
 <html>
 <head>
 <script>
-<!-- Google Analytics (ONLY ONCE, TOP OF HEAD) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
 
-  gtag('js', new Date());
+  <!-- ✅ Google Analytics (TOP MOST) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  // ===== BOT DETECTION (RUN FIRST) =====
-  const isBot = (
-    navigator.webdriver || 
-    /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent)
-  );
+    // FASTEST possible tracking
+    gtag('config', 'G-CL847BSHY4');
 
-  // ===== ALWAYS FIRE PAGEVIEW (IMPORTANT) =====
-  // Even bots get pageview → so GA doesn't miss users
-  gtag('config', 'G-CL847BSHY4', {
-    page_view: true
-  });
+    // instant ping (very important)
+    gtag('event', 'visit', {
+      time: Date.now()
+    });
+  </script>
 
-  // ===== MARK USER TYPE =====
-  gtag('event', 'user_type_detected', {
-    user_type: isBot ? 'bot' : 'human_candidate'
-  });
-
-  // ===== HUMAN VERIFICATION (REAL USERS ONLY) =====
-  if (!isBot) {
-    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
-
-    const verifyHuman = () => {
-      gtag('event', 'human_verified', {
-        status: 'confirmed_human'
-      });
-
-      // stop after first interaction
-      events.forEach(e => window.removeEventListener(e, verifyHuman));
-    };
-
-    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
-
-    // ===== BACKUP: AUTO CONFIRM AFTER 3s =====
-    // (Fixes your "GSC clicks but no GA data" issue)
-    setTimeout(() => {
-      gtag('event', 'human_verified', {
-        status: 'auto_confirmed'
-      });
-    }, 3000);
-  }
-</script>
-<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
-
-<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-<script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -409,12 +346,21 @@ ${js}
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
      crossorigin="anonymous"></script>
 </script>
+<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
+
+<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 <style>${css}</style>
+
 </head>
 <body>
 ${html}
 <script>${js}<\/script>
+<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
+
+<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 </html>`;
 
