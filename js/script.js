@@ -1,51 +1,78 @@
 // ===== SAFE GOOGLE ANALYTICS EVENT FUNCTION =====
+// ===== FIX GA LOADING ISSUE =====
+function waitForGtag(callback, maxAttempts = 20) {
+  let attempts = 0;
+
+  const interval = setInterval(() => {
+    if (typeof window.gtag === "function") {
+      clearInterval(interval);
+      callback();
+    } else {
+      attempts++;
+      if (attempts >= maxAttempts) {
+        clearInterval(interval);
+        console.warn("gtag failed to load");
+      }
+    }
+  }, 300);
+}
+
+// ===== SAFE EVENT =====
 function trackEvent(name, data = {}) {
   if (typeof window.gtag === "function") {
-    gtag('event', name, data);
-  } else {
-    console.warn("gtag not ready");
+    window.gtag('event', name, data);
   }
 }
 
-// ===== DAILY UNIQUE USER TRACKING =====
-function trackDailyUser() {
-  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+// ===== FORCE PAGE VIEW (VERY IMPORTANT) =====
+function trackPageView() {
+  trackEvent('page_view', {
+    page_title: document.title,
+    page_location: window.location.href,
+    page_path: window.location.pathname
+  });
+}
+
+// ===== BOT DETECTION =====
+function isBotUser() {
+  return /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
+         || navigator.webdriver;
+}
+
+// ===== MAIN ANALYTICS =====
+function runAnalytics() {
+  const isBot = isBotUser();
+
+  // 🔥 CRITICAL
+  trackPageView();
+
+  // Visit
+  trackEvent('visit', {
+    time: Date.now()
+  });
+
+  // Traffic type
+  trackEvent('traffic_type', {
+    type: isBot ? 'bot' : 'human'
+  });
+
+  // Daily unique user
+  const today = new Date().toISOString().slice(0, 10);
   const lastVisit = localStorage.getItem('toolsnova_last_visit');
 
   if (lastVisit !== today) {
-    // Count user once per day
-    trackEvent('daily_user', {
-      date: today
-    });
-
+    trackEvent('daily_user', { date: today });
     localStorage.setItem('toolsnova_last_visit', today);
   }
 }
 
-// ===== BASIC VISIT TRACKING =====
-function trackVisit() {
-  trackEvent('visit', {
-    time: Date.now()
-  });
-}
-
-// ===== OPTIONAL: TRACK USER TYPE (CLEAN VERSION) =====
-function trackUserType() {
-  const today = new Date().toISOString().slice(0, 10);
-  const lastVisit = localStorage.getItem('toolsnova_last_visit');
-
-  trackEvent('user_type', {
-    type: lastVisit === today ? 'repeat_today' : 'new_today'
-  });
-}
-
-// ===== RUN AFTER PAGE LOAD =====
+// ===== RUN SAFELY =====
 window.addEventListener("load", () => {
-  setTimeout(() => {
-    trackVisit();
-    trackDailyUser();
-    trackUserType();
-  }, 1000); // ensures gtag from HTML is ready
+  waitForGtag(() => {
+    setTimeout(() => {
+      runAnalytics();
+    }, 1500); // extra safety delay
+  });
 });
 
 // ===== TOOLSNOVA - COMPLETE WITH FIREBASE AUTH =====
