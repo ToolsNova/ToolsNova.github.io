@@ -1,3 +1,98 @@
+// ===== SAFE GOOGLE ANALYTICS SETUP =====
+
+// Ensure dataLayer exists
+window.dataLayer = window.dataLayer || [];
+
+// Safe gtag function
+function gtag(){ dataLayer.push(arguments); }
+
+// Wait until page fully loads (prevents crashes)
+window.addEventListener("load", () => {
+  
+  if (typeof gtag !== "function") return;
+
+  // Init analytics
+  gtag('js', new Date());
+  gtag('config', 'G-CL847BSHY4');
+
+  // ===== TRACK EVERY VISIT =====
+  gtag('event', 'visit', {
+    time: Date.now()
+  });
+
+  // ===== SAFE BOT DETECTION =====
+  let isBot = false;
+  try {
+    isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview|facebookexternalhit|WhatsApp|preview/i
+      .test(navigator.userAgent || '') || navigator.webdriver;
+  } catch (e) {
+    isBot = false;
+  }
+
+  // Track bot vs human
+  gtag('event', 'traffic_type', {
+    type: isBot ? 'bot' : 'human_candidate'
+  });
+
+  // ===== USER TYPE TRACKING =====
+  if (!isBot) {
+
+    try {
+      const hasVisitedBefore = localStorage.getItem('has_visited_before');
+      const isUniqueUser = !localStorage.getItem('unique_user_tracked');
+
+      // First-time user
+      if (!hasVisitedBefore) {
+        gtag('event', 'new_user', { status: 'first_time' });
+        localStorage.setItem('has_visited_before', 'true');
+      } 
+      // Returning user
+      else {
+        gtag('event', 'returning_user', { status: 'returning' });
+      }
+
+      // ===== UNIQUE HUMAN VERIFICATION =====
+      if (isUniqueUser) {
+
+        let verified = false;
+        const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
+
+        const verifyHuman = () => {
+          if (!verified) {
+            verified = true;
+
+            gtag('event', 'human_verified', {
+              status: 'unique_user'
+            });
+
+            localStorage.setItem('unique_user_tracked', 'true');
+          }
+
+          events.forEach(e => window.removeEventListener(e, verifyHuman));
+        };
+
+        // Real interaction listeners
+        events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
+
+        // Fallback after 3 sec
+        setTimeout(() => {
+          if (!verified) {
+            gtag('event', 'human_verified', {
+              status: 'unique_user'
+            });
+
+            localStorage.setItem('unique_user_tracked', 'true');
+          }
+        }, 3000);
+      }
+
+    } catch (err) {
+      console.warn("Analytics tracking error:", err);
+    }
+  }
+
+});
+
 // ===== TOOLSNOVA - COMPLETE WITH FIREBASE AUTH =====
 
 // Initialize Firebase (ONCE!)
