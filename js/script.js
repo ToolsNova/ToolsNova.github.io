@@ -6,7 +6,7 @@ gtag('js', new Date());
 
 // 1. Fire the Config IMMEDIATELY. 
 // This ensures GA4 sees the "Visit" even if the user stays for 0.5 seconds.
-gtag('config', 'G-CL847BSHY4');
+gtag('config', 'G-EWG766C86Y');
 
 // 2. Send a "Verification" event after 1.5 seconds.
 // This tells you if they actually stayed (Real Human).
