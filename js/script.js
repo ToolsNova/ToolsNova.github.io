@@ -3,7 +3,13 @@
 window.dataLayer = window.dataLayer || [];
 function gtag() { dataLayer.push(arguments); }
 gtag('js', new Date());
-gtag('config', 'G-CL847BSHY4');
+
+let startTime = Date.now();
+setTimeout(() => {
+    if (Date.now() - startTime > 1000) {
+        gtag('config', 'G-CL847BSHY4');
+    }
+}, 1000);
 
 // ===== TOOLSNOVA - COMPLETE WITH FIREBASE AUTH =====
 
