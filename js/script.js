@@ -1,79 +1,9 @@
-// ===== SAFE GOOGLE ANALYTICS EVENT FUNCTION =====
-// ===== FIX GA LOADING ISSUE =====
-function waitForGtag(callback, maxAttempts = 20) {
-  let attempts = 0;
-
-  const interval = setInterval(() => {
-    if (typeof window.gtag === "function") {
-      clearInterval(interval);
-      callback();
-    } else {
-      attempts++;
-      if (attempts >= maxAttempts) {
-        clearInterval(interval);
-        console.warn("gtag failed to load");
-      }
-    }
-  }, 300);
-}
-
-// ===== SAFE EVENT =====
-function trackEvent(name, data = {}) {
-  if (typeof window.gtag === "function") {
-    window.gtag('event', name, data);
-  }
-}
-
-// ===== FORCE PAGE VIEW (VERY IMPORTANT) =====
-function trackPageView() {
-  trackEvent('page_view', {
-    page_title: document.title,
-    page_location: window.location.href,
-    page_path: window.location.pathname
-  });
-}
-
-// ===== BOT DETECTION =====
-function isBotUser() {
-  return /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
-         || navigator.webdriver;
-}
-
-// ===== MAIN ANALYTICS =====
-function runAnalytics() {
-  const isBot = isBotUser();
-
-  // 🔥 CRITICAL
-  trackPageView();
-
-  // Visit
-  trackEvent('visit', {
-    time: Date.now()
-  });
-
-  // Traffic type
-  trackEvent('traffic_type', {
-    type: isBot ? 'bot' : 'human'
-  });
-
-  // Daily unique user
-  const today = new Date().toISOString().slice(0, 10);
-  const lastVisit = localStorage.getItem('toolsnova_last_visit');
-
-  if (lastVisit !== today) {
-    trackEvent('daily_user', { date: today });
-    localStorage.setItem('toolsnova_last_visit', today);
-  }
-}
-
-// ===== RUN SAFELY =====
-window.addEventListener("load", () => {
-  waitForGtag(() => {
-    setTimeout(() => {
-      runAnalytics();
-    }, 1500); // extra safety delay
-  });
-});
+// ===== GOOGLE ANALYTICS (STANDARD IMPLEMENTATION) =====
+// Google Analytics 4 (GA4) Standard Code
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'G-CL847BSHY4');
 
 // ===== TOOLSNOVA - COMPLETE WITH FIREBASE AUTH =====
 

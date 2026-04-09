@@ -65,69 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
         basic: `<!DOCTYPE html>
 <html>
 <head>
-<script>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
 
-  gtag('js', new Date());
-
-  // ===== BASIC TRACKING =====
-  gtag('config', 'G-CL847BSHY4');
-
-  // Track every visit (even repeat)
-  gtag('event', 'visit', {
-    time: Date.now()
-  });
-
-  // ===== BOT DETECTION =====
-  const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
-                || navigator.webdriver;
-
-  // Track traffic type
-  gtag('event', 'traffic_type', {
-    type: isBot ? 'bot' : 'human_candidate'
-  });
-
-  // ===== UNIQUE HUMAN TRACKING =====
-  if (!isBot) {
-
-    const alreadyCounted = localStorage.getItem('unique_user_tracked');
-    let interacted = false;
-
-    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
-
-    const verifyHuman = () => {
-      if (!interacted && !alreadyCounted) {
-        interacted = true;
-
-        gtag('event', 'human_verified', {
-          status: 'unique_user'
-        });
-
-        // Mark this user as counted
-        localStorage.setItem('unique_user_tracked', 'true');
-      }
-
-      events.forEach(e => window.removeEventListener(e, verifyHuman));
-    };
-
-    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
-
-    // Fallback (if no interaction)
-    setTimeout(() => {
-      if (!interacted && !alreadyCounted) {
-        gtag('event', 'human_verified', {
-          status: 'unique_user'
-        });
-
-        localStorage.setItem('unique_user_tracked', 'true');
-      }
-    }, 3000);
-  }
-</script>
 
 
 <!-- Favicon - For tool pages (inside /tools/ folder) -->
@@ -197,69 +137,9 @@ document.addEventListener('DOMContentLoaded', function() {
         form: `<!DOCTYPE html>
 <html>
 <head>
-<script>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
 
-  gtag('js', new Date());
-
-  // ===== BASIC TRACKING =====
-  gtag('config', 'G-CL847BSHY4');
-
-  // Track every visit (even repeat)
-  gtag('event', 'visit', {
-    time: Date.now()
-  });
-
-  // ===== BOT DETECTION =====
-  const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
-                || navigator.webdriver;
-
-  // Track traffic type
-  gtag('event', 'traffic_type', {
-    type: isBot ? 'bot' : 'human_candidate'
-  });
-
-  // ===== UNIQUE HUMAN TRACKING =====
-  if (!isBot) {
-
-    const alreadyCounted = localStorage.getItem('unique_user_tracked');
-    let interacted = false;
-
-    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
-
-    const verifyHuman = () => {
-      if (!interacted && !alreadyCounted) {
-        interacted = true;
-
-        gtag('event', 'human_verified', {
-          status: 'unique_user'
-        });
-
-        // Mark this user as counted
-        localStorage.setItem('unique_user_tracked', 'true');
-      }
-
-      events.forEach(e => window.removeEventListener(e, verifyHuman));
-    };
-
-    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
-
-    // Fallback (if no interaction)
-    setTimeout(() => {
-      if (!interacted && !alreadyCounted) {
-        gtag('event', 'human_verified', {
-          status: 'unique_user'
-        });
-
-        localStorage.setItem('unique_user_tracked', 'true');
-      }
-    }, 3000);
-  }
-</script>
 
 
 <!-- Favicon - For tool pages (inside /tools/ folder) -->
@@ -358,69 +238,9 @@ document.addEventListener('DOMContentLoaded', function() {
         dashboard: `<!DOCTYPE html>
 <html>
 <head>
-<script>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
 
-  gtag('js', new Date());
-
-  // ===== BASIC TRACKING =====
-  gtag('config', 'G-CL847BSHY4');
-
-  // Track every visit (even repeat)
-  gtag('event', 'visit', {
-    time: Date.now()
-  });
-
-  // ===== BOT DETECTION =====
-  const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
-                || navigator.webdriver;
-
-  // Track traffic type
-  gtag('event', 'traffic_type', {
-    type: isBot ? 'bot' : 'human_candidate'
-  });
-
-  // ===== UNIQUE HUMAN TRACKING =====
-  if (!isBot) {
-
-    const alreadyCounted = localStorage.getItem('unique_user_tracked');
-    let interacted = false;
-
-    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
-
-    const verifyHuman = () => {
-      if (!interacted && !alreadyCounted) {
-        interacted = true;
-
-        gtag('event', 'human_verified', {
-          status: 'unique_user'
-        });
-
-        // Mark this user as counted
-        localStorage.setItem('unique_user_tracked', 'true');
-      }
-
-      events.forEach(e => window.removeEventListener(e, verifyHuman));
-    };
-
-    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
-
-    // Fallback (if no interaction)
-    setTimeout(() => {
-      if (!interacted && !alreadyCounted) {
-        gtag('event', 'human_verified', {
-          status: 'unique_user'
-        });
-
-        localStorage.setItem('unique_user_tracked', 'true');
-      }
-    }, 3000);
-  }
-</script>
 
 
 <!-- Favicon - For tool pages (inside /tools/ folder) -->
@@ -633,69 +453,9 @@ document.addEventListener('DOMContentLoaded', function() {
         let html = htmlInput.value;
         if (!html || html.trim() === '') {
             html = '<!DOCTYPE html><html><head>
-<script>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
 
-  gtag('js', new Date());
-
-  // ===== BASIC TRACKING =====
-  gtag('config', 'G-CL847BSHY4');
-
-  // Track every visit (even repeat)
-  gtag('event', 'visit', {
-    time: Date.now()
-  });
-
-  // ===== BOT DETECTION =====
-  const isBot = /bot|crawl|spider|HeadlessChrome|slurp|bingpreview/i.test(navigator.userAgent) 
-                || navigator.webdriver;
-
-  // Track traffic type
-  gtag('event', 'traffic_type', {
-    type: isBot ? 'bot' : 'human_candidate'
-  });
-
-  // ===== UNIQUE HUMAN TRACKING =====
-  if (!isBot) {
-
-    const alreadyCounted = localStorage.getItem('unique_user_tracked');
-    let interacted = false;
-
-    const events = ['mousedown', 'touchstart', 'scroll', 'keydown'];
-
-    const verifyHuman = () => {
-      if (!interacted && !alreadyCounted) {
-        interacted = true;
-
-        gtag('event', 'human_verified', {
-          status: 'unique_user'
-        });
-
-        // Mark this user as counted
-        localStorage.setItem('unique_user_tracked', 'true');
-      }
-
-      events.forEach(e => window.removeEventListener(e, verifyHuman));
-    };
-
-    events.forEach(e => window.addEventListener(e, verifyHuman, { passive: true }));
-
-    // Fallback (if no interaction)
-    setTimeout(() => {
-      if (!interacted && !alreadyCounted) {
-        gtag('event', 'human_verified', {
-          status: 'unique_user'
-        });
-
-        localStorage.setItem('unique_user_tracked', 'true');
-      }
-    }, 3000);
-  }
-</script>
 
 
 <!-- Favicon - For tool pages (inside /tools/ folder) -->
