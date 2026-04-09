@@ -4,12 +4,15 @@ window.dataLayer = window.dataLayer || [];
 function gtag() { dataLayer.push(arguments); }
 gtag('js', new Date());
 
-let startTime = Date.now();
+// 1. Fire the Config IMMEDIATELY. 
+// This ensures GA4 sees the "Visit" even if the user stays for 0.5 seconds.
+gtag('config', 'G-CL847BSHY4');
+
+// 2. Send a "Verification" event after 1.5 seconds.
+// This tells you if they actually stayed (Real Human).
 setTimeout(() => {
-    if (Date.now() - startTime > 1000) {
-        gtag('config', 'G-CL847BSHY4');
-    }
-}, 1000);
+    gtag('event', 'human_verified', { 'status': 'stayed_1s' });
+}, 1100);
 
 // ===== TOOLSNOVA - COMPLETE WITH FIREBASE AUTH =====
 
