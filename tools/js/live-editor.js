@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <html>
 <head>
 <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWG766C86Y"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 
 
 
@@ -277,7 +277,7 @@ ${js}
 <html>
 <head>
 <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWG766C86Y"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 
 
 

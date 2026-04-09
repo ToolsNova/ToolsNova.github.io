@@ -6,7 +6,7 @@ gtag('js', new Date());
 
 // 1. Fire the Config IMMEDIATELY. 
 // This ensures GA4 sees the "Visit" even if the user stays for 0.5 seconds.
-gtag('config', 'G-EWG766C86Y');
+gtag('config', 'G-CL847BSHY4');
 
 // 2. Send a "Verification" event after 1.5 seconds.
 // This tells you if they actually stayed (Real Human).
@@ -24,7 +24,7 @@ const firebaseConfig = {
     storageBucket: "toolsnova-user.firebasestorage.app",
     messagingSenderId: "907228879212",
     appId: "1:907228879212:web:7e82b085899deb14857b49",
-    measurementId: "G-EWG766C86Y"
+    measurementId: "G-CL847BSHY4"
 };
 
 firebase.initializeApp(firebaseConfig);
