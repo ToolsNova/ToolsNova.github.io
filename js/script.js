@@ -1,18 +1,14 @@
 // ===== GOOGLE ANALYTICS (STANDARD IMPLEMENTATION) =====
 // Google Analytics 4 (GA4) Standard Code
 window.dataLayer = window.dataLayer || [];
-function gtag() { dataLayer.push(arguments); }
-gtag('js', new Date());
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-// 1. Fire the Config IMMEDIATELY. 
-// This ensures GA4 sees the "Visit" even if the user stays for 0.5 seconds.
-gtag('config', 'G-CL847BSHY4');
-
-// 2. Send a "Verification" event after 1.5 seconds.
-// This tells you if they actually stayed (Real Human).
-setTimeout(() => {
-    gtag('event', 'human_verified', { 'status': 'stayed_1s' });
-}, 1100);
+  // Default configuration: No delays, no custom bot logic
+  gtag('config', 'G-CL847BSHY4', {
+    'send_page_view': true,
+    'cookie_flags': 'SameSite=None;Secure'
+  });
 
 // ===== TOOLSNOVA - COMPLETE WITH FIREBASE AUTH =====
 

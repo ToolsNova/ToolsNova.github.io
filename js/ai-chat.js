@@ -1,5 +1,17 @@
 // ===== AI CHAT ASSISTANT - CLOUDFLARE WORKER VERSION =====
 
+// ===== GOOGLE ANALYTICS (STANDARD IMPLEMENTATION) =====
+// Google Analytics 4 (GA4) Standard Code
+window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  // Default configuration: No delays, no custom bot logic
+  gtag('config', 'G-CL847BSHY4', {
+    'send_page_view': true,
+    'cookie_flags': 'SameSite=None;Secure'
+  });
+
 // ===== FIREBASE CONFIG =====
 const firebaseConfig = {
     apiKey: "AIzaSyBADT8ZDZ9TGEVeVm73Yf_rwI6YmAtjRa8",
