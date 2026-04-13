@@ -655,15 +655,28 @@ body.dark-mode .file-preview {
 
 /* ===== INPUT AREA ===== */
 .input-area {
-    padding: 16px 20px;
-    padding-bottom: calc(16px + env(safe-area-inset-bottom));
-    border-top: 1px solid #e2e8f0;
-    background: #ffffff;
-    flex-shrink: 0;
-    position: sticky;
+    position: fixed;
     bottom: 0;
-    z-index: 5;
+    right: 0;
+    left: 280px; /* Default sidebar width */
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    z-index: 10;
+    transition: left 0.2s ease;
 }
+
+/* Adjust when sidebar is collapsed */
+.sidebar.collapsed + .main-chat .input-area,
+.sidebar.collapsed ~ .main-chat .input-area {
+    left: 72px;
+}
+
+/* Reset for mobile */
+@media (max-width: 768px) {
+    .input-area { left: 0; }
+}
+
+
 
 body.dark-mode .input-area {
     background: #0f172a;
