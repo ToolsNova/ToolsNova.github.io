@@ -129,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 <!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
 
-<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 <script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 </html>`,
@@ -230,7 +229,6 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 <!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
 
-<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 <script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 </html>`,
@@ -432,7 +430,6 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 <!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
 
-<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 <script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 </html>`
@@ -467,7 +464,6 @@ document.addEventListener('DOMContentLoaded', function() {
 <title>Empty Preview</title>
 </head><body><h3>Start typing HTML to see preview...</h3><!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
 
-<script>(function(s){s.dataset.zone='10792808',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 <script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body></html>';
         }
