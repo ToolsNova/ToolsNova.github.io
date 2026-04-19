@@ -1870,3 +1870,232 @@ body.sidebar-collapsed .navbar {
         left: 0 !important;
     }
 }
+
+/* Prevent sidebar transition flash on page load */
+.desktop-sidebar,
+.desktop-sidebar-toggle,
+body {
+    transition: none !important;
+}
+
+/* Re-enable transitions after page load */
+body.loaded .desktop-sidebar,
+body.loaded .desktop-sidebar-toggle,
+body.loaded {
+    transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ===== IMPROVED COLLAPSED SIDEBAR STYLES ===== */
+
+/* Smoother collapsed state with icons only */
+.desktop-sidebar.collapsed {
+    width: 72px;
+    padding: 30px 12px;
+}
+
+/* Better logo in collapsed mode */
+.desktop-sidebar.collapsed .desktop-sidebar-logo {
+    justify-content: center;
+    padding: 0;
+}
+
+.desktop-sidebar.collapsed .desktop-sidebar-logo i {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+/* Center icons in collapsed mode */
+.desktop-sidebar.collapsed .desktop-sidebar-link {
+    justify-content: center;
+    padding: 12px;
+    border-radius: 12px;
+    margin: 4px 0;
+}
+
+/* Tooltip on hover for collapsed sidebar */
+.desktop-sidebar.collapsed .desktop-sidebar-link {
+    position: relative;
+}
+
+.desktop-sidebar.collapsed .desktop-sidebar-link span {
+    display: none;
+}
+
+.desktop-sidebar.collapsed .desktop-sidebar-link:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+    z-index: 100;
+    margin-left: 12px;
+    pointer-events: none;
+    animation: tooltipFade 0.2s ease;
+}
+
+@keyframes tooltipFade {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) translateX(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+}
+
+/* Collapsed user info */
+.desktop-sidebar.collapsed .desktop-sidebar-user-info {
+    justify-content: center;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.desktop-sidebar.collapsed .desktop-sidebar-user-info span {
+    display: none;
+}
+
+.desktop-sidebar.collapsed .desktop-sidebar-user-info i {
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+/* Hide category titles when collapsed */
+.desktop-sidebar.collapsed .desktop-sidebar-category-title {
+    display: none;
+}
+
+/* Hide dividers when collapsed */
+.desktop-sidebar.collapsed .desktop-sidebar-divider {
+    margin: 8px 0;
+}
+
+/* Adjust header in collapsed mode */
+.desktop-sidebar.collapsed .desktop-sidebar-header {
+    justify-content: center;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+}
+
+/* Toggle button position improvement */
+.desktop-sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 260px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    z-index: 1001;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.desktop-sidebar-toggle:hover {
+    transform: scale(1.1);
+    background: var(--primary-dark);
+}
+
+.desktop-sidebar.collapsed + .desktop-sidebar-toggle {
+    left: 85px;
+}
+
+/* Smooth width transition */
+.desktop-sidebar {
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+}
+
+/* Active link indicator in collapsed mode */
+.desktop-sidebar.collapsed .desktop-sidebar-link.active {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+    border-color: var(--primary);
+}
+
+.desktop-sidebar.collapsed .desktop-sidebar-link.active::before {
+    width: 3px;
+    height: 70%;
+}
+
+/* Hover effect for collapsed links */
+.desktop-sidebar.collapsed .desktop-sidebar-link:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
+    transform: translateX(0) scale(1.05);
+}
+
+/* Special styling for CTA button in collapsed mode */
+.desktop-sidebar.collapsed .desktop-sidebar-cta {
+    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    padding: 12px;
+}
+
+.desktop-sidebar.collapsed .desktop-sidebar-cta i {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+/* Logout/Delete button in collapsed mode */
+.desktop-sidebar.collapsed .desktop-sidebar-logout,
+.desktop-sidebar.collapsed .desktop-sidebar-delete {
+    padding: 12px;
+}
+
+.desktop-sidebar.collapsed .desktop-sidebar-logout i,
+.desktop-sidebar.collapsed .desktop-sidebar-delete i {
+    margin: 0;
+}
+
+/* Body padding adjustment for collapsed sidebar */
+body.sidebar-collapsed {
+    padding-left: 72px;
+}
+
+body.sidebar-collapsed .navbar {
+    left: 72px;
+}
+
+/* Responsive: on smaller desktops */
+@media (max-width: 1024px) {
+    .desktop-sidebar {
+        width: 260px;
+    }
+    
+    .desktop-sidebar.collapsed {
+        width: 68px;
+    }
+    
+    body.sidebar-collapsed {
+        padding-left: 68px;
+    }
+    
+    body.sidebar-collapsed .navbar {
+        left: 68px;
+    }
+}
+
+/* Floating action button style for mobile */
+@media (max-width: 768px) {
+    .desktop-sidebar,
+    .desktop-sidebar-toggle {
+        display: none !important;
+    }
+    
+    body {
+        padding-left: 0 !important;
+    }
+}

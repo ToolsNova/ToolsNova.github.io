@@ -7,7 +7,7 @@ window.dataLayer = window.dataLayer || [];
   gtag('js', new Date());
 
   // Default configuration: No delays, no custom bot logic
-  gtag('config', 'G-CL847BSHY4', {
+  gtag('config', 'G-EWG766C86Y', {
     'send_page_view': true,
     'cookie_flags': 'SameSite=None;Secure'
   });
@@ -373,6 +373,17 @@ function loadChats() {
     const saved = localStorage.getItem('toolsnova_chats');
     if (saved) {
         chats = JSON.parse(saved);
+        // Make sure we have at least one chat
+        if (chats.length === 0) {
+            const defaultChat = { 
+                id: Date.now().toString(), 
+                title: 'New Chat', 
+                messages: [], 
+                createdAt: Date.now() 
+            };
+            chats = [defaultChat];
+            saveChats();
+        }
     } else {
         const defaultChat = { 
             id: Date.now().toString(), 
@@ -381,9 +392,9 @@ function loadChats() {
             createdAt: Date.now() 
         };
         chats = [defaultChat];
-        currentChatId = defaultChat.id;
         saveChats();
     }
+    
     if (!currentChatId && chats.length > 0) currentChatId = chats[0].id;
     renderChatHistory();
     if (currentChatId) loadChat(currentChatId);
@@ -425,6 +436,9 @@ function escapeHtml(text) {
 }
 
 function createNewChat() {
+    // Clear AI assistant messages
+    aiAssistant.clearMessages();
+    
     const newChat = { 
         id: Date.now().toString(), 
         title: 'New Chat', 
@@ -436,8 +450,14 @@ function createNewChat() {
     saveChats();
     renderChatHistory();
     
-    aiAssistant.clearMessages();
-    loadChat(currentChatId);
+    // Clear the UI
+    if (currentChatTitle) currentChatTitle.textContent = 'New Chat';
+    if (welcomeScreen) welcomeScreen.style.display = 'flex';
+    if (messagesWrapper) {
+        messagesWrapper.innerHTML = '';
+        messagesWrapper.appendChild(welcomeScreen);
+    }
+    
     if (messageInput) messageInput.focus();
     
     if (window.innerWidth <= 768) {
@@ -445,33 +465,223 @@ function createNewChat() {
     }
 }
 
-window.deleteChat = function(chatId, event) {
-    event.stopPropagation();
-    if (chats.length === 1) { 
-        alert('Cannot delete last chat'); 
-        return; 
+// ===== CUSTOM POPUP FUNCTIONS =====
+
+function showRenameModal(chatId) {
+    const chat = chats.find(c => c.id === chatId);
+    if (!chat) return;
+    
+    // Create modal overlay if it doesn't exist
+    let modalOverlay = document.getElementById('customModalOverlay');
+    if (!modalOverlay) {
+        modalOverlay = document.createElement('div');
+        modalOverlay.id = 'customModalOverlay';
+        modalOverlay.className = 'modal-overlay';
+        document.body.appendChild(modalOverlay);
     }
+    
+    modalOverlay.innerHTML = `
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-pen"></i>
+                    Rename Chat
+                </h3>
+                <button class="modal-close" onclick="window.closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="renameInput" placeholder="Enter new chat name" value="${escapeHtml(chat.title)}" autocomplete="off">
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="window.closeModal()">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" onclick="window.confirmRename('${chatId}')">Save</button>
+            </div>
+        </div>
+    `;
+    
+    modalOverlay.classList.add('active');
+    
+    // Focus input and select text
+    setTimeout(() => {
+        const input = document.getElementById('renameInput');
+        if (input) {
+            input.focus();
+            input.select();
+        }
+    }, 100);
+    
+    // Close on escape key
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            window.closeModal();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
+}
+
+function showDeleteModal(chatId) {
+    const chat = chats.find(c => c.id === chatId);
+    if (!chat) return;
+    
+    let modalOverlay = document.getElementById('customModalOverlay');
+    if (!modalOverlay) {
+        modalOverlay = document.createElement('div');
+        modalOverlay.id = 'customModalOverlay';
+        modalOverlay.className = 'modal-overlay';
+        document.body.appendChild(modalOverlay);
+    }
+    
+    modalOverlay.innerHTML = `
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-trash-alt" style="color: var(--error);"></i>
+                    Delete Chat
+                </h3>
+                <button class="modal-close" onclick="window.closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "<strong>${escapeHtml(chat.title)}</strong>"?</p>
+                <div class="warning-text">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>This action cannot be undone. All messages in this chat will be permanently deleted.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="window.closeModal()">Cancel</button>
+                <button class="modal-btn modal-btn-danger" onclick="window.confirmDelete('${chatId}')">Delete</button>
+            </div>
+        </div>
+    `;
+    
+    modalOverlay.classList.add('active');
+    
+    // Close on escape key
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            window.closeModal();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
+}
+
+function closeModal() {
+    const modalOverlay = document.getElementById('customModalOverlay');
+    if (modalOverlay) {
+        modalOverlay.classList.remove('active');
+        setTimeout(() => {
+            modalOverlay.innerHTML = '';
+        }, 300);
+    }
+}
+
+function confirmRename(chatId) {
+    const input = document.getElementById('renameInput');
+    const newTitle = input ? input.value.trim() : '';
+    
+    if (newTitle && newTitle.length > 0) {
+        const chat = chats.find(c => c.id === chatId);
+        if (chat) {
+            chat.title = newTitle.substring(0, 50);
+            saveChats();
+            renderChatHistory();
+            if (currentChatId === chatId && currentChatTitle) {
+                currentChatTitle.textContent = chat.title;
+            }
+            showNotification('Chat renamed successfully!', 'success');
+        }
+    } else {
+        showNotification('Please enter a valid chat name', 'error');
+        return;
+    }
+    
+    closeModal();
+}
+
+function confirmDelete(chatId) {
+    const deletedChat = chats.find(c => c.id === chatId);
+    const wasCurrentChat = currentChatId === chatId;
+    
     chats = chats.filter(c => c.id !== chatId);
-    if (currentChatId === chatId) { 
-        currentChatId = chats[0].id; 
-        loadChat(currentChatId); 
+    
+    // If no chats left, create a new default chat
+    if (chats.length === 0) {
+        const newChat = { 
+            id: Date.now().toString(), 
+            title: 'New Chat', 
+            messages: [], 
+            createdAt: Date.now() 
+        };
+        chats = [newChat];
+        currentChatId = newChat.id;
+        aiAssistant.clearMessages();
+        if (currentChatTitle) currentChatTitle.textContent = 'New Chat';
+        if (welcomeScreen) welcomeScreen.style.display = 'flex';
+        if (messagesWrapper) {
+            messagesWrapper.innerHTML = '';
+            messagesWrapper.appendChild(welcomeScreen);
+        }
+    } else if (wasCurrentChat) {
+        // If deleted chat was current, switch to the first available chat
+        currentChatId = chats[0].id;
+        loadChat(currentChatId);
     }
+    
     saveChats();
     renderChatHistory();
+    // Removed: showNotification('Chat deleted successfully', 'success');
+    closeModal();
+}
+
+// ===== NOTIFICATION TOAST =====
+function showNotification(message, type = 'info') {
+    let notification = document.getElementById('customNotification');
+    
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'customNotification';
+        notification.className = 'custom-notification';
+        document.body.appendChild(notification);
+    }
+    
+    // Set icon based on type
+    let icon = 'fa-info-circle';
+    if (type === 'success') icon = 'fa-check-circle';
+    if (type === 'error') icon = 'fa-exclamation-circle';
+    if (type === 'warning') icon = 'fa-exclamation-triangle';
+    
+    notification.innerHTML = `
+        <i class="fas ${icon}"></i>
+        <span>${message}</span>
+    `;
+    
+    notification.className = `custom-notification ${type} show`;
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+
+// Update the window functions
+window.renameChat = function(chatId, event) {
+    if (event) event.stopPropagation();
+    showRenameModal(chatId);
 };
 
-window.renameChat = function(chatId, event) {
-    event.stopPropagation();
-    const chat = chats.find(c => c.id === chatId);
-    const newTitle = prompt('Enter new chat name:', chat.title);
-    if (newTitle && newTitle.trim()) {
-        chat.title = newTitle.trim();
-        saveChats();
-        renderChatHistory();
-        if (currentChatId === chatId && currentChatTitle) 
-            currentChatTitle.textContent = chat.title;
-    }
+window.deleteChat = function(chatId, event) {
+    if (event) event.stopPropagation();
+    showDeleteModal(chatId);
 };
+
+window.closeModal = closeModal;
+window.confirmRename = confirmRename;
+window.confirmDelete = confirmDelete;
 
 function getTimeAgo(timestamp) {
     const diff = Date.now() - timestamp;
@@ -489,17 +699,58 @@ async function sendMessage() {
     const text = messageInput.value.trim();
     if (!text && attachedFiles.length === 0) return;
     
-    // 🔥 CHECK GUEST LIMIT BEFORE SENDING
+    // CHECK GUEST LIMIT BEFORE SENDING
     if (!canGuestSend()) {
         alert('You have used all 3 free messages. Please sign up for unlimited access!');
         window.location.href = 'signup.html';
         return;
     }
     
-    const currentChat = chats.find(c => c.id === currentChatId);
-    if (!currentChat) return;
+    let currentChat = chats.find(c => c.id === currentChatId);
     
-    // Remove old guest check (we already did above)
+    // 🔥 NEW: If current chat has messages, create a new chat automatically
+    if (currentChat && currentChat.messages.length > 0) {
+        // Create a new chat for the new message
+        const newChat = { 
+            id: Date.now().toString(), 
+            title: text.substring(0, 30) + (text.length > 30 ? '...' : ''), 
+            messages: [], 
+            createdAt: Date.now() 
+        };
+        chats.unshift(newChat);
+        currentChatId = newChat.id;
+        currentChat = newChat;
+        saveChats();
+        renderChatHistory();
+        
+        // Update UI
+        if (currentChatTitle) currentChatTitle.textContent = currentChat.title;
+        aiAssistant.clearMessages();
+        
+        // Clear welcome screen and show empty chat
+        if (welcomeScreen) welcomeScreen.style.display = 'flex';
+        if (messagesWrapper) {
+            messagesWrapper.innerHTML = '';
+            messagesWrapper.appendChild(welcomeScreen);
+        }
+    }
+    
+    // If no chat exists or we're in a fresh state, create one
+    if (!currentChat) {
+        const newChat = { 
+            id: Date.now().toString(), 
+            title: text.substring(0, 30) + (text.length > 30 ? '...' : ''), 
+            messages: [], 
+            createdAt: Date.now() 
+        };
+        chats.unshift(newChat);
+        currentChatId = newChat.id;
+        currentChat = newChat;
+        saveChats();
+        renderChatHistory();
+        if (currentChatTitle) currentChatTitle.textContent = currentChat.title;
+        aiAssistant.clearMessages();
+    }
     
     let processedFiles = [];
     if (attachedFiles.length > 0) {
@@ -513,10 +764,12 @@ async function sendMessage() {
         time: Date.now() 
     });
     
-    if (currentChat.messages.length === 1) {
+    // Update title if first message
+    if (currentChat.messages.length === 1 && currentChat.title === 'New Chat') {
         const titleText = text || processedFiles[0]?.name || 'New Chat';
         currentChat.title = titleText.substring(0, 30) + (titleText.length > 30 ? '...' : '');
         if (currentChatTitle) currentChatTitle.textContent = currentChat.title;
+        renderChatHistory();
     }
     
     saveChats();
@@ -552,7 +805,6 @@ async function sendMessage() {
         saveChats();
         loadChat(currentChatId);
         
-        // 🔥 TRACK GUEST MESSAGE AFTER SUCCESSFUL RESPONSE
         trackGuestMessage();
         
     } catch (error) {

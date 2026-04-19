@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 </script>
 <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWG766C86Y"></script>
 
 
 
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 </script>
 <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWG766C86Y"></script>
 
 
 
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 </script>
 <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWG766C86Y"></script>
 
 
 
@@ -507,7 +507,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 </script>
 <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWG766C86Y"></script>
 
 
 
