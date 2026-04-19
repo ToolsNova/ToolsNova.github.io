@@ -1039,11 +1039,13 @@ body {
 /* ===== PAGE ADJUSTMENT FOR SIDEBAR ===== */
 body {
     padding-left: 280px;
+    padding-top: 70px; /* ✅ THIS FIXES THE CUT TOP ISSUE */
     transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.sidebar-collapsed {
     padding-left: 70px;
+    padding-top: 70px; /* keep consistent */
 }
 
 .navbar {
