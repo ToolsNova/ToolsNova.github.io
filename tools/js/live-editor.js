@@ -120,6 +120,20 @@ document.addEventListener("DOMContentLoaded", () => {
 <!DOCTYPE html>
 <html>
 <head>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ToolsNova [Tool Name]",
+  "operatingSystem": "Any",
+  "applicationCategory": "MultimediaApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 <!-- Favicon -->
@@ -271,6 +285,20 @@ ${js}
 <!DOCTYPE html>
 <html>
 <head>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ToolsNova [Tool Name]",
+  "operatingSystem": "Any",
+  "applicationCategory": "MultimediaApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 <!-- Favicon -->

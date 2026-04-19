@@ -65,6 +65,20 @@ document.addEventListener('DOMContentLoaded', function() {
         basic: `<!DOCTYPE html>
 <html>
 <head>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ToolsNova [Tool Name]",
+  "operatingSystem": "Any",
+  "applicationCategory": "MultimediaApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 
@@ -136,6 +150,20 @@ document.addEventListener('DOMContentLoaded', function() {
         form: `<!DOCTYPE html>
 <html>
 <head>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ToolsNova [Tool Name]",
+  "operatingSystem": "Any",
+  "applicationCategory": "MultimediaApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 
@@ -236,6 +264,20 @@ document.addEventListener('DOMContentLoaded', function() {
         dashboard: `<!DOCTYPE html>
 <html>
 <head>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ToolsNova [Tool Name]",
+  "operatingSystem": "Any",
+  "applicationCategory": "MultimediaApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 
@@ -450,6 +492,20 @@ document.addEventListener('DOMContentLoaded', function() {
         let html = htmlInput.value;
         if (!html || html.trim() === '') {
             html = '<!DOCTYPE html><html><head>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ToolsNova [Tool Name]",
+  "operatingSystem": "Any",
+  "applicationCategory": "MultimediaApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL847BSHY4"></script>
 
