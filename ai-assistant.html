@@ -17,9 +17,16 @@
 </script>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWG766C86Y"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EWG766C86Y');
+</script>
 
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499" crossorigin="anonymous"></script>
+
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
@@ -28,67 +35,261 @@
 <link rel="manifest" href="/assets/favicon/site.webmanifest">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+
+<!-- Primary Meta Tags -->
+<title>AI Assistant - ToolsNova | Free AI Chat Bot</title>
+<meta name="title" content="AI Assistant - ToolsNova | Free AI Chat Bot">
+<meta name="description" content="Free AI chat assistant powered by AI. Get help with coding, writing, research, and more. Upload files, ask questions. Guest users get 3 free uses.">
+<meta name="keywords" content="AI assistant, chatbot, free AI, AI chat, coding assistant, writing helper, file analysis, AI help">
+<meta name="author" content="ToolsNova">
+<meta name="robots" content="index, follow">
+<meta name="language" content="English">
+<meta name="revisit-after" content="1 day">
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#3b82f6">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ToolsNova.github.io/ai-assistant.html">
+<meta property="og:title" content="AI Assistant - ToolsNova | Free AI Chat Bot">
+<meta property="og:description" content="Free AI chat assistant. Get help with coding, writing, research, and more.">
+<meta property="og:image" content="https://ToolsNova.github.io/assets/images/og-ai-assistant.jpg">
+<meta property="og:site_name" content="ToolsNova">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://ToolsNova.github.io/ai-assistant.html">
+<meta name="twitter:title" content="AI Assistant - ToolsNova | Free AI Chat Bot">
+<meta name="twitter:description" content="Free AI chat assistant. Get help instantly.">
+<meta name="twitter:image" content="https://ToolsNova.github.io/assets/images/twitter-ai-assistant.jpg">
+<meta name="twitter:site" content="@toolsnova">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://ToolsNova.github.io/ai-assistant.html">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome 6 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<!-- Main CSS -->
+<link rel="stylesheet" href="css/ai-chat.css">
+
+<!-- Modal Styles for Logout Confirmation -->
+<style>
+    /* Modal Overlay */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 10000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.active {
+        display: flex;
+    }
     
-    <!-- Primary Meta Tags -->
-    <title>AI Assistant - ToolsNova | Free AI Chat Bot</title>
-    <meta name="title" content="AI Assistant - ToolsNova | Free AI Chat Bot">
-    <meta name="description" content="Free AI chat assistant powered by Google Gemini. Get help with coding, writing, research, and more. Upload files, ask questions. Guest users get 3 free uses.">
-    <meta name="keywords" content="AI assistant, chatbot, free AI, Gemini AI, AI chat, coding assistant, writing helper, file analysis, AI help">
-    <meta name="author" content="ToolsNova">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="English">
-    <meta name="revisit-after" content="1 day">
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
+    /* Modal Container */
+    .modal-container {
+        background: var(--bg-primary, #ffffff);
+        border-radius: 24px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        animation: slideUp 0.3s ease;
+        border: 1px solid var(--border, #e2e8f0);
+        overflow: hidden;
+    }
     
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    /* Dark mode support */
+    .dark-mode .modal-container {
+        background: #1e293b;
+        border-color: #334155;
+    }
     
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#3b82f6">
+    /* Modal Header */
+    .modal-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border, #e2e8f0);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .dark-mode .modal-header {
+        border-bottom-color: #334155;
+    }
+    .modal-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary, #0f172a);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .dark-mode .modal-header h3 {
+        color: #f1f5f9;
+    }
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ToolsNova.github.io/ai-assistant.html">
-    <meta property="og:title" content="AI Assistant - ToolsNova | Free AI Chat Bot">
-    <meta property="og:description" content="Free AI chat assistant powered by Google Gemini. Get help with coding, writing, research, and more.">
-    <meta property="og:image" content="https://ToolsNova.github.io/assets/images/og-ai-assistant.jpg">
-    <meta property="og:site_name" content="ToolsNova">
+    /* Modal Close Button */
+    .modal-close {
+        background: var(--bg-secondary, #f1f5f9);
+        border: 1px solid var(--border, #e2e8f0);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--text-secondary, #475569);
+        transition: all 0.2s ease;
+    }
+    .modal-close:hover {
+        background: #ef4444;
+        color: white;
+        border-color: #ef4444;
+        transform: rotate(90deg);
+    }
     
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://ToolsNova.github.io/ai-assistant.html">
-    <meta name="twitter:title" content="AI Assistant - ToolsNova | Free AI Chat Bot">
-    <meta name="twitter:description" content="Free AI chat assistant powered by Google Gemini. Get help instantly.">
-    <meta name="twitter:image" content="https://ToolsNova.github.io/assets/images/twitter-ai-assistant.jpg">
-    <meta name="twitter:site" content="@toolsnova">
+    /* Modal Body */
+    .modal-body {
+        padding: 24px;
+    }
+    .modal-body p {
+        color: var(--text-secondary, #475569);
+        margin-bottom: 8px;
+        line-height: 1.5;
+    }
+    .dark-mode .modal-body p {
+        color: #94a3b8;
+    }
     
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://ToolsNova.github.io/ai-assistant.html">
+    /* Modal Footer */
+    .modal-footer {
+        padding: 16px 24px 24px;
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        border-top: 1px solid var(--border, #e2e8f0);
+        background: var(--bg-secondary, #f8fafc);
+    }
+    .dark-mode .modal-footer {
+        background: #0f172a;
+        border-top-color: #334155;
+    }
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    /* Modal Buttons */
+    .modal-btn {
+        padding: 10px 24px;
+        border-radius: 40px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        font-size: 0.9rem;
+    }
+    .modal-btn-cancel {
+        background: var(--bg-tertiary, #e2e8f0);
+        color: var(--text-secondary, #475569);
+        border: 1px solid var(--border, #e2e8f0);
+    }
+    .modal-btn-cancel:hover {
+        background: var(--border, #cbd5e1);
+        color: var(--text-primary, #0f172a);
+    }
+    .modal-btn-confirm {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+    }
+    .modal-btn-confirm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
     
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
     
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="css/ai-chat.css">
-    
-<!-- Your existing Firebase SDKs -->
+    /* Notification Toast */
+    .custom-notification {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: var(--bg-primary, #ffffff);
+        border: 1px solid var(--border, #e2e8f0);
+        border-radius: 12px;
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        z-index: 10001;
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    .custom-notification.show {
+        transform: translateX(0);
+    }
+    .custom-notification.success {
+        border-left: 4px solid #10b981;
+    }
+    .custom-notification.success i {
+        color: #10b981;
+    }
+    .custom-notification.error {
+        border-left: 4px solid #ef4444;
+    }
+    .custom-notification.error i {
+        color: #ef4444;
+    }
+    .custom-notification.warning {
+        border-left: 4px solid #f59e0b;
+    }
+    .custom-notification.warning i {
+        color: #f59e0b;
+    }
+    @media (max-width: 768px) {
+        .custom-notification {
+            bottom: 20px;
+            right: 20px;
+            left: 20px;
+            transform: translateY(100px);
+        }
+        .custom-notification.show {
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWG766C86Y"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-EWG766C86Y');
-    </script>
 
 </head>
 <body>
@@ -103,6 +304,7 @@
             <a href="#" id="newChatBtn"><i class="fas fa-plus-circle"></i><span>New Chat</span></a>
             <a href="#" id="sidebarToggle"><i class="fas fa-bars"></i><span>Collapse</span></a>
             <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="tools.html"><i class="fas fa-tools"></i><span>All Tools</span></a>
         </div>
         <div class="chat-history-section">
             <div class="history-header">Recent Chats</div>
@@ -148,15 +350,14 @@
                 <button class="icon-btn" id="attachBtn"><i class="fas fa-paperclip"></i></button>
                 <textarea id="messageInput" placeholder="Type your message..." rows="1"></textarea>
                 <button class="icon-btn" id="sendBtn" style="color: #3b82f6;"><i class="fas fa-paper-plane"></i></button>
-                <input type="file" id="fileInput" multiple style="display: none;">
             </div>
         </div>
     </div>
 </div>
 
-<script src="js/ai-chat.js"></script>
-<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
-
+<script src="./js/ai-chat.js"></script>
+<script src="./js/script.js"></script>
+<!-- Monetag Clean Ads -->
 <script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 </html>

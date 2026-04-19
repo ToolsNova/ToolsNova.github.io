@@ -1,49 +1,52 @@
-// ===== AI CHAT ASSISTANT - CLOUDFLARE WORKER VERSION =====
+// ===== AI CHAT ASSISTANT - WITH LOGOUT CONFIRMATION =====
 
-// ===== GOOGLE ANALYTICS (STANDARD IMPLEMENTATION) =====
-// Google Analytics 4 (GA4) Standard Code
+// ===== GOOGLE ANALYTICS =====
 window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  // Default configuration: No delays, no custom bot logic
-  gtag('config', 'G-EWG766C86Y', {
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-EWG766C86Y', {
     'send_page_view': true,
     'cookie_flags': 'SameSite=None;Secure'
-  });
+});
 
-// ===== FIREBASE CONFIG =====
+// ===== FIREBASE CONFIG - SAME AS MAIN SITE =====
 const firebaseConfig = {
-    apiKey: "AIzaSyBADT8ZDZ9TGEVeVm73Yf_rwI6YmAtjRa8",
-    authDomain: "toolsnova-869.firebaseapp.com",
-    projectId: "toolsnova-869",
-    storageBucket: "toolsnova-869.firebasestorage.app",
-    messagingSenderId: "393315506444",
-    appId: "1:393315506444:web:595807ed58abe6b6ad9129"
+    apiKey: "AIzaSyC6rF7Pg7j-NPioZ8Ei70GCj_megjD7UQw",
+    authDomain: "toolsnova-user.firebaseapp.com",
+    projectId: "toolsnova-user",
+    storageBucket: "toolsnova-user.firebasestorage.app",
+    messagingSenderId: "907228879212",
+    appId: "1:907228879212:web:7e82b085899deb14857b49",
+    measurementId: "G-EWG766C86Y"
 };
 
 // Initialize Firebase
+let auth = null;
 if (typeof firebase !== 'undefined') {
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    auth = firebase.auth();
 } else {
     console.error('Firebase not loaded');
 }
 
 // ===== CONFIGURATION =====
 const MAX_GUEST_MESSAGES = 3;
-// 🔥 YOUR CLOUDFLARE WORKER URL
 const WORKER_URL = 'https://proxy.toolsnova.workers.dev';
 
 // ===== GUEST MESSAGE TRACKING =====
 function canGuestSend() {
-    const user = firebase.auth().currentUser;
+    if (!auth) return true;
+    const user = auth.currentUser;
     if (user) return true;
     const messagesSent = parseInt(localStorage.getItem('toolsnova_guest_messages') || '0');
     return messagesSent < MAX_GUEST_MESSAGES;
 }
 
 function trackGuestMessage() {
-    const user = firebase.auth().currentUser;
+    if (!auth) return;
+    const user = auth.currentUser;
     if (!user) {
         let messagesSent = parseInt(localStorage.getItem('toolsnova_guest_messages') || '0');
         messagesSent++;
@@ -51,9 +54,10 @@ function trackGuestMessage() {
         
         const remaining = MAX_GUEST_MESSAGES - messagesSent;
         if (remaining === 0) {
-            alert('You have used all 3 free messages. Sign up for unlimited access!');
+            showNotification('You have used all 3 free messages. Sign up for unlimited access!', 'warning');
+            setTimeout(() => { window.location.href = 'signup.html'; }, 2000);
         } else if (remaining > 0) {
-            alert(`You have ${remaining} free ${remaining === 1 ? 'message' : 'messages'} left. Sign up for unlimited!`);
+            showNotification(`You have ${remaining} free ${remaining === 1 ? 'message' : 'messages'} left. Sign up for unlimited!`, 'info');
         }
     }
 }
@@ -70,50 +74,134 @@ let messageInput, sendBtn, newChatBtn, themeToggle;
 let chatHistory, currentChatTitle, attachBtn, fileInput, filePreviewContainer;
 let sidebar, sidebarToggle, mobileMenuBtn, mobileOverlay;
 
-// ===== CHECK MESSAGE SIZE =====
-function checkMessageSize(text) {
-    const MAX_SIZE = 50000;
-    if (text.length > MAX_SIZE) {
-        return {
-            valid: false,
-            message: `Message too long (${Math.round(text.length/1000)}KB). Please keep under 50KB.`
+// ===== NOTIFICATION TOAST =====
+function showNotification(message, type = 'info') {
+    let notification = document.getElementById('customNotification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'customNotification';
+        notification.className = 'custom-notification';
+        document.body.appendChild(notification);
+    }
+    
+    let icon = 'fa-info-circle';
+    if (type === 'success') icon = 'fa-check-circle';
+    if (type === 'error') icon = 'fa-exclamation-circle';
+    if (type === 'warning') icon = 'fa-exclamation-triangle';
+    
+    notification.innerHTML = `<i class="fas ${icon}"></i><span>${message}</span>`;
+    notification.className = `custom-notification ${type} show`;
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+
+// ===== LOGOUT CONFIRMATION MODAL (SAME AS MAIN SITE) =====
+function showLogoutConfirmation() {
+    let modalOverlay = document.getElementById('logoutModal');
+    if (!modalOverlay) {
+        modalOverlay = document.createElement('div');
+        modalOverlay.id = 'logoutModal';
+        modalOverlay.className = 'modal-overlay';
+        document.body.appendChild(modalOverlay);
+    }
+    
+    modalOverlay.innerHTML = `
+        <div class="modal-container" style="max-width: 380px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-sign-out-alt" style="color: #f59e0b;"></i> Confirm Logout</h3>
+                <button class="modal-close" onclick="closeLogoutModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+                <p style="color: var(--text-secondary, #6b7280); font-size: 0.85rem; margin-top: 8px;">
+                    You will need to login again to access your account.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="closeLogoutModal()">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="confirmLogoutBtn">Logout</button>
+            </div>
+        </div>
+    `;
+    
+    modalOverlay.classList.add('active');
+    
+    const confirmBtn = document.getElementById('confirmLogoutBtn');
+    if (confirmBtn) {
+        confirmBtn.onclick = () => {
+            closeLogoutModal();
+            executeLogout();
         };
     }
-    return { valid: true };
+    
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            closeLogoutModal();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
 }
+
+function closeLogoutModal() {
+    const modal = document.getElementById('logoutModal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.innerHTML = '';
+        }, 300);
+    }
+}
+
+function executeLogout() {
+    if (auth) {
+        auth.signOut().then(() => {
+            showNotification('Logged out successfully!', 'success');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }).catch((error) => {
+            showNotification('Error logging out: ' + error.message, 'error');
+        });
+    } else {
+        showNotification('Logging out...', 'info');
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 500);
+    }
+}
+
+window.closeLogoutModal = closeLogoutModal;
 
 // ===== COPY CODE FUNCTION =====
 window.copyCode = function(code) {
     const decodedCode = decodeURIComponent(code);
-    
     navigator.clipboard.writeText(decodedCode).then(() => {
         const btn = event.target.closest('.copy-code-btn');
         if (!btn) return;
-        
         const originalText = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
         btn.style.background = '#10b981';
         btn.style.color = 'white';
-        
         setTimeout(() => {
             btn.innerHTML = originalText;
             btn.style.background = '';
             btn.style.color = '';
         }, 2000);
-    }).catch(() => alert('Failed to copy code'));
+    }).catch(() => showNotification('Failed to copy code', 'error'));
 };
 
 // ===== FILE PROCESSING =====
 async function processFile(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        
         reader.onload = async (e) => {
             const content = e.target.result;
             const fileType = file.type;
             const fileName = file.name;
             const fileSize = (file.size / 1024).toFixed(2) + ' KB';
-            
             resolve({
                 name: fileName,
                 type: fileType,
@@ -128,7 +216,6 @@ async function processFile(file) {
                         fileName.endsWith('.txt')
             });
         };
-        
         reader.onerror = () => reject(new Error('Failed to read file'));
         
         if (file.type.startsWith('text/') || 
@@ -158,64 +245,27 @@ async function processFiles(files) {
     return processedFiles;
 }
 
-// ===== 🔥 AI ASSISTANT CLASS - CLOUDFLARE WORKER VERSION =====
+// ===== AI ASSISTANT CLASS =====
 class AIAssistant {
     constructor() {
         this.messages = [];
     }
-
-    loadMessages(msgs) {
-        this.messages = [...msgs];
-    }
-
-    clearMessages() {
-        this.messages = [];
-    }
-
+    loadMessages(msgs) { this.messages = [...msgs]; }
+    clearMessages() { this.messages = []; }
+    
     async getResponse(userMessage, files = []) {
-        this.messages.push({
-            role: 'user',
-            content: userMessage
-        });
-
+        this.messages.push({ role: 'user', content: userMessage });
         const messageCount = this.messages.filter(m => m.role === 'user').length;
         
         let historyText = '';
-        this.messages.forEach((msg, i) => {
+        this.messages.forEach((msg) => {
             const prefix = msg.role === 'user' ? 'User' : 'Assistant';
             historyText += `${prefix}: ${msg.content}\n`;
         });
 
-        const systemPrompt = `You are a helpful AI assistant. Here is the EXACT conversation so far:
-
-${historyText}
-
-Current message: "${userMessage}"
-${files.length > 0 ? `Files: ${files.length}` : ''}
-
-TABLE FORMATTING RULES:
-When the user asks for a table, output an HTML table like this:
-
-<table class="data-table">
-  <thead>
-      <tr><th>City</th><th>Population</th><th>Country</th></tr>
-  </thead>
-  <tbody>
-      <tr><td>Tokyo</td><td>38M</td><td>Japan</td></tr>
-  </tbody>
-</table>
-
-IMPORTANT:
-1. Use HTML tables, NOT markdown
-2. Use <ul>, <li> tags for lists with proper spacing
-3. Answer concisely and accurately
-4. Remember chat context but give fresh replies
-5. Always provide accurate and latest information
-
-Remember: This is message #${messageCount}. Be friendly and helpful.`;
-
+        const systemPrompt = `You are a helpful AI assistant. Current conversation:\n${historyText}\nCurrent message: "${userMessage}"\nBe friendly and helpful.`;
+        
         try {
-            // 🔥 CALL YOUR CLOUDFLARE WORKER (NO API KEY!)
             const response = await fetch(WORKER_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -224,26 +274,17 @@ Remember: This is message #${messageCount}. Be friendly and helpful.`;
                     action: 'chat'
                 })
             });
-            
             const data = await response.json();
-            
             if (data.success) {
-                let responseText = data.result;
-                responseText = responseText.replace(/\*\*/g, '').replace(/\*/g, '').trim();
-                
-                this.messages.push({
-                    role: 'assistant',
-                    content: responseText
-                });
-                
+                let responseText = data.result.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+                this.messages.push({ role: 'assistant', content: responseText });
                 return responseText;
             } else {
                 throw new Error(data.error);
             }
-            
         } catch (error) {
             console.error('AI Error:', error);
-            return "❌ Error\n\nSorry, the AI service is temporarily unavailable. Please try again in a few moments.";
+            return "❌ Error\n\nSorry, the AI service is temporarily unavailable. Please try again.";
         }
     }
 }
@@ -253,7 +294,6 @@ const aiAssistant = new AIAssistant();
 // ===== SIDEBAR FUNCTIONS =====
 function toggleSidebar() {
     if (!sidebar) return;
-    
     if (window.innerWidth <= 768) {
         sidebar.classList.toggle('open');
         if (mobileOverlay) {
@@ -275,13 +315,11 @@ function toggleSidebar() {
 }
 
 function closeSidebar() {
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 768 && sidebar) {
         sidebar.classList.remove('open');
         if (mobileOverlay) {
             mobileOverlay.classList.remove('active');
-            setTimeout(() => {
-                if (mobileOverlay) mobileOverlay.style.display = 'none';
-            }, 300);
+            setTimeout(() => { if (mobileOverlay) mobileOverlay.style.display = 'none'; }, 300);
         }
     }
 }
@@ -290,12 +328,9 @@ function closeSidebar() {
 function loadChat(chatId) {
     const chat = chats.find(c => c.id === chatId);
     if (!chat) return;
-    
     currentChatId = chatId;
     if (currentChatTitle) currentChatTitle.textContent = chat.title;
-    
     aiAssistant.loadMessages(chat.messages);
-    
     if (!messagesWrapper || !welcomeScreen) return;
     
     if (chat.messages.length === 0) {
@@ -306,383 +341,46 @@ function loadChat(chatId) {
         welcomeScreen.style.display = 'none';
         messagesWrapper.innerHTML = chat.messages.map(msg => {
             const isUser = msg.role === 'user';
-            const time = new Date(msg.time).toLocaleTimeString([], { 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
-            
+            const time = msg.time ? new Date(msg.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
             let content = msg.content;
-            
             if (msg.files && msg.files.length > 0) {
-                const fileHtml = msg.files.map(file => `
-                    <div class="file-attachment">
-                        <i class="fas fa-file"></i>
-                        <span>${escapeHtml(file.name)} (${file.size})</span>
-                    </div>
-                `).join('');
+                const fileHtml = msg.files.map(file => `<div class="file-attachment"><i class="fas fa-file"></i><span>${escapeHtml(file.name)} (${file.size})</span></div>`).join('');
                 content = fileHtml + '<br>' + content;
             }
-            
             if (content.includes('```')) {
                 content = content.replace(/```(\w*)\n([\s\S]*?)```/g, (match, language, code) => {
                     const cleanCode = code.trim();
-                    const displayCode = cleanCode
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#039;');
-                    
-                    return `
-                        <div class="code-block-wrapper">
-                            <pre><code class="language-${language || 'plaintext'}">${displayCode}</code></pre>
-                            <button class="copy-code-btn" onclick="copyCode('${encodeURIComponent(cleanCode)}')">
-                                <i class="fas fa-copy"></i> Copy code
-                            </button>
-                        </div>
-                    `;
+                    const displayCode = cleanCode.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    return `<div class="code-block-wrapper"><pre><code class="language-${language || 'plaintext'}">${displayCode}</code></pre><button class="copy-code-btn" onclick="copyCode('${encodeURIComponent(cleanCode)}')"><i class="fas fa-copy"></i> Copy code</button></div>`;
                 });
             }
-            
-            return `
-                <div class="message ${isUser ? 'user' : ''}">
-                    <div class="message-avatar ${isUser ? 'user' : 'ai'}">
-                        <i class="fas ${isUser ? 'fa-user' : 'fa-robot'}"></i>
-                    </div>
-                    <div class="message-content">
-                        <div class="message-bubble">${content}</div>
-                        <div class="message-time">${time}</div>
-                    </div>
-                </div>
-            `;
+            return `<div class="message ${isUser ? 'user' : ''}"><div class="message-avatar ${isUser ? 'user' : 'ai'}"><i class="fas ${isUser ? 'fa-user' : 'fa-robot'}"></i></div><div class="message-content"><div class="message-bubble">${content}</div><div class="message-time">${time}</div></div></div>`;
         }).join('');
     }
-    
-    if (messagesContainer) {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-    
+    if (messagesContainer) messagesContainer.scrollTop = messagesContainer.scrollHeight;
     renderChatHistory();
-    
-    if (window.innerWidth <= 768) {
-        closeSidebar();
-    }
+    if (window.innerWidth <= 768) closeSidebar();
 }
 
 function loadChats() {
     const saved = localStorage.getItem('toolsnova_chats');
     if (saved) {
         chats = JSON.parse(saved);
-        // Make sure we have at least one chat
         if (chats.length === 0) {
-            const defaultChat = { 
-                id: Date.now().toString(), 
-                title: 'New Chat', 
-                messages: [], 
-                createdAt: Date.now() 
-            };
-            chats = [defaultChat];
+            chats = [{ id: Date.now().toString(), title: 'New Chat', messages: [], createdAt: Date.now() }];
             saveChats();
         }
     } else {
-        const defaultChat = { 
-            id: Date.now().toString(), 
-            title: 'New Chat', 
-            messages: [], 
-            createdAt: Date.now() 
-        };
-        chats = [defaultChat];
+        chats = [{ id: Date.now().toString(), title: 'New Chat', messages: [], createdAt: Date.now() }];
         saveChats();
     }
-    
     if (!currentChatId && chats.length > 0) currentChatId = chats[0].id;
     renderChatHistory();
     if (currentChatId) loadChat(currentChatId);
 }
 
-function saveChats() {
-    localStorage.setItem('toolsnova_chats', JSON.stringify(chats));
-}
-
-function renderChatHistory() {
-    if (!chatHistory) return;
-    chatHistory.innerHTML = chats.map(chat => {
-        const isActive = chat.id === currentChatId;
-        const timeAgo = getTimeAgo(chat.createdAt);
-        return `
-            <div class="history-item ${isActive ? 'active' : ''}" onclick="window.loadChat('${chat.id}')">
-                <i class="fas fa-comment"></i>
-                <div class="history-content">
-                    <span class="history-title">${escapeHtml(chat.title)}</span>
-                    <span class="history-time">${timeAgo}</span>
-                </div>
-                <div class="chat-actions">
-                    <button class="chat-action-btn rename" onclick="window.renameChat('${chat.id}', event)">
-                        <i class="fas fa-pen"></i>
-                    </button>
-                    <button class="chat-action-btn delete" onclick="window.deleteChat('${chat.id}', event)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function createNewChat() {
-    // Clear AI assistant messages
-    aiAssistant.clearMessages();
-    
-    const newChat = { 
-        id: Date.now().toString(), 
-        title: 'New Chat', 
-        messages: [], 
-        createdAt: Date.now() 
-    };
-    chats.unshift(newChat);
-    currentChatId = newChat.id;
-    saveChats();
-    renderChatHistory();
-    
-    // Clear the UI
-    if (currentChatTitle) currentChatTitle.textContent = 'New Chat';
-    if (welcomeScreen) welcomeScreen.style.display = 'flex';
-    if (messagesWrapper) {
-        messagesWrapper.innerHTML = '';
-        messagesWrapper.appendChild(welcomeScreen);
-    }
-    
-    if (messageInput) messageInput.focus();
-    
-    if (window.innerWidth <= 768) {
-        closeSidebar();
-    }
-}
-
-// ===== CUSTOM POPUP FUNCTIONS =====
-
-function showRenameModal(chatId) {
-    const chat = chats.find(c => c.id === chatId);
-    if (!chat) return;
-    
-    // Create modal overlay if it doesn't exist
-    let modalOverlay = document.getElementById('customModalOverlay');
-    if (!modalOverlay) {
-        modalOverlay = document.createElement('div');
-        modalOverlay.id = 'customModalOverlay';
-        modalOverlay.className = 'modal-overlay';
-        document.body.appendChild(modalOverlay);
-    }
-    
-    modalOverlay.innerHTML = `
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-pen"></i>
-                    Rename Chat
-                </h3>
-                <button class="modal-close" onclick="window.closeModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="text" id="renameInput" placeholder="Enter new chat name" value="${escapeHtml(chat.title)}" autocomplete="off">
-            </div>
-            <div class="modal-footer">
-                <button class="modal-btn modal-btn-cancel" onclick="window.closeModal()">Cancel</button>
-                <button class="modal-btn modal-btn-confirm" onclick="window.confirmRename('${chatId}')">Save</button>
-            </div>
-        </div>
-    `;
-    
-    modalOverlay.classList.add('active');
-    
-    // Focus input and select text
-    setTimeout(() => {
-        const input = document.getElementById('renameInput');
-        if (input) {
-            input.focus();
-            input.select();
-        }
-    }, 100);
-    
-    // Close on escape key
-    const handleEscape = (e) => {
-        if (e.key === 'Escape') {
-            window.closeModal();
-            document.removeEventListener('keydown', handleEscape);
-        }
-    };
-    document.addEventListener('keydown', handleEscape);
-}
-
-function showDeleteModal(chatId) {
-    const chat = chats.find(c => c.id === chatId);
-    if (!chat) return;
-    
-    let modalOverlay = document.getElementById('customModalOverlay');
-    if (!modalOverlay) {
-        modalOverlay = document.createElement('div');
-        modalOverlay.id = 'customModalOverlay';
-        modalOverlay.className = 'modal-overlay';
-        document.body.appendChild(modalOverlay);
-    }
-    
-    modalOverlay.innerHTML = `
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-trash-alt" style="color: var(--error);"></i>
-                    Delete Chat
-                </h3>
-                <button class="modal-close" onclick="window.closeModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete "<strong>${escapeHtml(chat.title)}</strong>"?</p>
-                <div class="warning-text">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <span>This action cannot be undone. All messages in this chat will be permanently deleted.</span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-btn modal-btn-cancel" onclick="window.closeModal()">Cancel</button>
-                <button class="modal-btn modal-btn-danger" onclick="window.confirmDelete('${chatId}')">Delete</button>
-            </div>
-        </div>
-    `;
-    
-    modalOverlay.classList.add('active');
-    
-    // Close on escape key
-    const handleEscape = (e) => {
-        if (e.key === 'Escape') {
-            window.closeModal();
-            document.removeEventListener('keydown', handleEscape);
-        }
-    };
-    document.addEventListener('keydown', handleEscape);
-}
-
-function closeModal() {
-    const modalOverlay = document.getElementById('customModalOverlay');
-    if (modalOverlay) {
-        modalOverlay.classList.remove('active');
-        setTimeout(() => {
-            modalOverlay.innerHTML = '';
-        }, 300);
-    }
-}
-
-function confirmRename(chatId) {
-    const input = document.getElementById('renameInput');
-    const newTitle = input ? input.value.trim() : '';
-    
-    if (newTitle && newTitle.length > 0) {
-        const chat = chats.find(c => c.id === chatId);
-        if (chat) {
-            chat.title = newTitle.substring(0, 50);
-            saveChats();
-            renderChatHistory();
-            if (currentChatId === chatId && currentChatTitle) {
-                currentChatTitle.textContent = chat.title;
-            }
-            showNotification('Chat renamed successfully!', 'success');
-        }
-    } else {
-        showNotification('Please enter a valid chat name', 'error');
-        return;
-    }
-    
-    closeModal();
-}
-
-function confirmDelete(chatId) {
-    const deletedChat = chats.find(c => c.id === chatId);
-    const wasCurrentChat = currentChatId === chatId;
-    
-    chats = chats.filter(c => c.id !== chatId);
-    
-    // If no chats left, create a new default chat
-    if (chats.length === 0) {
-        const newChat = { 
-            id: Date.now().toString(), 
-            title: 'New Chat', 
-            messages: [], 
-            createdAt: Date.now() 
-        };
-        chats = [newChat];
-        currentChatId = newChat.id;
-        aiAssistant.clearMessages();
-        if (currentChatTitle) currentChatTitle.textContent = 'New Chat';
-        if (welcomeScreen) welcomeScreen.style.display = 'flex';
-        if (messagesWrapper) {
-            messagesWrapper.innerHTML = '';
-            messagesWrapper.appendChild(welcomeScreen);
-        }
-    } else if (wasCurrentChat) {
-        // If deleted chat was current, switch to the first available chat
-        currentChatId = chats[0].id;
-        loadChat(currentChatId);
-    }
-    
-    saveChats();
-    renderChatHistory();
-    // Removed: showNotification('Chat deleted successfully', 'success');
-    closeModal();
-}
-
-// ===== NOTIFICATION TOAST =====
-function showNotification(message, type = 'info') {
-    let notification = document.getElementById('customNotification');
-    
-    if (!notification) {
-        notification = document.createElement('div');
-        notification.id = 'customNotification';
-        notification.className = 'custom-notification';
-        document.body.appendChild(notification);
-    }
-    
-    // Set icon based on type
-    let icon = 'fa-info-circle';
-    if (type === 'success') icon = 'fa-check-circle';
-    if (type === 'error') icon = 'fa-exclamation-circle';
-    if (type === 'warning') icon = 'fa-exclamation-triangle';
-    
-    notification.innerHTML = `
-        <i class="fas ${icon}"></i>
-        <span>${message}</span>
-    `;
-    
-    notification.className = `custom-notification ${type} show`;
-    
-    setTimeout(() => {
-        notification.classList.remove('show');
-    }, 3000);
-}
-
-// Update the window functions
-window.renameChat = function(chatId, event) {
-    if (event) event.stopPropagation();
-    showRenameModal(chatId);
-};
-
-window.deleteChat = function(chatId, event) {
-    if (event) event.stopPropagation();
-    showDeleteModal(chatId);
-};
-
-window.closeModal = closeModal;
-window.confirmRename = confirmRename;
-window.confirmDelete = confirmDelete;
-
+function saveChats() { localStorage.setItem('toolsnova_chats', JSON.stringify(chats)); }
+function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 function getTimeAgo(timestamp) {
     const diff = Date.now() - timestamp;
     const minutes = Math.floor(diff / 60000);
@@ -693,56 +391,93 @@ function getTimeAgo(timestamp) {
     return days + 'd';
 }
 
+function renderChatHistory() {
+    if (!chatHistory) return;
+    chatHistory.innerHTML = chats.map(chat => {
+        const isActive = chat.id === currentChatId;
+        const timeAgo = getTimeAgo(chat.createdAt);
+        return `<div class="history-item ${isActive ? 'active' : ''}" onclick="window.loadChat('${chat.id}')">
+            <i class="fas fa-comment"></i>
+            <div class="history-content"><span class="history-title">${escapeHtml(chat.title)}</span><span class="history-time">${timeAgo}</span></div>
+            <div class="chat-actions">
+                <button class="chat-action-btn rename" onclick="event.stopPropagation(); window.renameChat('${chat.id}')"><i class="fas fa-pen"></i></button>
+                <button class="chat-action-btn delete" onclick="event.stopPropagation(); window.deleteChat('${chat.id}')"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function createNewChat() {
+    aiAssistant.clearMessages();
+    const newChat = { id: Date.now().toString(), title: 'New Chat', messages: [], createdAt: Date.now() };
+    chats.unshift(newChat);
+    currentChatId = newChat.id;
+    saveChats();
+    renderChatHistory();
+    if (currentChatTitle) currentChatTitle.textContent = 'New Chat';
+    if (welcomeScreen) welcomeScreen.style.display = 'flex';
+    if (messagesWrapper) { messagesWrapper.innerHTML = ''; messagesWrapper.appendChild(welcomeScreen); }
+    if (messageInput) messageInput.focus();
+    if (window.innerWidth <= 768) closeSidebar();
+}
+
+// ===== RENAME/DELETE CHAT FUNCTIONS =====
+window.renameChat = function(chatId) {
+    const chat = chats.find(c => c.id === chatId);
+    if (!chat) return;
+    const newTitle = prompt('Enter new chat name:', chat.title);
+    if (newTitle && newTitle.trim()) {
+        chat.title = newTitle.trim().substring(0, 50);
+        saveChats();
+        renderChatHistory();
+        if (currentChatId === chatId && currentChatTitle) currentChatTitle.textContent = chat.title;
+        showNotification('Chat renamed!', 'success');
+    }
+};
+
+window.deleteChat = function(chatId) {
+    if (chats.length === 1) {
+        showNotification('Cannot delete the last chat', 'warning');
+        return;
+    }
+    const wasCurrent = currentChatId === chatId;
+    chats = chats.filter(c => c.id !== chatId);
+    if (wasCurrent) {
+        currentChatId = chats[0].id;
+        loadChat(currentChatId);
+    }
+    saveChats();
+    renderChatHistory();
+    showNotification('Chat deleted', 'info');
+};
+
 // ===== SEND MESSAGE =====
 async function sendMessage() {
     if (!messageInput) return;
     const text = messageInput.value.trim();
     if (!text && attachedFiles.length === 0) return;
-    
-    // CHECK GUEST LIMIT BEFORE SENDING
     if (!canGuestSend()) {
-        alert('You have used all 3 free messages. Please sign up for unlimited access!');
-        window.location.href = 'signup.html';
+        showNotification('You have used all 3 free messages. Sign up for unlimited access!', 'warning');
+        setTimeout(() => { window.location.href = 'signup.html'; }, 2000);
         return;
     }
     
     let currentChat = chats.find(c => c.id === currentChatId);
-    
-    // 🔥 NEW: If current chat has messages, create a new chat automatically
     if (currentChat && currentChat.messages.length > 0) {
-        // Create a new chat for the new message
-        const newChat = { 
-            id: Date.now().toString(), 
-            title: text.substring(0, 30) + (text.length > 30 ? '...' : ''), 
-            messages: [], 
-            createdAt: Date.now() 
-        };
+        const newChat = { id: Date.now().toString(), title: text.substring(0, 30) + (text.length > 30 ? '...' : ''), messages: [], createdAt: Date.now() };
         chats.unshift(newChat);
         currentChatId = newChat.id;
         currentChat = newChat;
         saveChats();
         renderChatHistory();
-        
-        // Update UI
         if (currentChatTitle) currentChatTitle.textContent = currentChat.title;
         aiAssistant.clearMessages();
-        
-        // Clear welcome screen and show empty chat
         if (welcomeScreen) welcomeScreen.style.display = 'flex';
-        if (messagesWrapper) {
-            messagesWrapper.innerHTML = '';
-            messagesWrapper.appendChild(welcomeScreen);
-        }
+        if (messagesWrapper) { messagesWrapper.innerHTML = ''; messagesWrapper.appendChild(welcomeScreen); }
     }
     
-    // If no chat exists or we're in a fresh state, create one
     if (!currentChat) {
-        const newChat = { 
-            id: Date.now().toString(), 
-            title: text.substring(0, 30) + (text.length > 30 ? '...' : ''), 
-            messages: [], 
-            createdAt: Date.now() 
-        };
+        const newChat = { id: Date.now().toString(), title: text.substring(0, 30) + (text.length > 30 ? '...' : ''), messages: [], createdAt: Date.now() };
         chats.unshift(newChat);
         currentChatId = newChat.id;
         currentChat = newChat;
@@ -753,18 +488,10 @@ async function sendMessage() {
     }
     
     let processedFiles = [];
-    if (attachedFiles.length > 0) {
-        processedFiles = await processFiles(attachedFiles);
-    }
+    if (attachedFiles.length > 0) processedFiles = await processFiles(attachedFiles);
     
-    currentChat.messages.push({ 
-        role: 'user', 
-        content: text || '📎 File upload',
-        files: processedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })),
-        time: Date.now() 
-    });
+    currentChat.messages.push({ role: 'user', content: text || '📎 File upload', files: processedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })), time: Date.now() });
     
-    // Update title if first message
     if (currentChat.messages.length === 1 && currentChat.title === 'New Chat') {
         const titleText = text || processedFiles[0]?.name || 'New Chat';
         currentChat.title = titleText.substring(0, 30) + (titleText.length > 30 ? '...' : '');
@@ -774,7 +501,6 @@ async function sendMessage() {
     
     saveChats();
     loadChat(currentChatId);
-    
     messageInput.value = '';
     messageInput.style.height = 'auto';
     attachedFiles = [];
@@ -793,28 +519,15 @@ async function sendMessage() {
     
     try {
         const response = await aiAssistant.getResponse(text, processedFiles);
-        
         document.getElementById('typingIndicator')?.remove();
-        
-        currentChat.messages.push({ 
-            role: 'assistant', 
-            content: response, 
-            time: Date.now() 
-        });
-        
+        currentChat.messages.push({ role: 'assistant', content: response, time: Date.now() });
         saveChats();
         loadChat(currentChatId);
-        
         trackGuestMessage();
-        
     } catch (error) {
         console.error('Error:', error);
         document.getElementById('typingIndicator')?.remove();
-        currentChat.messages.push({ 
-            role: 'assistant', 
-            content: '❌ Error\n\nSorry, something went wrong. Please try again.', 
-            time: Date.now() 
-        });
+        currentChat.messages.push({ role: 'assistant', content: '❌ Error\n\nSorry, something went wrong. Please try again.', time: Date.now() });
         saveChats();
         loadChat(currentChatId);
     }
@@ -827,44 +540,24 @@ async function sendMessage() {
 // ===== FILE UPLOAD UI =====
 function showFilePreviews() {
     if (!filePreviewContainer) return;
-    if (attachedFiles.length === 0) { 
-        filePreviewContainer.innerHTML = ''; 
-        return; 
-    }
+    if (attachedFiles.length === 0) { filePreviewContainer.innerHTML = ''; return; }
     filePreviewContainer.innerHTML = attachedFiles.map((file, index) => 
-        `<div class="file-preview">
-            <div class="file-preview-info">
-                <i class="fas ${file.type.startsWith('image/') ? 'fa-image' : 'fa-file'}"></i>
-                <div>
-                    <div>${escapeHtml(file.name)}</div>
-                    <div>${(file.size / 1024).toFixed(1)} KB</div>
-                </div>
-            </div>
-            <button class="remove-file" onclick="window.removeFile(${index})">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>`
+        `<div class="file-preview"><div class="file-preview-info"><i class="fas ${file.type.startsWith('image/') ? 'fa-image' : 'fa-file'}"></i><div><div>${escapeHtml(file.name)}</div><div>${(file.size / 1024).toFixed(1)} KB</div></div></div><button class="remove-file" onclick="window.removeFile(${index})"><i class="fas fa-times"></i></button></div>`
     ).join('');
 }
 
-window.removeFile = function(index) {
-    attachedFiles.splice(index, 1);
-    showFilePreviews();
-    if (fileInput) fileInput.value = '';
-};
+window.removeFile = function(index) { attachedFiles.splice(index, 1); showFilePreviews(); if (fileInput) fileInput.value = ''; };
 
 // ===== AUTH UI =====
 function updateUserUI(user) {
     const authLinks = document.getElementById('sidebarAuth');
     const userMenu = document.getElementById('userInfo');
     const userName = document.getElementById('sidebarUserName');
-    
     if (authLinks && userMenu) {
         if (user) {
             authLinks.style.display = 'none';
             userMenu.style.display = 'flex';
-            if (userName && user.email) 
-                userName.textContent = user.email.split('@')[0];
+            if (userName && user.email) userName.textContent = user.email.split('@')[0];
         } else {
             authLinks.style.display = 'flex';
             userMenu.style.display = 'none';
@@ -893,81 +586,41 @@ function initDOMElements() {
 }
 
 function setupEventListeners() {
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleSidebar();
-        });
-    }
-    
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleSidebar();
-        });
-    }
-    
-    if (mobileOverlay) {
-        mobileOverlay.addEventListener('click', () => {
-            closeSidebar();
-        });
-    }
-    
-    if (sendBtn) {
-        sendBtn.addEventListener('click', (e) => { 
-            e.preventDefault(); 
-            sendMessage(); 
-        });
-    }
-    
-    if (newChatBtn) {
-        newChatBtn.addEventListener('click', () => {
-            createNewChat();
-        });
-    }
-    
+    if (sidebarToggle) sidebarToggle.addEventListener('click', (e) => { e.preventDefault(); toggleSidebar(); });
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', (e) => { e.preventDefault(); toggleSidebar(); });
+    if (mobileOverlay) mobileOverlay.addEventListener('click', () => closeSidebar());
+    if (sendBtn) sendBtn.addEventListener('click', (e) => { e.preventDefault(); sendMessage(); });
+    if (newChatBtn) newChatBtn.addEventListener('click', () => createNewChat());
     if (attachBtn && fileInput) {
         attachBtn.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', (e) => { 
-            attachedFiles = Array.from(e.target.files); 
-            showFilePreviews(); 
-        });
+        fileInput.addEventListener('change', (e) => { attachedFiles = Array.from(e.target.files); showFilePreviews(); });
     }
-    
     if (messageInput) {
-        messageInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) { 
-                e.preventDefault(); 
-                sendMessage(); 
-            }
-        });
-        
-        messageInput.addEventListener('input', function() { 
-            this.style.height = 'auto'; 
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px'; 
-        });
+        messageInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+        messageInput.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 120) + 'px'; });
     }
-    
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const icon = themeToggle.querySelector('i');
-            if (icon) {
-                icon.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'far fa-moon';
-            }
+            if (icon) icon.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'far fa-moon';
             localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+    }
+    
+    // Logout button with confirmation
+    const sidebarLogoutBtn = document.getElementById('sidebarLogout');
+    if (sidebarLogoutBtn) {
+        sidebarLogoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showLogoutConfirmation();
         });
     }
     
     window.addEventListener('resize', () => {
         if (window.innerWidth > 768) {
-            if (sidebar) {
-                sidebar.classList.remove('open');
-            }
-            if (mobileOverlay) {
-                mobileOverlay.style.display = 'none';
-                mobileOverlay.classList.remove('active');
-            }
+            if (sidebar) sidebar.classList.remove('open');
+            if (mobileOverlay) { mobileOverlay.style.display = 'none'; mobileOverlay.classList.remove('active'); }
         }
     });
 }
@@ -979,21 +632,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
-        if (themeToggle) {
-            const icon = themeToggle.querySelector('i');
-            if (icon) icon.className = 'fas fa-sun';
-        }
+        if (themeToggle) { const icon = themeToggle.querySelector('i'); if (icon) icon.className = 'fas fa-sun'; }
     }
     
-    document.getElementById('sidebarLogout')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (typeof firebase !== 'undefined' && firebase.auth) {
-            firebase.auth().signOut();
-        }
-    });
-    
-    if (typeof firebase !== 'undefined' && firebase.auth) {
-        firebase.auth().onAuthStateChanged((user) => {
+    if (auth) {
+        auth.onAuthStateChanged((user) => {
             currentUser = user;
             updateUserUI(user);
             loadChats();
@@ -1007,4 +650,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.copyCode = copyCode;
     window.toggleSidebar = toggleSidebar;
     window.closeSidebar = closeSidebar;
+    window.showLogoutConfirmation = showLogoutConfirmation;
 });
+
+console.log('AI Chat Assistant initialized');
