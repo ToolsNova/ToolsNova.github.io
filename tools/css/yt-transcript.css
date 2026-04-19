@@ -1,4 +1,4 @@
-/* YouTube Transcript Generator Specific Styles */
+/* YouTube Transcript Generator Specific Styles - Matching Age Calculator */
 
 .tool-container {
     max-width: 900px;
@@ -98,6 +98,12 @@
     text-align: center;
 }
 
+.dark-mode .error-message {
+    background: #451a1a;
+    color: #fecaca;
+    border-color: #991b1b;
+}
+
 /* Loading */
 .loading {
     text-align: center;
@@ -181,6 +187,10 @@
     margin-bottom: 5px;
 }
 
+.dark-mode .video-details p {
+    color: #9ca3af;
+}
+
 .transcript-stats {
     text-align: right;
     color: #6b7280;
@@ -256,6 +266,89 @@
     font-size: 1rem;
 }
 
+/* ===== INFO SECTION - MATCHING AGE CALCULATOR STYLE ===== */
+.info-section {
+    background: #f9fafb;
+    border-radius: 30px;
+    padding: 30px;
+    margin: 30px 0;
+    border: 1px solid #e5e7eb;
+}
+
+.dark-mode .info-section {
+    background: #111827;
+    border-color: #374151;
+}
+
+.info-section h3 {
+    font-size: 1.3rem;
+    margin: 0 0 15px 0;
+    color: #111827;
+}
+
+.dark-mode .info-section h3 {
+    color: #f9fafb;
+}
+
+.info-section p {
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.dark-mode .info-section p {
+    color: #9ca3af;
+}
+
+.info-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.info-section ul li {
+    padding: 10px 0;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dark-mode .info-section ul li {
+    color: #9ca3af;
+}
+
+.info-section ul li i {
+    width: 20px;
+}
+
+.note {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #3b82f6;
+    font-size: 0.85rem;
+}
+
+.dark-mode .note {
+    background: rgba(59, 130, 246, 0.15);
+}
+
+.note a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.note a:hover {
+    text-decoration: underline;
+}
+
 /* Animation */
 @keyframes fadeIn {
     from {
@@ -296,5 +389,27 @@
     
     .action-btn {
         width: 100%;
+    }
+    
+    .info-section {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tool-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .input-card {
+        padding: 20px;
+    }
+    
+    .url-input {
+        padding: 14px 16px;
+    }
+    
+    .get-btn {
+        padding: 14px;
     }
 }

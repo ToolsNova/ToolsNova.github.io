@@ -1,4 +1,4 @@
-/* AI Content Detector Specific Styles */
+/* AI Content Detector Specific Styles - Matching Age Calculator */
 
 .tool-container {
     max-width: 900px;
@@ -124,6 +124,23 @@
     box-shadow: 0 10px 25px -5px #8b5cf6;
 }
 
+/* Error Message */
+.error-message {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 16px;
+    padding: 15px 20px;
+    color: #dc2626;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.dark-mode .error-message {
+    background: #7f1d1d;
+    border-color: #991b1b;
+    color: #fca5a5;
+}
+
 /* Loading */
 .loading {
     text-align: center;
@@ -184,6 +201,7 @@
     justify-content: center;
     gap: 40px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 .score-circle {
@@ -222,22 +240,16 @@
     text-align: center;
     margin-bottom: 25px;
     padding: 10px;
-    background: #f3f4f6;
     border-radius: 60px;
     display: inline-block;
     padding: 8px 24px;
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
-}
-
-.dark-mode .confidence-badge {
-    background: #374151;
-    color: #f9fafb;
+    font-weight: 500;
 }
 
 .confidence-badge i {
-    color: #10b981;
     margin-right: 5px;
 }
 
@@ -295,7 +307,11 @@
 }
 
 .key-indicators li i {
-    color: #8b5cf6;
+    width: 20px;
+}
+
+.action-buttons {
+    margin-top: 20px;
 }
 
 .new-btn {
@@ -321,10 +337,90 @@
     background: #e5e7eb;
 }
 
+/* ===== INFO SECTION - MATCHING AGE CALCULATOR ===== */
+.info-section {
+    background: #f9fafb;
+    border-radius: 30px;
+    padding: 30px;
+    margin: 30px 0;
+    border: 1px solid #e5e7eb;
+}
+
+.dark-mode .info-section {
+    background: #111827;
+    border-color: #374151;
+}
+
+.info-section h3 {
+    font-size: 1.3rem;
+    margin: 20px 0 15px;
+    color: #111827;
+}
+
+.dark-mode .info-section h3 {
+    color: #f9fafb;
+}
+
+.info-section h3:first-child {
+    margin-top: 0;
+}
+
+.info-section p {
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.dark-mode .info-section p {
+    color: #9ca3af;
+}
+
+.info-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.info-section ul li {
+    padding: 10px 0;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dark-mode .info-section ul li {
+    color: #9ca3af;
+}
+
+.info-section ul li i {
+    width: 20px;
+}
+
+.note {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #3b82f6;
+    font-size: 0.85rem;
+}
+
+.dark-mode .note {
+    background: rgba(59, 130, 246, 0.15);
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .tool-header h1 {
         font-size: 2rem;
+    }
+    
+    .calculator-card {
+        padding: 25px;
     }
     
     .score-container {
@@ -335,6 +431,25 @@
     
     .sample-prompts {
         flex-direction: column;
+    }
+    
+    .info-section {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .calculator-card {
+        padding: 20px;
+    }
+    
+    .score-circle {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .score-value {
+        font-size: 2rem;
     }
 }
 
