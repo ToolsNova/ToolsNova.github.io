@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWG766C86Y"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EWG766C86Y');
+</script>
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon/favicon-48x48.png">
+<link rel="manifest" href="/assets/favicon/site.webmanifest">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
+
+<title>Changelog - ToolsNova v1.0.0</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<meta name="description" content="ToolsNova v1.0.0 release notes and changelog.">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://toolsnova.github.io/changelog.html">
+<meta property="og:title" content="ToolsNova v1.0.0 - Release Notes">
+<meta property="og:description" content="Check out what's new in ToolsNova v1.0.0!">
+<meta property="og:site_name" content="ToolsNova">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="./css/style.css">
+
+<style>
+    .changelog-container {
+        max-width: 800px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+    
+    .changelog-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .changelog-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .version-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        padding: 6px 16px;
+        border-radius: 60px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+    
+    .release-date {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+    
+    .changelog-card {
+        background: var(--bg-primary);
+        border-radius: 24px;
+        border: 1px solid var(--border);
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+    
+    .changelog-card h2 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-primary);
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--border);
+    }
+    
+    .changelog-card h2 i {
+        color: #3b82f6;
+    }
+    
+    .changelog-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .changelog-list li {
+        padding: 12px 0;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .changelog-list li:last-child {
+        border-bottom: none;
+    }
+    
+    .changelog-list li i {
+        margin-top: 2px;
+        font-size: 1rem;
+        width: 20px;
+    }
+    
+    .feature-new i { color: #10b981; }
+    .feature-improved i { color: #3b82f6; }
+    .feature-fixed i { color: #f59e0b; }
+    
+    .back-home {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        margin-bottom: 20px;
+        transition: color 0.2s ease;
+    }
+    
+    .back-home:hover {
+        color: var(--primary);
+    }
+    
+    @media (max-width: 768px) {
+        .changelog-header h1 {
+            font-size: 2rem;
+        }
+        .changelog-card {
+            padding: 20px;
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-star"></i>
+                <span>ToolsNova</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="ai-assistant.html">AI Assistant</a>
+                <a href="./tools.html">Tools</a>
+                <a href="changelog.html">Changelog</a>
+                <!-- These will be dynamically updated by JavaScript -->
+                <div class="auth-links" id="authLinks">
+                    <a href="login.html" class="login-link">Login</a>
+                    <a href="signup.html" class="nav-cta signup-link">Sign Up</a>
+                </div>
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span class="user-greeting" id="userGreeting">Hi, User</span>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <i class="far fa-moon"></i>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="index.html" class="back-home">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        
+        <div class="changelog-header">
+            <div class="version-badge">
+                <i class="fas fa-tag"></i> Version 1.0.0
+            </div>
+            <h1>Release Notes</h1>
+            <p class="release-date">Released: April 20, 2026</p>
+        </div>
+        
+        <!-- What's New -->
+        <div class="changelog-card">
+            <h2><i class="fas fa-sparkle"></i> What's New</h2>
+            <ul class="changelog-list">
+                <li class="feature-new"><i class="fas fa-check-circle"></i> <span>Launch of ToolsNova with 25+ free web tools</span></li>
+                <li class="feature-new"><i class="fas fa-check-circle"></i> <span>AI Assistant powered by Cloudflare Workers</span></li>
+                <li class="feature-new"><i class="fas fa-check-circle"></i> <span>User authentication with Email/Password and Google Sign-In</span></li>
+                <li class="feature-new"><i class="fas fa-check-circle"></i> <span>Guest mode with 3 free uses before sign up</span></li>
+                <li class="feature-new"><i class="fas fa-check-circle"></i> <span>Dark mode support across all pages</span></li>
+                <li class="feature-new"><i class="fas fa-check-circle"></i> <span>Mobile responsive design</span></li>
+                <li class="feature-new"><i class="fas fa-check-circle"></i> <span>Collapsible desktop sidebar</span></li>
+                <li class="feature-new"><i class="fas fa-check-circle"></i> <span>Draggable mobile menu button</span></li>
+            </ul>
+        </div>
+        
+        <!-- Improvements -->
+        <div class="changelog-card">
+            <h2><i class="fas fa-chart-line"></i> Improvements</h2>
+            <ul class="changelog-list">
+                <li class="feature-improved"><i class="fas fa-rocket"></i> <span>Fast loading times with optimized assets</span></li>
+                <li class="feature-improved"><i class="fas fa-palette"></i> <span>Modern and clean UI design</span></li>
+                <li class="feature-improved"><i class="fas fa-search"></i> <span>Search functionality for tools</span></li>
+                <li class="feature-improved"><i class="fas fa-history"></i> <span>Chat history saved locally</span></li>
+            </ul>
+        </div>
+        
+        <!-- Fixed -->
+        <div class="changelog-card">
+            <h2><i class="fas fa-bug"></i> Fixed</h2>
+            <ul class="changelog-list">
+                <li class="feature-fixed"><i class="fas fa-check-circle"></i> <span>Initial release - no known issues</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-star"></i>
+                    <span>ToolsNova</span>
+                    <p>Your universe of professional web tools.</p>
+                    
+                    <div class="guest-info" id="footerGuestInfo">
+                        <i class="fas fa-user-guest"></i>
+                        <span>Guest users get 3 free uses</span>
+                    </div>
+                    
+                    <div class="user-info-footer" id="footerUserInfo" style="display: none;">
+                        <i class="fas fa-crown" style="color: var(--success);"></i>
+                        <span>You have unlimited access</span>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-group">
+                        <h4>Tools</h4>
+                        <a href="tools.html">All Tools</a>
+                        <a href="ai-assistant.html">AI Assistant</a>
+                        <a href="changelog.html">Changelog</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Company</h4>
+                        <a href="about.html">About</a>
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Account</h4>
+                        <a href="login.html">Login</a>
+                        <a href="signup.html">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 ToolsNova. All rights reserved. Version 1.0.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <!-- Global JS -->
+    <script src="./js/script.js"></script>
+    
+    <script>
+        // Dark mode toggle (fallback if global JS doesn't handle it)
+        const themeToggle = document.querySelector('.theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                const icon = this.querySelector('i');
+                icon.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'far fa-moon';
+                localStorage.setItem('toolsnova_darkmode', document.body.classList.contains('dark-mode'));
+            });
+        }
+        if (localStorage.getItem('toolsnova_darkmode') === 'true') {
+            document.body.classList.add('dark-mode');
+            if (themeToggle) themeToggle.querySelector('i').className = 'fas fa-sun';
+        }
+
+        // Mobile menu
+        const mobileBtn = document.querySelector('.mobile-menu-btn');
+        if (mobileBtn && !document.querySelector('.mobile-menu')) {
+            const overlay = document.createElement('div');
+            overlay.className = 'mobile-menu-overlay';
+            const menu = document.createElement('div');
+            menu.className = 'mobile-menu';
+            menu.innerHTML = `
+                <div class="mobile-menu-header">
+                    <div class="mobile-menu-logo"><i class="fas fa-star"></i><span>ToolsNova</span></div>
+                    <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="mobile-menu-links">
+                    <a href="index.html" class="mobile-link">Home</a>
+                    <a href="ai-assistant.html" class="mobile-link">AI Assistant</a>
+                    <a href="tools.html" class="mobile-link">Tools</a>
+                    <a href="about.html" class="mobile-link">About</a>
+                    <a href="changelog.html" class="mobile-link active">Changelog</a>
+                    <a href="login.html" class="mobile-link">Login</a>
+                    <a href="signup.html" class="mobile-link mobile-cta">Sign Up</a>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            document.body.appendChild(menu);
+            
+            mobileBtn.addEventListener('click', () => {
+                menu.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            const closeBtn = menu.querySelector('.mobile-menu-close');
+            const closeMenu = () => {
+                menu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            };
+            if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+            overlay.addEventListener('click', closeMenu);
+        }
+    </script>
+</body>
+</html>

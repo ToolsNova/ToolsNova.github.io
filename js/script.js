@@ -476,25 +476,32 @@ if (mobileBtn) {
         const basePath = isInTools ? '../' : './';
         
         let menuLinks = `
-            <div class="mobile-menu-header"><div class="mobile-menu-logo"><i class="fas fa-star"></i><span>ToolsNova</span></div><button class="mobile-menu-close"><i class="fas fa-times"></i></button></div>
-            <div class="mobile-menu-links">
-                <a href="${basePath}index.html" class="mobile-link">Home</a>
-                <a href="${basePath}ai-assistant.html" class="mobile-link">AI Assistant</a>
-                <a href="${basePath}tools.html" class="mobile-link">All Tools</a>
-                <div class="mobile-menu-category-title">For You! 🔥</div>
-                <a href="${basePath}tools.html#media" class="mobile-link">📹 Media Tools</a>
-                <a href="${basePath}tools.html#ai" class="mobile-link">🤖 AI Tools</a>
-                <a href="${basePath}tools.html#image" class="mobile-link">🎨 Image Editor</a>
-                <a href="${basePath}tools.html#code" class="mobile-link">💻 Code Editors</a>
-                <a href="${basePath}tools.html#calc" class="mobile-link">🧮 Calculators</a>
-                <div class="mobile-menu-divider"></div>
-                <a href="${basePath}about.html" class="mobile-link">About</a>
-                <a href="${basePath}privacy.html" class="mobile-link">Privacy</a>
-                <a href="${basePath}terms.html" class="mobile-link">Terms</a>
-                <a href="${basePath}contact.html" class="mobile-link">Contact</a>
-                <div class="mobile-menu-divider"></div>
-                <button class="mobile-link" id="mobileDarkToggle"><i class="fas fa-moon"></i> Dark Mode</button>
-                <div class="mobile-menu-divider"></div>
+        <div class="mobile-menu-header">
+        <div class="mobile-menu-logo">
+            <i class="fas fa-star"></i>
+            <span>ToolsNova</span>
+        </div>
+        <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mobile-menu-links">
+        <a href="${basePath}index.html" class="mobile-link">Home</a>
+        <a href="${basePath}ai-assistant.html" class="mobile-link">AI Assistant</a>
+        <a href="${basePath}tools.html" class="mobile-link">All Tools</a>
+        <a href="${basePath}changelog.html" class="mobile-link">Changelog</a>
+        <div class="mobile-menu-category-title">For You! 🔥</div>
+        <a href="${basePath}tools.html#media" class="mobile-link">📹 Media Tools</a>
+        <a href="${basePath}tools.html#ai" class="mobile-link">🤖 AI Tools</a>
+        <a href="${basePath}tools.html#image" class="mobile-link">🎨 Image Editor</a>
+        <a href="${basePath}tools.html#code" class="mobile-link">💻 Code Editors</a>
+        <a href="${basePath}tools.html#calc" class="mobile-link">🧮 Calculators</a>
+        <div class="mobile-menu-divider"></div>
+        <a href="${basePath}about.html" class="mobile-link">About</a>
+        <a href="${basePath}privacy.html" class="mobile-link">Privacy</a>
+        <a href="${basePath}terms.html" class="mobile-link">Terms</a>
+        <a href="${basePath}contact.html" class="mobile-link">Contact</a>
+        <div class="mobile-menu-divider"></div>
+        <button class="mobile-link" id="mobileDarkToggle"><i class="fas fa-moon"></i> Dark Mode</button>
+        <div class="mobile-menu-divider"></div>
         `;
         
         if (user) {
