@@ -503,3 +503,46 @@
         padding: 14px;
     }
 }
+
+.thumbnail-card {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.thumbnail-quality {
+    font-weight: bold;
+    margin: 10px 0 5px;
+}
+
+.thumbnail-resolution {
+    font-size: 12px;
+    color: #666;
+}
+
+.thumbnail-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.thumbnail-btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.download-btn {
+    background: #4CAF50;
+    color: white;
+}
+
+.copy-btn {
+    background: #2196F3;
+    color: white;
+}
