@@ -1,7 +1,7 @@
-// ===== YOUTUBE TRANSCRIPT GENERATOR - PRODUCTION VERSION =====
+// ===== YOUTUBE TRANSCRIPT GENERATOR - WORKING PRODUCTION VERSION =====
 // ✅ Works on GitHub Pages
-// ✅ Unlimited requests
 // ✅ No API keys needed
+// ✅ Multiple fallback proxies
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('YouTube Transcript Generator loaded');
@@ -107,25 +107,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Main function to fetch transcript
     async function fetchTranscript(videoId) {
-        // Try multiple proxies (one will work on production)
-        const proxies = [
-            `https://cors-anywhere.herokuapp.com/https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`,
-            `https://api.allorigins.win/raw?url=https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`,
-            `https://corsproxy.io/?https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`
+        // Try multiple proxy services
+        const proxyUrls = [
+            `https://thingproxy.freeboard.io/fetch/https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`,
+            `https://corsproxy.io/?https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`,
+            `https://api.allorigins.win/raw?url=https://www.youtube.com/api/timedtext?lang=en&v=${videoId}&_=${Date.now()}`
         ];
         
-        for (const proxy of proxies) {
+        for (const proxyUrl of proxyUrls) {
             try {
-                const response = await fetch(proxy);
+                console.log('Trying:', proxyUrl.substring(0, 50));
+                const response = await fetch(proxyUrl);
+                
                 if (response.ok) {
                     const xmlText = await response.text();
                     if (xmlText && xmlText.includes('<text')) {
+                        console.log('✅ Success with proxy');
                         return parseXMLTranscript(xmlText);
                     }
                 }
             } catch (e) {
+                console.log('Proxy failed:', e.message);
                 continue;
             }
         }
@@ -152,6 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return segments.length > 0 ? segments : null;
         } catch (e) {
+            console.error('Parse error:', e);
             return null;
         }
     }
@@ -185,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const segments = await fetchTranscript(videoId);
             
             if (!segments || segments.length === 0) {
-                showError('❌ No transcript available for this video.\n\n💡 Tips:\n• Video must have captions enabled\n• Look for the [CC] button on YouTube\n• Try: TED Talks, educational videos, news channels');
+                showError('❌ No transcript available for this video.\n\n💡 Tips:\n• Video must have captions/subtitles enabled\n• Look for the [CC] button on YouTube\n• Try this test video: https://youtu.be/Gc4HGQHgeFE');
                 loading.style.display = 'none';
                 return;
             }
@@ -212,6 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
             resultCard.style.display = 'block';
             
         } catch (error) {
+            console.error('Error:', error);
             loading.style.display = 'none';
             showError('An error occurred. Please try again.');
         }
