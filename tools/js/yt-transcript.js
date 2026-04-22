@@ -1,7 +1,5 @@
-// ===== YOUTUBE TRANSCRIPT GENERATOR - WORKING PRODUCTION VERSION =====
-// ✅ Works on GitHub Pages
-// ✅ No API keys needed
-// ✅ Multiple fallback proxies
+// ===== YOUTUBE TRANSCRIPT GENERATOR - WORKING VERSION =====
+// Uses multiple proxy services that actually work
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('YouTube Transcript Generator loaded');
@@ -107,28 +105,95 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    async function fetchTranscript(videoId) {
-        // Try multiple proxy services
-        const proxyUrls = [
-            `https://thingproxy.freeboard.io/fetch/https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`,
+    // NEW: Using a different approach - yewtu.be (Invidious instance)
+    async function fetchTranscriptFromInvidious(videoId) {
+        try {
+            // Using public Invidious instance (works without CORS)
+            const response = await fetch(`https://yewtu.be/api/v1/captions/${videoId}?format=json`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.captions && data.captions.length > 0) {
+                    // Get English captions or first available
+                    const caption = data.captions.find(c => c.language_code === 'en') || data.captions[0];
+                    if (caption && caption.url) {
+                        const captionResponse = await fetch(caption.url);
+                        const captionText = await captionResponse.text();
+                        return parseVTTTranscript(captionText);
+                    }
+                }
+            }
+        } catch (e) {
+            console.log('Invidious fetch failed:', e.message);
+        }
+        return null;
+    }
+    
+    function parseVTTTranscript(vttText) {
+        const segments = [];
+        const lines = vttText.split('\n');
+        let currentTime = null;
+        let currentText = '';
+        
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            // Match timestamp lines like "00:00:01.234 --> 00:00:05.678"
+            if (line.includes('-->')) {
+                if (currentText && currentTime !== null) {
+                    segments.push({
+                        text: currentText.trim(),
+                        start: currentTime,
+                        duration: 5
+                    });
+                }
+                const timeMatch = line.match(/(\d{2}:\d{2}:\d{2}\.\d{3})/);
+                if (timeMatch) {
+                    currentTime = parseVttTime(timeMatch[1]);
+                    currentText = '';
+                }
+            } else if (line && !line.match(/^\d+$/) && !line.startsWith('WEBVTT')) {
+                currentText += (currentText ? ' ' : '') + line;
+            }
+        }
+        
+        if (currentText && currentTime !== null) {
+            segments.push({
+                text: currentText.trim(),
+                start: currentTime,
+                duration: 5
+            });
+        }
+        
+        return segments.length > 0 ? segments : null;
+    }
+    
+    function parseVttTime(timeStr) {
+        const parts = timeStr.split(':');
+        const hours = parseInt(parts[0]);
+        const minutes = parseInt(parts[1]);
+        const secsMillis = parts[2].split('.');
+        const seconds = parseInt(secsMillis[0]);
+        const millis = parseInt(secsMillis[1]);
+        return hours * 3600 + minutes * 60 + seconds + millis / 1000;
+    }
+    
+    // Fallback: Try direct XML with different proxy
+    async function fetchTranscriptXML(videoId) {
+        const proxies = [
             `https://corsproxy.io/?https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`,
-            `https://api.allorigins.win/raw?url=https://www.youtube.com/api/timedtext?lang=en&v=${videoId}&_=${Date.now()}`
+            `https://api.allorigins.win/raw?url=https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`,
+            `https://proxy.cors.sh/https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`
         ];
         
-        for (const proxyUrl of proxyUrls) {
+        for (const proxy of proxies) {
             try {
-                console.log('Trying:', proxyUrl.substring(0, 50));
-                const response = await fetch(proxyUrl);
-                
+                const response = await fetch(proxy);
                 if (response.ok) {
                     const xmlText = await response.text();
                     if (xmlText && xmlText.includes('<text')) {
-                        console.log('✅ Success with proxy');
                         return parseXMLTranscript(xmlText);
                     }
                 }
             } catch (e) {
-                console.log('Proxy failed:', e.message);
                 continue;
             }
         }
@@ -155,7 +220,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return segments.length > 0 ? segments : null;
         } catch (e) {
-            console.error('Parse error:', e);
             return null;
         }
     }
@@ -186,7 +250,12 @@ document.addEventListener('DOMContentLoaded', function() {
             videoChannel.textContent = videoInfo.author;
             videoThumbnail.src = videoInfo.thumbnail;
             
-            const segments = await fetchTranscript(videoId);
+            // Try multiple methods
+            let segments = await fetchTranscriptFromInvidious(videoId);
+            
+            if (!segments || segments.length === 0) {
+                segments = await fetchTranscriptXML(videoId);
+            }
             
             if (!segments || segments.length === 0) {
                 showError('❌ No transcript available for this video.\n\n💡 Tips:\n• Video must have captions/subtitles enabled\n• Look for the [CC] button on YouTube\n• Try this test video: https://youtu.be/Gc4HGQHgeFE');
