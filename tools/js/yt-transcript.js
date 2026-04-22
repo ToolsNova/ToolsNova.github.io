@@ -1,8 +1,11 @@
-// ===== YOUTUBE TRANSCRIPT GENERATOR - WORKING VERSION =====
-// Uses multiple proxy services that actually work
+// ===== YOUTUBE TRANSCRIPT GENERATOR - RAPIDAPI VERSION =====
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('YouTube Transcript Generator loaded');
+    
+    // 🔑 YOUR RAPIDAPI KEY (same as your MP3 tool)
+    const RAPIDAPI_KEY = '4b36c31694msh1cdcec0b31dc05bp11f6f8jsn9c48a958e28f';
+    const RAPIDAPI_HOST = 'youtube-transcript3.p.rapidapi.com';
     
     // DOM elements
     const videoUrlInput = document.getElementById('videoUrl');
@@ -12,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultCard = document.getElementById('resultCard');
     const videoTitle = document.getElementById('videoTitle');
     const videoChannel = document.getElementById('videoChannel');
+    const videoDuration = document.getElementById('videoDuration');
     const transcriptInfo = document.getElementById('transcriptInfo');
     const videoThumbnail = document.getElementById('videoThumbnail');
     const transcriptBox = document.getElementById('transcriptBox');
@@ -22,16 +26,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const downloadSrtBtn = document.getElementById('downloadSrtBtn');
     const downloadVttBtn = document.getElementById('downloadVttBtn');
     
-    let currentTranscriptData = null;
+    // Store current transcript data
+    let currentTranscript = null;
     let currentVideoId = null;
-    let currentSegments = null;
     
+    // Extract video ID from various YouTube URL formats
     function extractVideoId(url) {
         const patterns = [
             /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/,
             /youtube\.com\/embed\/([^/?]+)/,
             /youtube\.com\/shorts\/([^/?]+)/
         ];
+        
         for (let pattern of patterns) {
             const match = url.match(pattern);
             if (match) return match[1];
@@ -48,52 +54,40 @@ document.addEventListener('DOMContentLoaded', function() {
         errorMessage.style.display = 'block';
         loading.style.display = 'none';
         resultCard.style.display = 'none';
+        
         setTimeout(() => {
             errorMessage.style.display = 'none';
-        }, 8000);
+        }, 5000);
     }
     
+    // Format time (seconds to HH:MM:SS)
     function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${minutes}:${secs.toString().padStart(2, '0')}`;
-    }
-    
-    function formatSrtTime(seconds) {
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
         const secs = Math.floor(seconds % 60);
-        const millis = Math.floor((seconds % 1) * 1000);
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')},${millis.toString().padStart(3, '0')}`;
+        
+        if (hours > 0) {
+            return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        } else {
+            return `${minutes}:${secs.toString().padStart(2, '0')}`;
+        }
     }
     
-    function formatVttTime(seconds) {
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const secs = Math.floor(seconds % 60);
-        const millis = Math.floor((seconds % 1) * 1000);
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}.${millis.toString().padStart(3, '0')}`;
-    }
-    
+    // Calculate reading time
     function calculateReadingTime(text) {
-        const words = text.split(/\s+/).filter(w => w.length > 0).length;
+        const words = text.split(/\s+/).length;
         const minutes = Math.ceil(words / 200);
         return { words, minutes };
     }
     
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-    
+    // Get video info from YouTube oEmbed
     async function getVideoInfo(videoId) {
         try {
             const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
             const data = await response.json();
             return {
-                title: data.title || 'YouTube Video',
-                author: data.author_name || 'YouTube',
+                title: data.title,
+                author: data.author_name,
                 thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
             };
         } catch (error) {
@@ -105,125 +99,41 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // NEW: Using a different approach - yewtu.be (Invidious instance)
-    async function fetchTranscriptFromInvidious(videoId) {
+    // Fetch transcript using RapidAPI
+    async function fetchTranscript(videoId) {
+        const url = `https://${RAPIDAPI_HOST}/api/transcript?videoId=${videoId}`;
+        
         try {
-            // Using public Invidious instance (works without CORS)
-            const response = await fetch(`https://yewtu.be/api/v1/captions/${videoId}?format=json`);
-            if (response.ok) {
-                const data = await response.json();
-                if (data.captions && data.captions.length > 0) {
-                    // Get English captions or first available
-                    const caption = data.captions.find(c => c.language_code === 'en') || data.captions[0];
-                    if (caption && caption.url) {
-                        const captionResponse = await fetch(caption.url);
-                        const captionText = await captionResponse.text();
-                        return parseVTTTranscript(captionText);
-                    }
+            const response = await fetch(url, {
+                headers: {
+                    'x-rapidapi-host': RAPIDAPI_HOST,
+                    'x-rapidapi-key': RAPIDAPI_KEY
                 }
-            }
-        } catch (e) {
-            console.log('Invidious fetch failed:', e.message);
-        }
-        return null;
-    }
-    
-    function parseVTTTranscript(vttText) {
-        const segments = [];
-        const lines = vttText.split('\n');
-        let currentTime = null;
-        let currentText = '';
-        
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i].trim();
-            // Match timestamp lines like "00:00:01.234 --> 00:00:05.678"
-            if (line.includes('-->')) {
-                if (currentText && currentTime !== null) {
-                    segments.push({
-                        text: currentText.trim(),
-                        start: currentTime,
-                        duration: 5
-                    });
-                }
-                const timeMatch = line.match(/(\d{2}:\d{2}:\d{2}\.\d{3})/);
-                if (timeMatch) {
-                    currentTime = parseVttTime(timeMatch[1]);
-                    currentText = '';
-                }
-            } else if (line && !line.match(/^\d+$/) && !line.startsWith('WEBVTT')) {
-                currentText += (currentText ? ' ' : '') + line;
-            }
-        }
-        
-        if (currentText && currentTime !== null) {
-            segments.push({
-                text: currentText.trim(),
-                start: currentTime,
-                duration: 5
             });
-        }
-        
-        return segments.length > 0 ? segments : null;
-    }
-    
-    function parseVttTime(timeStr) {
-        const parts = timeStr.split(':');
-        const hours = parseInt(parts[0]);
-        const minutes = parseInt(parts[1]);
-        const secsMillis = parts[2].split('.');
-        const seconds = parseInt(secsMillis[0]);
-        const millis = parseInt(secsMillis[1]);
-        return hours * 3600 + minutes * 60 + seconds + millis / 1000;
-    }
-    
-    // Fallback: Try direct XML with different proxy
-    async function fetchTranscriptXML(videoId) {
-        const proxies = [
-            `https://corsproxy.io/?https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`,
-            `https://api.allorigins.win/raw?url=https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`,
-            `https://proxy.cors.sh/https://www.youtube.com/api/timedtext?lang=en&v=${videoId}`
-        ];
-        
-        for (const proxy of proxies) {
-            try {
-                const response = await fetch(proxy);
-                if (response.ok) {
-                    const xmlText = await response.text();
-                    if (xmlText && xmlText.includes('<text')) {
-                        return parseXMLTranscript(xmlText);
-                    }
-                }
-            } catch (e) {
-                continue;
-            }
-        }
-        return null;
-    }
-    
-    function parseXMLTranscript(xmlText) {
-        try {
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-            const textElements = xmlDoc.getElementsByTagName('text');
             
-            const segments = [];
-            for (let i = 0; i < textElements.length; i++) {
-                const el = textElements[i];
-                const text = el.textContent;
-                if (text && text.trim()) {
-                    segments.push({
-                        text: text.trim(),
-                        start: parseFloat(el.getAttribute('start') || 0),
-                        duration: parseFloat(el.getAttribute('dur') || 5)
-                    });
-                }
+            if (!response.ok) {
+                throw new Error(`API error: ${response.status}`);
             }
-            return segments.length > 0 ? segments : null;
-        } catch (e) {
-            return null;
+            
+            const data = await response.json();
+            console.log('Transcript data:', data); // Debug log
+            
+            // Handle different response formats
+            if (data.transcript) {
+                return data.transcript;
+            } else if (data) {
+                return data;
+            } else {
+                throw new Error('No transcript data');
+            }
+            
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
         }
     }
     
+    // Process video
     async function processVideo() {
         const url = videoUrlInput.value.trim();
         
@@ -240,136 +150,155 @@ document.addEventListener('DOMContentLoaded', function() {
         const videoId = extractVideoId(url);
         currentVideoId = videoId;
         
+        // Show loading
         loading.style.display = 'block';
         resultCard.style.display = 'none';
         errorMessage.style.display = 'none';
         
         try {
+            // Get video info
             const videoInfo = await getVideoInfo(videoId);
             videoTitle.textContent = videoInfo.title;
             videoChannel.textContent = videoInfo.author;
             videoThumbnail.src = videoInfo.thumbnail;
             
-            // Try multiple methods
-            let segments = await fetchTranscriptFromInvidious(videoId);
+            // Fetch transcript
+            const transcriptData = await fetchTranscript(videoId);
             
-            if (!segments || segments.length === 0) {
-                segments = await fetchTranscriptXML(videoId);
-            }
+            // Store for downloads
+            currentTranscript = transcriptData;
             
-            if (!segments || segments.length === 0) {
-                showError('❌ No transcript available for this video.\n\n💡 Tips:\n• Video must have captions/subtitles enabled\n• Look for the [CC] button on YouTube\n• Try this test video: https://youtu.be/Gc4HGQHgeFE');
-                loading.style.display = 'none';
-                return;
-            }
-            
-            currentSegments = segments;
-            
+            // Build transcript HTML
             let transcriptHTML = '';
             let fullText = '';
             
-            for (const segment of segments) {
-                fullText += segment.text + ' ';
-                transcriptHTML += `<p><span style="color: #3b82f6; font-weight: 500;">[${formatTime(segment.start)}]</span> ${escapeHtml(segment.text)}</p>`;
+            if (Array.isArray(transcriptData)) {
+                // Format with timestamps
+                transcriptHTML = transcriptData.map(item => {
+                    const text = item.text || '';
+                    fullText += text + ' ';
+                    const time = item.offset || 0;
+                    return `<p><span class="timestamp">[${formatTime(time)}]</span> ${text}</p>`;
+                }).join('');
+            } else if (typeof transcriptData === 'object') {
+                // Try different object formats
+                fullText = JSON.stringify(transcriptData);
+                transcriptHTML = `<p>${fullText}</p>`;
+            } else {
+                fullText = String(transcriptData);
+                transcriptHTML = `<p>${fullText}</p>`;
             }
             
+            // Calculate stats
             const { words, minutes } = calculateReadingTime(fullText);
             
-            transcriptInfo.textContent = `✅ Transcript found (${segments.length} lines)`;
+            // Update UI
+            transcriptInfo.textContent = `Transcript found (${Array.isArray(transcriptData) ? transcriptData.length : 'text'} lines)`;
             wordCount.textContent = `${words} words`;
             readingTime.textContent = `~${minutes} min read`;
             transcriptBox.innerHTML = transcriptHTML;
-            currentTranscriptData = fullText.trim();
             
+            // Hide loading, show result
             loading.style.display = 'none';
             resultCard.style.display = 'block';
             
+            // Track usage
+            trackToolUsage();
+            
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Process error:', error);
             loading.style.display = 'none';
-            showError('An error occurred. Please try again.');
+            
+            // Still show video info
+            const videoInfo = await getVideoInfo(videoId);
+            videoTitle.textContent = videoInfo.title;
+            videoChannel.textContent = videoInfo.author;
+            videoThumbnail.src = videoInfo.thumbnail;
+            
+            transcriptBox.innerHTML = '<p class="error">No transcript available for this video. The video may not have captions.</p>';
+            resultCard.style.display = 'block';
         }
     }
     
-    function generateSRT(segments) {
-        let srt = '';
-        for (let i = 0; i < segments.length; i++) {
-            const seg = segments[i];
-            srt += `${i + 1}\n${formatSrtTime(seg.start)} --> ${formatSrtTime(seg.start + seg.duration)}\n${seg.text}\n\n`;
+    // Copy to clipboard
+    copyBtn.addEventListener('click', function() {
+        const text = transcriptBox.innerText;
+        if (text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const original = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = original;
+                }, 2000);
+            });
         }
-        return srt;
-    }
+    });
     
-    function generateVTT(segments) {
-        let vtt = 'WEBVTT\n\n';
-        for (let i = 0; i < segments.length; i++) {
-            const seg = segments[i];
-            vtt += `${formatVttTime(seg.start)} --> ${formatVttTime(seg.start + seg.duration)}\n${seg.text}\n\n`;
+    // Download as TXT
+    downloadTxtBtn.addEventListener('click', function() {
+        const text = transcriptBox.innerText;
+        if (!text) return;
+        
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `transcript-${currentVideoId}.txt`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    });
+    
+    // Track tool usage
+    function trackToolUsage() {
+        if (typeof firebase !== 'undefined') {
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                let guestUses = localStorage.getItem('toolsnova_guest_uses') ? 
+                    parseInt(localStorage.getItem('toolsnova_guest_uses')) : 0;
+                guestUses++;
+                localStorage.setItem('toolsnova_guest_uses', guestUses);
+            }
         }
-        return vtt;
     }
     
     // Event listeners
-    if (copyBtn) {
-        copyBtn.addEventListener('click', () => {
-            if (currentTranscriptData) {
-                navigator.clipboard.writeText(currentTranscriptData);
-                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                setTimeout(() => copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy Text', 2000);
-            }
-        });
-    }
-    
-    if (downloadTxtBtn) {
-        downloadTxtBtn.addEventListener('click', () => {
-            if (currentTranscriptData) {
-                const blob = new Blob([currentTranscriptData], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `transcript-${currentVideoId}.txt`;
-                a.click();
-                URL.revokeObjectURL(url);
-            }
-        });
-    }
-    
-    if (downloadSrtBtn) {
-        downloadSrtBtn.addEventListener('click', () => {
-            if (currentSegments) {
-                const srt = generateSRT(currentSegments);
-                const blob = new Blob([srt], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `transcript-${currentVideoId}.srt`;
-                a.click();
-                URL.revokeObjectURL(url);
-            }
-        });
-    }
-    
-    if (downloadVttBtn) {
-        downloadVttBtn.addEventListener('click', () => {
-            if (currentSegments) {
-                const vtt = generateVTT(currentSegments);
-                const blob = new Blob([vtt], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `transcript-${currentVideoId}.vtt`;
-                a.click();
-                URL.revokeObjectURL(url);
-            }
-        });
-    }
-    
-    if (getBtn) {
-        getBtn.addEventListener('click', processVideo);
-    }
-    if (videoUrlInput) {
-        videoUrlInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') processVideo();
-        });
-    }
+    getBtn.addEventListener('click', processVideo);
+    videoUrlInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') processVideo();
+    });
 });
+
+// Firebase auth state observer
+if (typeof firebase !== 'undefined') {
+    firebase.auth().onAuthStateChanged(function(user) {
+        const authLinks = document.getElementById('authLinks');
+        const userMenu = document.getElementById('userMenu');
+        const userGreeting = document.getElementById('userGreeting');
+        const footerLogin = document.getElementById('footerLogin');
+        const footerSignup = document.getElementById('footerSignup');
+        const footerLogout = document.getElementById('footerLogout');
+        const footerGuestInfo = document.getElementById('footerGuestInfo');
+        const footerUserInfo = document.getElementById('footerUserInfo');
+        
+        if (user) {
+            if (authLinks) authLinks.style.display = 'none';
+            if (userMenu) {
+                userMenu.style.display = 'flex';
+                if (userGreeting) userGreeting.textContent = `Hi, ${user.email.split('@')[0]}`;
+            }
+            if (footerLogin) footerLogin.style.display = 'none';
+            if (footerSignup) footerSignup.style.display = 'none';
+            if (footerLogout) footerLogout.style.display = 'block';
+            if (footerGuestInfo) footerGuestInfo.style.display = 'none';
+            if (footerUserInfo) footerUserInfo.style.display = 'flex';
+        } else {
+            if (authLinks) authLinks.style.display = 'flex';
+            if (userMenu) userMenu.style.display = 'none';
+            if (footerLogin) footerLogin.style.display = 'block';
+            if (footerSignup) footerSignup.style.display = 'block';
+            if (footerLogout) footerLogout.style.display = 'none';
+            if (footerGuestInfo) footerGuestInfo.style.display = 'flex';
+            if (footerUserInfo) footerUserInfo.style.display = 'none';
+        }
+    });
+}
