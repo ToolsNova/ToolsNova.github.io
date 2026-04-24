@@ -2342,3 +2342,349 @@ body.sidebar-collapsed .navbar {
         transform: translateY(0);
     }
 }
+
+/* ===== RESPONSIVE TABLES FOR AI ASSISTANT ===== */
+
+/* Make tables responsive on mobile */
+.data-table,
+.message-bubble table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+/* Better table styling */
+.data-table th,
+.message-bubble table th {
+    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.data-table td,
+.message-bubble table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+}
+
+.data-table tr:last-child td,
+.message-bubble table tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tr:hover,
+.message-bubble table tr:hover {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+/* Dark mode table styles */
+.dark-mode .data-table,
+.dark-mode .message-bubble table {
+    border-color: #374151;
+}
+
+.dark-mode .data-table td,
+.dark-mode .message-bubble table td {
+    border-bottom-color: #374151;
+    color: #f9fafb;
+}
+
+.dark-mode .data-table tr:hover,
+.dark-mode .message-bubble table tr:hover {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+/* Mobile responsive table styles */
+@media (max-width: 768px) {
+    .data-table,
+    .message-bubble table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+        font-size: 0.8rem;
+    }
+    
+    .data-table th,
+    .message-bubble table th,
+    .data-table td,
+    .message-bubble table td {
+        padding: 8px 12px;
+    }
+    
+    /* Alternative: Convert table to cards on very small screens */
+    @media (max-width: 480px) {
+        .data-table,
+        .message-bubble table {
+            display: block;
+            width: 100%;
+        }
+        
+        .data-table thead,
+        .message-bubble table thead {
+            display: none;
+        }
+        
+        .data-table tbody,
+        .message-bubble table tbody {
+            display: block;
+        }
+        
+        .data-table tr,
+        .message-bubble table tr {
+            display: block;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px;
+            background: var(--bg-primary);
+        }
+        
+        .dark-mode .data-table tr,
+        .dark-mode .message-bubble table tr {
+            background: var(--bg-secondary);
+        }
+        
+        .data-table td,
+        .message-bubble table td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border);
+            text-align: right;
+            white-space: normal;
+            word-break: break-word;
+        }
+        
+        .data-table td:last-child,
+        .message-bubble table td:last-child {
+            border-bottom: none;
+        }
+        
+        .data-table td::before,
+        .message-bubble table td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            text-align: left;
+            margin-right: 15px;
+            color: var(--primary);
+        }
+    }
+}
+
+/* Scrollable table wrapper for better UX */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 15px 0;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.table-wrapper table {
+    margin: 0;
+    border: none;
+}
+
+/* Table compact mode for better readability */
+.table-compact th,
+.table-compact td {
+    padding: 6px 10px;
+}
+
+/* Striped tables for better readability */
+.table-striped tbody tr:nth-child(even) {
+    background: rgba(59, 130, 246, 0.03);
+}
+
+.dark-mode .table-striped tbody tr:nth-child(even) {
+    background: rgba(59, 130, 246, 0.08);
+}
+
+/* ===== MOBILE RESPONSIVE TABLES - FIXED VERSION ===== */
+
+/* Force tables to be responsive on all screen sizes */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 15px 0;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    position: relative;
+}
+
+.table-wrapper table {
+    width: 100%;
+    min-width: 500px;
+    margin: 0;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* For AI Assistant message tables */
+.message-bubble .table-wrapper {
+    margin: 10px 0;
+}
+
+.message-bubble table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.message-bubble th,
+.message-bubble td {
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid var(--border);
+}
+
+.message-bubble th {
+    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    color: white;
+    font-weight: 600;
+}
+
+.message-bubble td {
+    color: var(--text-primary);
+}
+
+/* Dark mode */
+.dark-mode .message-bubble td {
+    color: #f9fafb;
+}
+
+/* Mobile: Make tables scrollable horizontally */
+@media (max-width: 768px) {
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table-wrapper table {
+        min-width: 550px;
+        font-size: 0.8rem;
+    }
+    
+    .message-bubble th,
+    .message-bubble td {
+        padding: 8px 10px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Very small screens: Convert table to cards */
+@media (max-width: 480px) {
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Keep horizontal scroll instead of card conversion for better UX */
+    .table-wrapper table {
+        min-width: 500px;
+    }
+    
+    /* Add scroll indicator */
+    .table-wrapper::after {
+        content: '← scroll →';
+        display: block;
+        text-align: center;
+        font-size: 0.7rem;
+        color: var(--text-tertiary);
+        margin-top: 5px;
+        padding: 4px;
+        background: var(--bg-tertiary);
+        border-radius: 20px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* For tables without wrapper - auto wrap */
+@media (max-width: 768px) {
+    .message-bubble table:not(.no-responsive) {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .message-bubble table:not(.no-responsive) th,
+    .message-bubble table:not(.no-responsive) td {
+        white-space: nowrap;
+    }
+}
+
+/* Style for the scroll indicator */
+.scroll-hint {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+    text-align: right;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.scroll-hint i {
+    font-size: 0.6rem;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(3px); }
+}
+
+/* Responsive table with data-label fallback */
+@media (max-width: 480px) {
+    .responsive-table thead {
+        display: none;
+    }
+    
+    .responsive-table tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px;
+    }
+    
+    .responsive-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--border);
+        text-align: right;
+    }
+    
+    .responsive-table td:last-child {
+        border-bottom: none;
+    }
+    
+    .responsive-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        text-align: left;
+        margin-right: 15px;
+        color: var(--primary);
+    }
+}

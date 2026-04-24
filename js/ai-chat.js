@@ -1,4 +1,4 @@
-// ===== AI CHAT ASSISTANT - WITH LOGOUT CONFIRMATION =====
+// ===== AI CHAT ASSISTANT - WITH LOGOUT CONFIRMATION & ENHANCED AI =====
 
 // ===== GOOGLE ANALYTICS =====
 window.dataLayer = window.dataLayer || [];
@@ -10,21 +10,23 @@ gtag('config', 'G-EWG766C86Y', {
 });
 
 // ===== FIREBASE CONFIG - SAME AS MAIN SITE =====
-const firebaseConfig = {
-    apiKey: "AIzaSyC6rF7Pg7j-NPioZ8Ei70GCj_megjD7UQw",
-    authDomain: "toolsnova-user.firebaseapp.com",
-    projectId: "toolsnova-user",
-    storageBucket: "toolsnova-user.firebasestorage.app",
-    messagingSenderId: "907228879212",
-    appId: "1:907228879212:web:7e82b085899deb14857b49",
-    measurementId: "G-EWG766C86Y"
-};
+if (typeof window.firebaseConfig === 'undefined') {
+    window.firebaseConfig = {
+        apiKey: "AIzaSyC6rF7Pg7j-NPioZ8Ei70GCj_megjD7UQw",
+        authDomain: "toolsnova-user.firebaseapp.com",
+        projectId: "toolsnova-user",
+        storageBucket: "toolsnova-user.firebasestorage.app",
+        messagingSenderId: "907228879212",
+        appId: "1:907228879212:web:7e82b085899deb14857b49",
+        measurementId: "G-EWG766C86Y"
+    };
+}
 
 // Initialize Firebase
 let auth = null;
 if (typeof firebase !== 'undefined') {
     if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(window.firebaseConfig);
     }
     auth = firebase.auth();
 } else {
@@ -54,10 +56,10 @@ function trackGuestMessage() {
         
         const remaining = MAX_GUEST_MESSAGES - messagesSent;
         if (remaining === 0) {
-            showNotification('You have used all 3 free messages. Sign up for unlimited access!', 'warning');
+            showNotification('✨ You have used all 3 free messages! Sign up for unlimited access!', 'warning');
             setTimeout(() => { window.location.href = 'signup.html'; }, 2000);
         } else if (remaining > 0) {
-            showNotification(`You have ${remaining} free ${remaining === 1 ? 'message' : 'messages'} left. Sign up for unlimited!`, 'info');
+            showNotification(`📬 You have ${remaining} free ${remaining === 1 ? 'message' : 'messages'} left. Sign up for unlimited!`, 'info');
         }
     }
 }
@@ -97,7 +99,7 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// ===== LOGOUT CONFIRMATION MODAL (SAME AS MAIN SITE) =====
+// ===== LOGOUT CONFIRMATION MODAL =====
 function showLogoutConfirmation() {
     let modalOverlay = document.getElementById('logoutModal');
     if (!modalOverlay) {
@@ -158,7 +160,7 @@ function closeLogoutModal() {
 function executeLogout() {
     if (auth) {
         auth.signOut().then(() => {
-            showNotification('Logged out successfully!', 'success');
+            showNotification('👋 Logged out successfully!', 'success');
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 1500);
@@ -245,27 +247,107 @@ async function processFiles(files) {
     return processedFiles;
 }
 
-// ===== AI ASSISTANT CLASS =====
+// ===== ENHANCED AI ASSISTANT CLASS =====
 class AIAssistant {
     constructor() {
         this.messages = [];
     }
-    loadMessages(msgs) { this.messages = [...msgs]; }
-    clearMessages() { this.messages = []; }
     
+    loadMessages(msgs) { 
+        this.messages = [...msgs]; 
+    }
+    
+    clearMessages() { 
+        this.messages = []; 
+    }
+    
+    getSystemPrompt(userMessage, files, messageCount, historyText) {
+        return `You are ToolsNova AI, a friendly, knowledgeable, and enthusiastic assistant for ToolsNova.com.
+
+## YOUR PERSONALITY
+- Be warm, friendly, and conversational (use occasional emojis like 😊, 🎉, 💡, ✅)
+- Be enthusiastic and positive about helping
+- Be patient and explain things clearly
+- Show excitement when users learn something new
+- Be honest when you don't know something
+
+## RESPONSE FORMATTING RULES
+
+### For Code:
+Use proper syntax highlighting with triple backticks:
+\`\`\`javascript
+// Your code here
+\`\`\`
+
+### For Tables (Mobile Responsive):
+ALWAYS wrap tables in a div with class "table-wrapper":
+<div class="table-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr><th>Column 1</th><th>Column 2</th></tr>
+    </thead>
+    <tbody>
+      <tr><td data-label="Column 1">Value 1</td><td data-label="Column 2">Value 2</td></tr>
+    </tbody>
+  </table>
+</div>
+
+### For Lists:
+Use proper HTML lists:
+<ul>
+  <li>First item</li>
+  <li>Second item</li>
+</ul>
+
+### For Important Information:
+Use blockquotes or bold text:
+> 💡 **Tip:** Important information here
+
+### For Steps/Instructions:
+Use numbered lists:
+<ol>
+  <li>First step</li>
+  <li>Second step</li>
+</ol>
+
+## RESPONSE STRUCTURE
+1. **Acknowledge the question** - Show you understood what they're asking
+2. **Provide the answer** - Clear, concise, and accurate
+3. **Add examples** - If helpful, include practical examples
+4. **Offer follow-up** - Ask if they need clarification or have more questions
+
+## CURRENT CONVERSATION
+${historyText}
+
+Current message: "${userMessage}"
+${files.length > 0 ? `📎 Files attached: ${files.length} file(s)` : ''}
+Message number: ${messageCount}
+
+## REMEMBER
+- You are ToolsNova AI, representing ToolsNova.com
+- Be helpful, accurate, and friendly
+- Keep responses concise but informative
+- Break long responses into sections
+- Never invent information - say "I don't know" if unsure
+
+Now, provide a helpful response to the user's message.`;
+    }
+
     async getResponse(userMessage, files = []) {
         this.messages.push({ role: 'user', content: userMessage });
         const messageCount = this.messages.filter(m => m.role === 'user').length;
         
         let historyText = '';
         this.messages.forEach((msg) => {
-            const prefix = msg.role === 'user' ? 'User' : 'Assistant';
+            const prefix = msg.role === 'user' ? 'User' : 'ToolsNova AI';
             historyText += `${prefix}: ${msg.content}\n`;
         });
 
-        const systemPrompt = `You are a helpful AI assistant. Current conversation:\n${historyText}\nCurrent message: "${userMessage}"\nBe friendly and helpful.`;
-        
+        const systemPrompt = this.getSystemPrompt(userMessage, files, messageCount, historyText);
+
         try {
+            console.log('Sending request to worker...');
+            
             const response = await fetch(WORKER_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -274,17 +356,50 @@ class AIAssistant {
                     action: 'chat'
                 })
             });
+            
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
             const data = await response.json();
+            console.log('Response data:', data);
+            
             if (data.success) {
-                let responseText = data.result.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+                let responseText = data.result;
+                responseText = responseText.replace(/\*\*/g, '');
+                responseText = responseText.replace(/\[|\]/g, '');
+                responseText = responseText.trim();
+                
                 this.messages.push({ role: 'assistant', content: responseText });
                 return responseText;
             } else {
-                throw new Error(data.error);
+                throw new Error(data.error || 'Unknown error from worker');
             }
         } catch (error) {
-            console.error('AI Error:', error);
-            return "❌ Error\n\nSorry, the AI service is temporarily unavailable. Please try again.";
+            console.error('AI Error details:', error);
+            
+            // Provide a more helpful error message
+            if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                return `⚠️ **Connection Error**
+
+I'm having trouble connecting to the AI service. 
+
+**Possible reasons:**
+1. The Cloudflare Worker might be offline
+2. Network connectivity issues
+3. CORS configuration needs adjustment
+
+**Please try:**
+- Refreshing the page
+- Checking your internet connection
+- Trying again in a few moments
+
+If the problem persists, please contact support. 🔧`;
+            }
+            
+            return `😊 I'm having a bit of trouble right now. Please try again in a moment.`;
         }
     }
 }
@@ -296,14 +411,20 @@ function toggleSidebar() {
     if (!sidebar) return;
     if (window.innerWidth <= 768) {
         sidebar.classList.toggle('open');
-        if (mobileOverlay) {
-            if (sidebar.classList.contains('open')) {
-                mobileOverlay.style.display = 'block';
-                setTimeout(() => mobileOverlay.classList.add('active'), 10);
-            } else {
-                mobileOverlay.classList.remove('active');
-                setTimeout(() => mobileOverlay.style.display = 'none', 300);
-            }
+        let overlay = document.getElementById('mobileOverlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'mobileOverlay';
+            overlay.className = 'mobile-overlay';
+            document.body.appendChild(overlay);
+            overlay.addEventListener('click', closeSidebar);
+        }
+        if (sidebar.classList.contains('open')) {
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        } else {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
         }
     } else {
         sidebar.classList.toggle('collapsed');
@@ -311,15 +432,30 @@ function toggleSidebar() {
         if (icon) {
             icon.className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-bars';
         }
+        localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
     }
 }
 
 function closeSidebar() {
     if (window.innerWidth <= 768 && sidebar) {
         sidebar.classList.remove('open');
-        if (mobileOverlay) {
-            mobileOverlay.classList.remove('active');
-            setTimeout(() => { if (mobileOverlay) mobileOverlay.style.display = 'none'; }, 300);
+        const overlay = document.getElementById('mobileOverlay');
+        if (overlay) {
+            overlay.classList.remove('active');
+        }
+        document.body.style.overflow = '';
+    }
+}
+
+function restoreSidebarState() {
+    if (window.innerWidth > 768) {
+        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+        if (isCollapsed && sidebar) {
+            sidebar.classList.add('collapsed');
+            if (sidebarToggle) {
+                const icon = sidebarToggle.querySelector('i');
+                if (icon) icon.className = 'fas fa-chevron-right';
+            }
         }
     }
 }
@@ -380,7 +516,13 @@ function loadChats() {
 }
 
 function saveChats() { localStorage.setItem('toolsnova_chats', JSON.stringify(chats)); }
-function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+function escapeHtml(text) { 
+    const div = document.createElement('div'); 
+    div.textContent = text; 
+    return div.innerHTML; 
+}
+
 function getTimeAgo(timestamp) {
     const diff = Date.now() - timestamp;
     const minutes = Math.floor(diff / 60000);
@@ -398,10 +540,17 @@ function renderChatHistory() {
         const timeAgo = getTimeAgo(chat.createdAt);
         return `<div class="history-item ${isActive ? 'active' : ''}" onclick="window.loadChat('${chat.id}')">
             <i class="fas fa-comment"></i>
-            <div class="history-content"><span class="history-title">${escapeHtml(chat.title)}</span><span class="history-time">${timeAgo}</span></div>
-            <div class="chat-actions">
-                <button class="chat-action-btn rename" onclick="event.stopPropagation(); window.renameChat('${chat.id}')"><i class="fas fa-pen"></i></button>
-                <button class="chat-action-btn delete" onclick="event.stopPropagation(); window.deleteChat('${chat.id}')"><i class="fas fa-trash"></i></button>
+            <div class="history-content">
+                <span class="history-title">${escapeHtml(chat.title)}</span>
+                <span class="history-time">${timeAgo}</span>
+            </div>
+            <div class="chat-actions" onclick="event.stopPropagation()">
+                <button class="chat-action-btn rename" onclick="window.showRenameModal('${chat.id}')" title="Rename">
+                    <i class="fas fa-pen"></i>
+                </button>
+                <button class="chat-action-btn delete" onclick="window.showDeleteModal('${chat.id}')" title="Delete">
+                    <i class="fas fa-trash"></i>
+                </button>
             </div>
         </div>`;
     }).join('');
@@ -421,25 +570,145 @@ function createNewChat() {
     if (window.innerWidth <= 768) closeSidebar();
 }
 
-// ===== RENAME/DELETE CHAT FUNCTIONS =====
-window.renameChat = function(chatId) {
+// ===== CUSTOM RENAME/DELETE MODAL FUNCTIONS =====
+
+window.showRenameModal = function(chatId) {
     const chat = chats.find(c => c.id === chatId);
     if (!chat) return;
-    const newTitle = prompt('Enter new chat name:', chat.title);
-    if (newTitle && newTitle.trim()) {
-        chat.title = newTitle.trim().substring(0, 50);
-        saveChats();
-        renderChatHistory();
-        if (currentChatId === chatId && currentChatTitle) currentChatTitle.textContent = chat.title;
-        showNotification('Chat renamed!', 'success');
+    
+    let modalOverlay = document.getElementById('renameModal');
+    if (!modalOverlay) {
+        modalOverlay = document.createElement('div');
+        modalOverlay.id = 'renameModal';
+        modalOverlay.className = 'modal-overlay';
+        document.body.appendChild(modalOverlay);
     }
-};
+    
+    modalOverlay.innerHTML = `
+        <div class="modal-container" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-pen" style="color: #3b82f6;"></i> Rename Chat</h3>
+                <button class="modal-close" onclick="closeRenameModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="renameChatInput" placeholder="Enter new chat name" value="${escapeHtml(chat.title)}" autocomplete="off">
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="closeRenameModal()">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="confirmRenameBtn">Save Changes</button>
+            </div>
+        </div>
+    `;
+    
+    modalOverlay.classList.add('active');
+    
+    const input = document.getElementById('renameChatInput');
+    const confirmBtn = document.getElementById('confirmRenameBtn');
+    
+    if (input) {
+        input.focus();
+        input.select();
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') confirmRenameChat(chatId);
+        });
+    }
+    if (confirmBtn) confirmBtn.onclick = () => confirmRenameChat(chatId);
+    
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            closeRenameModal();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
+}
 
-window.deleteChat = function(chatId) {
+function closeRenameModal() {
+    const modal = document.getElementById('renameModal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => { modal.innerHTML = ''; }, 300);
+    }
+}
+
+function confirmRenameChat(chatId) {
+    const input = document.getElementById('renameChatInput');
+    const newTitle = input ? input.value.trim() : '';
+    
+    if (newTitle && newTitle.length > 0) {
+        const chat = chats.find(c => c.id === chatId);
+        if (chat) {
+            chat.title = newTitle.substring(0, 50);
+            saveChats();
+            renderChatHistory();
+            if (currentChatId === chatId && currentChatTitle) currentChatTitle.textContent = chat.title;
+            showNotification('✏️ Chat renamed successfully!', 'success');
+        }
+    } else {
+        showNotification('Please enter a valid chat name', 'error');
+        return;
+    }
+    closeRenameModal();
+}
+
+window.showDeleteModal = function(chatId) {
+    const chat = chats.find(c => c.id === chatId);
+    if (!chat) return;
     if (chats.length === 1) {
         showNotification('Cannot delete the last chat', 'warning');
         return;
     }
+    
+    let modalOverlay = document.getElementById('deleteModal');
+    if (!modalOverlay) {
+        modalOverlay = document.createElement('div');
+        modalOverlay.id = 'deleteModal';
+        modalOverlay.className = 'modal-overlay';
+        document.body.appendChild(modalOverlay);
+    }
+    
+    modalOverlay.innerHTML = `
+        <div class="modal-container" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-trash-alt" style="color: #ef4444;"></i> Delete Chat</h3>
+                <button class="modal-close" onclick="closeDeleteModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "<strong>${escapeHtml(chat.title)}</strong>"?</p>
+                <div class="warning-text">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>This action cannot be undone. All messages will be permanently deleted.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+                <button class="modal-btn modal-btn-danger" id="confirmDeleteBtn">Delete Chat</button>
+            </div>
+        </div>
+    `;
+    
+    modalOverlay.classList.add('active');
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    if (confirmBtn) confirmBtn.onclick = () => confirmDeleteChat(chatId);
+    
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            closeDeleteModal();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => { modal.innerHTML = ''; }, 300);
+    }
+}
+
+function confirmDeleteChat(chatId) {
     const wasCurrent = currentChatId === chatId;
     chats = chats.filter(c => c.id !== chatId);
     if (wasCurrent) {
@@ -448,8 +717,12 @@ window.deleteChat = function(chatId) {
     }
     saveChats();
     renderChatHistory();
-    showNotification('Chat deleted', 'info');
-};
+    showNotification('🗑️ Chat deleted successfully', 'success');
+    closeDeleteModal();
+}
+
+window.renameChat = function(chatId) { window.showRenameModal(chatId); };
+window.deleteChat = function(chatId) { window.showDeleteModal(chatId); };
 
 // ===== SEND MESSAGE =====
 async function sendMessage() {
@@ -457,25 +730,12 @@ async function sendMessage() {
     const text = messageInput.value.trim();
     if (!text && attachedFiles.length === 0) return;
     if (!canGuestSend()) {
-        showNotification('You have used all 3 free messages. Sign up for unlimited access!', 'warning');
+        showNotification('✨ You have used all 3 free messages! Sign up for unlimited access!', 'warning');
         setTimeout(() => { window.location.href = 'signup.html'; }, 2000);
         return;
     }
     
     let currentChat = chats.find(c => c.id === currentChatId);
-    if (currentChat && currentChat.messages.length > 0) {
-        const newChat = { id: Date.now().toString(), title: text.substring(0, 30) + (text.length > 30 ? '...' : ''), messages: [], createdAt: Date.now() };
-        chats.unshift(newChat);
-        currentChatId = newChat.id;
-        currentChat = newChat;
-        saveChats();
-        renderChatHistory();
-        if (currentChatTitle) currentChatTitle.textContent = currentChat.title;
-        aiAssistant.clearMessages();
-        if (welcomeScreen) welcomeScreen.style.display = 'flex';
-        if (messagesWrapper) { messagesWrapper.innerHTML = ''; messagesWrapper.appendChild(welcomeScreen); }
-    }
-    
     if (!currentChat) {
         const newChat = { id: Date.now().toString(), title: text.substring(0, 30) + (text.length > 30 ? '...' : ''), messages: [], createdAt: Date.now() };
         chats.unshift(newChat);
@@ -489,7 +749,6 @@ async function sendMessage() {
     
     let processedFiles = [];
     if (attachedFiles.length > 0) processedFiles = await processFiles(attachedFiles);
-    
     currentChat.messages.push({ role: 'user', content: text || '📎 File upload', files: processedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })), time: Date.now() });
     
     if (currentChat.messages.length === 1 && currentChat.title === 'New Chat') {
@@ -537,7 +796,6 @@ async function sendMessage() {
     messageInput.focus();
 }
 
-// ===== FILE UPLOAD UI =====
 function showFilePreviews() {
     if (!filePreviewContainer) return;
     if (attachedFiles.length === 0) { filePreviewContainer.innerHTML = ''; return; }
@@ -546,9 +804,12 @@ function showFilePreviews() {
     ).join('');
 }
 
-window.removeFile = function(index) { attachedFiles.splice(index, 1); showFilePreviews(); if (fileInput) fileInput.value = ''; };
+window.removeFile = function(index) { 
+    attachedFiles.splice(index, 1); 
+    showFilePreviews(); 
+    if (fileInput) fileInput.value = ''; 
+};
 
-// ===== AUTH UI =====
 function updateUserUI(user) {
     const authLinks = document.getElementById('sidebarAuth');
     const userMenu = document.getElementById('userInfo');
@@ -565,7 +826,6 @@ function updateUserUI(user) {
     }
 }
 
-// ===== INITIALIZE =====
 function initDOMElements() {
     sidebar = document.getElementById('sidebar');
     sidebarToggle = document.getElementById('sidebarToggle');
@@ -583,12 +843,20 @@ function initDOMElements() {
     attachBtn = document.getElementById('attachBtn');
     fileInput = document.getElementById('fileInput');
     filePreviewContainer = document.getElementById('filePreviewContainer');
+    
+    if (!document.getElementById('mobileOverlay')) {
+        const overlay = document.createElement('div');
+        overlay.id = 'mobileOverlay';
+        overlay.className = 'mobile-overlay';
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', closeSidebar);
+    }
+    restoreSidebarState();
 }
 
 function setupEventListeners() {
     if (sidebarToggle) sidebarToggle.addEventListener('click', (e) => { e.preventDefault(); toggleSidebar(); });
     if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', (e) => { e.preventDefault(); toggleSidebar(); });
-    if (mobileOverlay) mobileOverlay.addEventListener('click', () => closeSidebar());
     if (sendBtn) sendBtn.addEventListener('click', (e) => { e.preventDefault(); sendMessage(); });
     if (newChatBtn) newChatBtn.addEventListener('click', () => createNewChat());
     if (attachBtn && fileInput) {
@@ -608,7 +876,6 @@ function setupEventListeners() {
         });
     }
     
-    // Logout button with confirmation
     const sidebarLogoutBtn = document.getElementById('sidebarLogout');
     if (sidebarLogoutBtn) {
         sidebarLogoutBtn.addEventListener('click', (e) => {
@@ -620,12 +887,14 @@ function setupEventListeners() {
     window.addEventListener('resize', () => {
         if (window.innerWidth > 768) {
             if (sidebar) sidebar.classList.remove('open');
-            if (mobileOverlay) { mobileOverlay.style.display = 'none'; mobileOverlay.classList.remove('active'); }
+            const overlay = document.getElementById('mobileOverlay');
+            if (overlay) overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            restoreSidebarState();
         }
     });
 }
 
-// ===== APP START =====
 document.addEventListener('DOMContentLoaded', () => {
     initDOMElements();
     setupEventListeners();
@@ -651,6 +920,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.toggleSidebar = toggleSidebar;
     window.closeSidebar = closeSidebar;
     window.showLogoutConfirmation = showLogoutConfirmation;
+    window.closeRenameModal = closeRenameModal;
+    window.closeDeleteModal = closeDeleteModal;
 });
 
-console.log('AI Chat Assistant initialized');
+console.log('🤖 AI Chat Assistant initialized!');

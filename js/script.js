@@ -487,7 +487,7 @@ if (mobileBtn) {
         <a href="${basePath}index.html" class="mobile-link">Home</a>
         <a href="${basePath}ai-assistant.html" class="mobile-link">AI Assistant</a>
         <a href="${basePath}tools.html" class="mobile-link">All Tools</a>
-        <a href="${basePath}changelog.html" class="mobile-link">Changelog</a>
+        <a href="${basePath}changelog.html" class="mobile-link">What's New!</a>
         <div class="mobile-menu-category-title">For You! 🔥</div>
         <a href="${basePath}tools.html#media" class="mobile-link">📹 Media Tools</a>
         <a href="${basePath}tools.html#ai" class="mobile-link">🤖 AI Tools</a>
@@ -602,9 +602,10 @@ function initDesktopSidebar() {
             <a href="${basePath}index.html" class="desktop-sidebar-link ${isActive('index.html') ? 'active' : ''}" data-tooltip="Home"><i class="fas fa-home"></i><span>Home</span></a>
             <a href="${basePath}ai-assistant.html" class="desktop-sidebar-link ${isActive('ai-assistant.html') ? 'active' : ''}" data-tooltip="AI Assistant"><i class="fas fa-robot"></i><span>AI Assistant</span></a>
             <a href="${basePath}tools.html" class="desktop-sidebar-link ${isActive('tools.html') ? 'active' : ''}" data-tooltip="All Tools"><i class="fas fa-tools"></i><span>All Tools</span></a>
+            <a href="${basePath}changelog.html" class="desktop-sidebar-link ${isActive('tools.html') ? 'active' : ''}" data-tooltip="All Tools"><i class="fa-solid fa-rocket"></i><span>What's New!</span></a>
             <div class="desktop-sidebar-category-title">For You! 🔥</div>
             <a href="${basePath}tools.html#media" class="desktop-sidebar-link" data-tooltip="Media Tools"><i class="fas fa-video"></i><span>Media Tools</span></a>
-            <a href="${basePath}tools.html#ai" class="desktop-sidebar-link" data-tooltip="AI Tools"><i class="fas fa-robot"></i><span>AI Tools</span></a>
+            <a href="${basePath}tools.html#ai" class="desktop-sidebar-link" data-tooltip="AI Tools"><i class="fa-solid fa-gear"></i><span>AI Tools</span></a>
             <a href="${basePath}tools.html#image" class="desktop-sidebar-link" data-tooltip="Image Editor"><i class="fas fa-paint-brush"></i><span>Image Editor</span></a>
             <a href="${basePath}tools.html#code" class="desktop-sidebar-link" data-tooltip="Code Editors"><i class="fas fa-code"></i><span>Code Editors</span></a>
             <a href="${basePath}tools.html#calc" class="desktop-sidebar-link" data-tooltip="Calculators"><i class="fas fa-calculator"></i><span>Calculators</span></a>
