@@ -588,41 +588,48 @@ function initDesktopSidebar() {
         const isInTools = currentPath.includes('/tools/');
         const basePath = isInTools ? '../' : './';
         
+        // Debug: Log the current path to console
+        console.log('Current path:', currentPath);
+        
         function isActive(href) {
-            // For tools.html - match exactly or with hash
-            if (href === 'tools.html' && (currentPath.includes('/tools.html') || currentPath === '/tools.html')) {
-                return true;
-            }
-            // For tools.html with hash (e.g., tools.html#media)
-            if (href === 'tools.html' && currentPath.includes('/tools.html')) {
-                return true;
-            }
-            // For index.html
-            if (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html' || currentPath.endsWith('/index.html'))) {
+            // For index.html (homepage)
+            if (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html' || currentPath.endsWith('index.html'))) {
+                console.log('Home active');
                 return true;
             }
             // For ai-assistant.html
-            if (href === 'ai-assistant.html' && currentPath.includes('ai-assistant')) {
+            if (href === 'ai-assistant.html' && (currentPath.includes('ai-assistant') || currentPath.includes('ai-assistant.html'))) {
+                console.log('AI Assistant active');
                 return true;
             }
-            // For changelog.html
-            if (href === 'changelog.html' && currentPath.includes('changelog')) {
+            // For tools.html
+            if (href === 'tools.html' && (currentPath.includes('tools.html') || currentPath === '/tools.html')) {
+                console.log('Tools active');
+                return true;
+            }
+            // For changelog.html - FIXED
+            if (href === 'changelog.html' && (currentPath.includes('changelog') || currentPath.includes('changelog.html'))) {
+                console.log('Changelog active');
                 return true;
             }
             // For about.html
-            if (href === 'about.html' && currentPath.includes('about')) {
+            if (href === 'about.html' && (currentPath.includes('about') || currentPath.includes('about.html'))) {
+                console.log('About active');
                 return true;
             }
             // For privacy.html
-            if (href === 'privacy.html' && currentPath.includes('privacy')) {
+            if (href === 'privacy.html' && (currentPath.includes('privacy') || currentPath.includes('privacy.html'))) {
+                console.log('Privacy active');
                 return true;
             }
             // For terms.html
-            if (href === 'terms.html' && currentPath.includes('terms')) {
+            if (href === 'terms.html' && (currentPath.includes('terms') || currentPath.includes('terms.html'))) {
+                console.log('Terms active');
                 return true;
             }
             // For contact.html
-            if (href === 'contact.html' && currentPath.includes('contact')) {
+            if (href === 'contact.html' && (currentPath.includes('contact') || currentPath.includes('contact.html'))) {
+                console.log('Contact active');
                 return true;
             }
             return false;
@@ -633,7 +640,7 @@ function initDesktopSidebar() {
             <a href="${basePath}index.html" class="desktop-sidebar-link ${isActive('index.html') ? 'active' : ''}" data-tooltip="Home"><i class="fas fa-home"></i><span>Home</span></a>
             <a href="${basePath}ai-assistant.html" class="desktop-sidebar-link ${isActive('ai-assistant.html') ? 'active' : ''}" data-tooltip="AI Assistant"><i class="fas fa-robot"></i><span>AI Assistant</span></a>
             <a href="${basePath}tools.html" class="desktop-sidebar-link ${isActive('tools.html') ? 'active' : ''}" data-tooltip="All Tools"><i class="fas fa-tools"></i><span>All Tools</span></a>
-            <a href="${basePath}changelog.html" class="desktop-sidebar-link ${isActive('changelog.html') ? 'active' : ''}" data-tooltip="Changelog"><i class="fa-solid fa-rocket"></i><span>What's New!</span></a>
+            <a href="${basePath}changelog.html" class="desktop-sidebar-link ${isActive('changelog.html') ? 'active' : ''}" data-tooltip="What's New"><i class="fa-solid fa-rocket"></i><span>What's New!</span></a>
             <div class="desktop-sidebar-category-title">For You! 🔥</div>
             <a href="${basePath}tools.html#media" class="desktop-sidebar-link" data-tooltip="Media Tools"><i class="fas fa-video"></i><span>Media Tools</span></a>
             <a href="${basePath}tools.html#ai" class="desktop-sidebar-link" data-tooltip="AI Tools"><i class="fa-solid fa-gear"></i><span>AI Tools</span></a>
