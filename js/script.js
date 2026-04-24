@@ -587,22 +587,53 @@ function initDesktopSidebar() {
         const currentPath = window.location.pathname;
         const isInTools = currentPath.includes('/tools/');
         const basePath = isInTools ? '../' : './';
+        
         function isActive(href) {
-            if (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html' || currentPath.endsWith('/index.html'))) return true;
-            if (href === 'ai-assistant.html' && currentPath.includes('ai-assistant')) return true;
-            if (href === 'tools.html' && currentPath.includes('tools.html')) return true;
-            if (href === 'about.html' && currentPath.includes('about')) return true;
-            if (href === 'privacy.html' && currentPath.includes('privacy')) return true;
-            if (href === 'terms.html' && currentPath.includes('terms')) return true;
-            if (href === 'contact.html' && currentPath.includes('contact')) return true;
+            // For tools.html - match exactly or with hash
+            if (href === 'tools.html' && (currentPath.includes('/tools.html') || currentPath === '/tools.html')) {
+                return true;
+            }
+            // For tools.html with hash (e.g., tools.html#media)
+            if (href === 'tools.html' && currentPath.includes('/tools.html')) {
+                return true;
+            }
+            // For index.html
+            if (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html' || currentPath.endsWith('/index.html'))) {
+                return true;
+            }
+            // For ai-assistant.html
+            if (href === 'ai-assistant.html' && currentPath.includes('ai-assistant')) {
+                return true;
+            }
+            // For changelog.html
+            if (href === 'changelog.html' && currentPath.includes('changelog')) {
+                return true;
+            }
+            // For about.html
+            if (href === 'about.html' && currentPath.includes('about')) {
+                return true;
+            }
+            // For privacy.html
+            if (href === 'privacy.html' && currentPath.includes('privacy')) {
+                return true;
+            }
+            // For terms.html
+            if (href === 'terms.html' && currentPath.includes('terms')) {
+                return true;
+            }
+            // For contact.html
+            if (href === 'contact.html' && currentPath.includes('contact')) {
+                return true;
+            }
             return false;
         }
+        
         let html = `<div class="desktop-sidebar-header"><div class="desktop-sidebar-logo"><i class="fas fa-star"></i><span>ToolsNova</span></div></div>
             <div class="desktop-sidebar-links">
             <a href="${basePath}index.html" class="desktop-sidebar-link ${isActive('index.html') ? 'active' : ''}" data-tooltip="Home"><i class="fas fa-home"></i><span>Home</span></a>
             <a href="${basePath}ai-assistant.html" class="desktop-sidebar-link ${isActive('ai-assistant.html') ? 'active' : ''}" data-tooltip="AI Assistant"><i class="fas fa-robot"></i><span>AI Assistant</span></a>
             <a href="${basePath}tools.html" class="desktop-sidebar-link ${isActive('tools.html') ? 'active' : ''}" data-tooltip="All Tools"><i class="fas fa-tools"></i><span>All Tools</span></a>
-            <a href="${basePath}changelog.html" class="desktop-sidebar-link ${isActive('changelog.html') ? 'active' : ''}" data-tooltip="All Tools"><i class="fa-solid fa-rocket"></i><span>What's New!</span></a>
+            <a href="${basePath}changelog.html" class="desktop-sidebar-link ${isActive('changelog.html') ? 'active' : ''}" data-tooltip="Changelog"><i class="fa-solid fa-rocket"></i><span>What's New!</span></a>
             <div class="desktop-sidebar-category-title">For You! 🔥</div>
             <a href="${basePath}tools.html#media" class="desktop-sidebar-link" data-tooltip="Media Tools"><i class="fas fa-video"></i><span>Media Tools</span></a>
             <a href="${basePath}tools.html#ai" class="desktop-sidebar-link" data-tooltip="AI Tools"><i class="fa-solid fa-gear"></i><span>AI Tools</span></a>
@@ -616,6 +647,7 @@ function initDesktopSidebar() {
             <a href="${basePath}contact.html" class="desktop-sidebar-link ${isActive('contact.html') ? 'active' : ''}" data-tooltip="Contact"><i class="fas fa-envelope"></i><span>Contact</span></a>
             <div class="desktop-sidebar-divider"></div>
             <button class="desktop-sidebar-link" id="desktopDarkToggle"><i class="fas ${document.body.classList.contains('dark-mode') ? 'fa-sun' : 'fa-moon'}"></i><span>${document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode'}</span></button>`;
+        
         if (user) {
             html += `<div class="desktop-sidebar-divider"></div><div class="desktop-sidebar-user-info"><i class="fas fa-user-circle"></i><span>${user.email.split('@')[0]}</span></div>
                 <a href="#" class="desktop-sidebar-link desktop-sidebar-logout" id="desktopSidebarLogout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
@@ -625,17 +657,42 @@ function initDesktopSidebar() {
                 <a href="${basePath}signup.html" class="desktop-sidebar-link desktop-sidebar-cta"><i class="fas fa-user-plus"></i><span>Sign Up</span></a>`;
         }
         html += `</div>`;
+        
         if (sidebar.innerHTML !== html) sidebar.innerHTML = html;
         
-        document.getElementById('desktopDarkToggle')?.addEventListener('click', () => { document.body.classList.toggle('dark-mode'); const isDark = document.body.classList.contains('dark-mode'); localStorage.setItem('darkMode', isDark); const btn = document.getElementById('desktopDarkToggle'); if(btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i><span>Light Mode</span>' : '<i class="fas fa-moon"></i><span>Dark Mode</span>'; const mainIcon = document.querySelector('.theme-toggle i'); if(mainIcon) mainIcon.className = isDark ? 'fas fa-sun' : 'far fa-moon'; });
-        document.getElementById('desktopSidebarLogout')?.addEventListener('click', (e) => { e.preventDefault(); showLogoutConfirmation(); });
-        document.getElementById('desktopDeleteAccount')?.addEventListener('click', (e) => { e.preventDefault(); window.deleteUserAccount(); });
+        document.getElementById('desktopDarkToggle')?.addEventListener('click', () => { 
+            document.body.classList.toggle('dark-mode'); 
+            const isDark = document.body.classList.contains('dark-mode'); 
+            localStorage.setItem('darkMode', isDark); 
+            const btn = document.getElementById('desktopDarkToggle'); 
+            if(btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i><span>Light Mode</span>' : '<i class="fas fa-moon"></i><span>Dark Mode</span>'; 
+            const mainIcon = document.querySelector('.theme-toggle i'); 
+            if(mainIcon) mainIcon.className = isDark ? 'fas fa-sun' : 'far fa-moon'; 
+        });
+        
+        document.getElementById('desktopSidebarLogout')?.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            showLogoutConfirmation(); 
+        });
+        
+        document.getElementById('desktopDeleteAccount')?.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            window.deleteUserAccount(); 
+        });
     }
+    
     updateSidebarContent();
-    auth.onAuthStateChanged(() => updateSidebarContent());
+    
+    if (auth) {
+        auth.onAuthStateChanged(() => updateSidebarContent());
+    }
 }
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initDesktopSidebar);
-else initDesktopSidebar();
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDesktopSidebar);
+} else {
+    initDesktopSidebar();
+}
 
 // ===== INITIAL GUEST DISPLAY =====
 updateGuestDisplay();
