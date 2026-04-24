@@ -700,7 +700,6 @@ if (document.readyState === 'loading') {
 } else {
     initDesktopSidebar();
 }
-
 // ===== INITIAL GUEST DISPLAY =====
 updateGuestDisplay();
 
