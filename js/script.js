@@ -700,6 +700,7 @@ if (document.readyState === 'loading') {
 } else {
     initDesktopSidebar();
 }
+
 // ===== INITIAL GUEST DISPLAY =====
 updateGuestDisplay();
 
@@ -712,3 +713,101 @@ window.maxGuestUses = maxGuestUses;
 window.isGuestUser = () => !auth.currentUser;
 window.showNotification = showNotification;
 window.dispatchEvent(new Event('toolsnova-auth-ready'));
+
+// ===== FAQ ACCORDION FUNCTIONALITY =====
+function initFaqAccordion() {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    if (faqQuestions.length === 0) return;
+    
+    faqQuestions.forEach(question => {
+        // Remove any existing listeners to avoid duplicates
+        question.removeEventListener('click', handleFaqClick);
+        question.addEventListener('click', handleFaqClick);
+    });
+}
+
+function handleFaqClick() {
+    const faqItem = this.parentElement;
+    const isActive = faqItem.classList.contains('active');
+    
+    // Close all other FAQ items
+    document.querySelectorAll('.faq-item').forEach(item => {
+        if (item !== faqItem) {
+            item.classList.remove('active');
+        }
+    });
+    
+    // Toggle current item
+    if (!isActive) {
+        faqItem.classList.add('active');
+    } else {
+        faqItem.classList.remove('active');
+    }
+}
+
+// Initialize FAQ when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initFaqAccordion();
+});
+
+// Also re-initialize when content might change (for dynamic pages)
+if (typeof MutationObserver !== 'undefined') {
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length) {
+                initFaqAccordion();
+            }
+        });
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
+// ===== ACTIVE NAVIGATION HIGHLIGHT - FIXED =====
+function highlightActiveNav() {
+    const currentPath = window.location.pathname;
+    const currentPage = currentPath.split('/').pop() || 'index.html';
+    const isInToolsFolder = currentPath.includes('/tools/');
+    
+    console.log('Current page:', currentPage); // Debug
+    
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        
+        if (!href) return;
+        
+        // For Tools page - highlight when on tools.html or any tool inside /tools/ folder
+        if ((href === 'tools.html' || href === './tools.html') && 
+            (currentPage === 'tools.html' || isInToolsFolder)) {
+            link.classList.add('active');
+            console.log('Tools link active'); // Debug
+        }
+        // For changelog page
+        else if ((href === 'changelog.html' || href === './changelog.html') && 
+                 currentPage === 'changelog.html') {
+            link.classList.add('active');
+        }
+        // For AI Assistant page
+        else if ((href === 'ai-assistant.html' || href === './ai-assistant.html') && 
+                 currentPage === 'ai-assistant.html') {
+            link.classList.add('active');
+        }
+        // For Home page
+        else if ((href === 'index.html' || href === './index.html') && 
+                 (currentPage === 'index.html' || currentPage === '' || currentPath === '/')) {
+            link.classList.add('active');
+        }
+        // For About page
+        else if ((href === 'about.html' || href === './about.html') && 
+                 currentPage === 'about.html') {
+            link.classList.add('active');
+        }
+    });
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', highlightActiveNav);
+// Run after a small delay to ensure everything is loaded
+setTimeout(highlightActiveNav, 100);

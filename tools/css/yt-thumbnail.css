@@ -546,3 +546,52 @@
     background: #2196F3;
     color: white;
 }
+
+/* ===== FIX TABLE OVERFLOW - ADD SCROLLBAR ===== */
+
+/* Add a wrapper class for the table */
+.quality-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 20px 0;
+    border-radius: 16px;
+}
+
+.quality-table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+    background: #f9fafb;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.dark-mode .quality-table {
+    background: #111827;
+}
+
+/* Keep existing table styles */
+.quality-table th {
+    background: #f3f4f6;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #111827;
+}
+
+.dark-mode .quality-table th {
+    background: #1f2937;
+    color: #f9fafb;
+}
+
+.quality-table td {
+    padding: 10px 12px;
+    border-top: 1px solid #e5e7eb;
+    color: #6b7280;
+}
+
+.dark-mode .quality-table td {
+    border-top-color: #374151;
+    color: #9ca3af;
+}

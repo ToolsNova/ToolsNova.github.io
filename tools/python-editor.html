@@ -26,7 +26,6 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
 
 
-
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499" crossorigin="anonymous"></script>
 <!-- Favicon -->
@@ -46,12 +45,6 @@
 <link rel="manifest" href="/assets/site.webmanifest">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6' rx='20'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870338245420499"
-     crossorigin="anonymous"></script>
-<!-- Monetag Clean Ads - Push + In-Page + Direct Link -->
-
-<script>(function(s){s.dataset.zone='10792811',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-</body>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     
@@ -306,19 +299,121 @@
         </div>
     </div>
 
-    <!-- Ad Section 3 - Bottom Banner -->
-    <div class="ad-container">
-        <div class="container">
-            <div class="ad-banner">
-                <p>Advertisement</p>
-                <div class="ad-placeholder">
-                    <i class="fas fa-ad"></i>
-                    <span>Ad Placeholder</span>
+    <!-- ===== RELATED TOOLS SECTION ===== -->
+    <div class="related-tools-section">
+        <h2 class="related-tools-title">You May Also Like</h2>
+        <div class="related-tools-grid">
+            <a href="./live-editor.html" class="related-tool-card">
+                <div class="related-tool-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>Live HTML/CSS/JS Editor</h3>
+                <p>Full stack web editor with live preview</p>
+            </a>
+            
+            <a href="./json-formatter.html" class="related-tool-card">
+                <div class="related-tool-icon">
+                    <i class="fas fa-brackets-curly"></i>
+                </div>
+                <h3>JSON Formatter</h3>
+                <p>Format and validate JSON data</p>
+            </a>
+            
+            <a href="../tools.html" class="related-tool-card all-tools-card">
+                <div class="related-tool-icon">
+                    <i class="fas fa-border-all"></i>
+                </div>
+                <h3>All Tools</h3>
+                <p>Explore 25+ free web tools</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== FAQ SECTION ===== -->
+    <div class="faq-section">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        <div class="faq-accordion">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How to run Python code online for free?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Simply write your Python code in the editor, then click the "Run" button or press Ctrl+Enter. Your code will execute in your browser using Pyodide (Python 3.12). No installation needed!</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Does this Python editor support all Python features?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! It supports Python 3.12 with most core features including variables, loops, functions, classes, lists, dictionaries, and the input() function. Some external libraries are not available, but pure Python works perfectly.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How to use the input() function in this editor?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>When your code calls input(), a dialog box will appear asking for input. Type your response and click Submit. The program will continue with your input. This works exactly like running Python locally!</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Can I save or download my Python code?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! Use the Download button to save your code as a .py file. You can also use the Copy button to copy the code to your clipboard, or load sample templates to get started quickly.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What is Pyodide and how does it work?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Pyodide is a Python runtime compiled to WebAssembly that runs entirely in your browser. Your code never leaves your device - 100% private and secure. The first load takes longer as Python is downloaded, but subsequent runs are instant.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Can I use external Python libraries like NumPy or Pandas?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Currently, this editor focuses on core Python. Pyodide does support NumPy, Pandas, and Matplotlib, but they increase load time significantly. We're working on adding library support in future updates!</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Is this Python editor free to use?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, completely free! Guest users get 3 free runs. For unlimited access, <a href="../signup.html" style="color: #3b82f6;">sign up for free</a> - no credit card required.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Why is the first run taking so long?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The first time you run Python, the Pyodide runtime (about 15MB) needs to download and initialize. This takes 5-10 seconds depending on your internet speed. After that, Python stays cached and runs instantly. This only happens once!</p>
                 </div>
             </div>
         </div>
     </div>
-
 
 <!-- Footer -->
 <footer class="footer">
@@ -364,7 +459,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2026 ToolsNova v1.0.0. All rights reserved. Made for developers and creators.</p>
+            <p>© 2026 ToolsNova v1.0.1. All rights reserved. Made for developers and creators.</p>
         </div>
     </div>
 </footer>

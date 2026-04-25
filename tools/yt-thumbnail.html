@@ -221,38 +221,44 @@
             <p>Download high-resolution YouTube thumbnails instantly in HD, HQ, or 1080p quality. This tool extracts the original image directly from the YouTube servers, making it perfect for creators who need to analyze competitor thumbnail designs or recover lost assets for their own channel. No signup is required to save thumbnails from any public video link.</p>
             <br>
             <h3>Thumbnail Qualities</h3>
-            <table class="quality-table">
-                <tr>
-                    <th>Quality</th>
-                    <th>Resolution</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>Default</td>
-                    <td>120×90</td>
-                    <td>Smallest thumbnail</td>
-                </tr>
-                <tr>
-                    <td>Medium</td>
-                    <td>320×180</td>
-                    <td>Good for previews</td>
-                </tr>
-                <tr>
-                    <td>High</td>
-                    <td>480×360</td>
-                    <td>Standard quality</td>
-                </tr>
-                <tr>
-                    <td>Standard</td>
-                    <td>640×480</td>
-                    <td>SD quality</td>
-                </tr>
-                <tr>
-                    <td>Max Resolution</td>
-                    <td>1280×720</td>
-                    <td>HD quality (if available)</td>
-                </tr>
-            </table>
+            <div class="quality-table-wrapper">
+                <table class="quality-table">
+                    <thead>
+                        <tr>
+                            <th>Quality</th>
+                            <th>Resolution</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Quality">Default</td>
+                            <td data-label="Resolution">120×90</td>
+                            <td data-label="Description">Smallest thumbnail</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Quality">Medium</td>
+                            <td data-label="Resolution">320×180</td>
+                            <td data-label="Description">Good for previews</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Quality">High</td>
+                            <td data-label="Resolution">480×360</td>
+                            <td data-label="Description">Standard quality</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Quality">Standard</td>
+                            <td data-label="Resolution">640×480</td>
+                            <td data-label="Description">SD quality</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Quality">Max Resolution</td>
+                            <td data-label="Resolution">1280×720</td>
+                            <td data-label="Description">HD quality (if available)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             
             <h3>Features</h3>
             <ul>
@@ -265,19 +271,121 @@
         </div>
     </div>
 
-    <!-- Ad Section 3 - Bottom Banner -->
-    <div class="ad-container">
-        <div class="container">
-            <div class="ad-banner">
-                <p>Advertisement</p>
-                <div class="ad-placeholder">
-                    <i class="fas fa-ad"></i>
-                    <span>Ad Placeholder</span>
+    <!-- ===== RELATED TOOLS SECTION ===== -->
+    <div class="related-tools-section">
+        <h2 class="related-tools-title">You May Also Like</h2>
+        <div class="related-tools-grid">
+            <a href="./video-to-mp3.html" class="related-tool-card">
+                <div class="related-tool-icon">
+                    <i class="fas fa-music"></i>
+                </div>
+                <h3>YouTube to MP3</h3>
+                <p>Convert YouTube videos to MP3 audio</p>
+            </a>
+            
+            <a href="./yt-transcript.html" class="related-tool-card">
+                <div class="related-tool-icon">
+                    <i class="fas fa-closed-captioning"></i>
+                </div>
+                <h3>YouTube Transcript Generator</h3>
+                <p>Get video transcripts and subtitles</p>
+            </a>
+            
+            <a href="../tools.html" class="related-tool-card all-tools-card">
+                <div class="related-tool-icon">
+                    <i class="fas fa-border-all"></i>
+                </div>
+                <h3>All Tools</h3>
+                <p>Explore 25+ free web tools</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== FAQ SECTION ===== -->
+    <div class="faq-section">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        <div class="faq-accordion">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How to download YouTube thumbnails in HD for free?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Simply paste your YouTube video URL into the input field and click "Get Thumbnails". You'll see all available thumbnail sizes (from 120x90 to 1280x720 HD). Choose the quality you want and click download. No registration required!</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What thumbnail qualities are available?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Multiple qualities: Default (120x90px), Medium (320x180px), High (480x360px), Standard (640x480px), and Max Resolution (1280x720px HD). For some popular videos, 4K thumbnails (3840x2160px) may also be available.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How to get the highest quality YouTube thumbnail?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Our tool automatically fetches the best available quality (maxresdefault). For most videos, this is 1280x720px HD. Some popular videos have 4K thumbnails available. The download button shows the resolution before downloading.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What YouTube URL formats are supported?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>All YouTube URL formats: standard (youtube.com/watch?v=...), shortened (youtu.be/...), embed links (youtube.com/embed/...), and YouTube Shorts (youtube.com/shorts/...). Also supports URLs with timestamps and playlist parameters.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Can I download thumbnails from private or age-restricted videos?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Private, unlisted, and age-restricted videos may not be accessible. Our tool only works with public videos where thumbnails are hosted on YouTube's public CDN. Most public videos work perfectly.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What is the file format of downloaded thumbnails?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Thumbnails are downloaded in JPG/JPEG format. This is the native format YouTube uses for thumbnails, offering good quality with reasonable file size. Downloads are direct from YouTube's servers.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Is this YouTube thumbnail downloader free?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, completely free! Guest users get 3 free downloads. For unlimited access, <a href="../signup.html" style="color: #3b82f6;">sign up for free</a> - no credit card required.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Why can't I find thumbnails for some videos?</h3>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Possible reasons: Invalid URL format, video is private/unlisted, video was removed, or the thumbnail hasn't been generated yet. Double-check the URL and try again. Most public videos work fine.</p>
                 </div>
             </div>
         </div>
     </div>
-
 
 <!-- Footer -->
 <footer class="footer">
@@ -323,7 +431,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2026 ToolsNova v1.0.0. All rights reserved. Made for developers and creators.</p>
+            <p>© 2026 ToolsNova v1.0.1. All rights reserved. Made for developers and creators.</p>
         </div>
     </div>
 </footer>
