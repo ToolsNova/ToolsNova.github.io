@@ -52,9 +52,24 @@ const footerGuestInfo = document.getElementById('footerGuestInfo');
 const footerLogin = document.getElementById('footerLogin');
 const footerSignup = document.getElementById('footerSignup');
 
-// ===== GUEST USAGE TRACKING =====
-let guestUses = localStorage.getItem('toolsnova_guest_uses') ? parseInt(localStorage.getItem('toolsnova_guest_uses')) : 0;
+// ===== GUEST USAGE TRACKING - FIXED VERSION =====
 const maxGuestUses = 3;
+
+// Helper function to get current guest uses (unified)
+function getCurrentGuestUses() {
+    let uses1 = parseInt(localStorage.getItem('toolsnova_guest_uses')) || 0;
+    let uses2 = parseInt(localStorage.getItem('toolsnova_tools_used')) || 0;
+    // Return the higher value to be safe, and sync them
+    const total = Math.max(uses1, uses2);
+    if (uses1 !== total || uses2 !== total) {
+        localStorage.setItem('toolsnova_guest_uses', total);
+        localStorage.setItem('toolsnova_tools_used', total);
+    }
+    return total;
+}
+
+// Update global variable
+let guestUses = getCurrentGuestUses();
 
 // ===== TOOLS DATABASE - ONLY TOOLS THAT EXIST IN tools.html =====
 const tools = [
@@ -105,6 +120,73 @@ function displayTools(grid, items) {
         `;
     }
     grid.innerHTML = html;
+}
+
+// ===== CHECK IF USER CAN USE TOOL =====
+function canUseTool() {
+    const user = auth.currentUser;
+    // Logged in users have unlimited access
+    if (user) return true;
+    
+    // Get current guest uses
+    const currentUses = getCurrentGuestUses();
+    return currentUses < maxGuestUses;
+}
+
+// ===== TRACK TOOL USAGE (only for guests) =====
+function trackToolUse() {
+    const user = auth.currentUser;
+    if (user) return true; // No tracking for logged in users
+    
+    // Get current guest uses
+    let currentUses = getCurrentGuestUses();
+    
+    if (currentUses >= maxGuestUses) {
+        console.log('Guest limit reached - blocking usage');
+        return false;
+    }
+    
+    // Increment and save to BOTH keys for compatibility
+    const newUses = currentUses + 1;
+    localStorage.setItem('toolsnova_guest_uses', newUses);
+    localStorage.setItem('toolsnova_tools_used', newUses);
+    
+    // Update global variable and display
+    guestUses = newUses;
+    updateGuestDisplay();
+    
+    console.log(`Guest use tracked: ${newUses}/${maxGuestUses}`);
+    
+    // Show warning when reaching limit
+    if (newUses === maxGuestUses) {
+        showNotification('Last free use! Sign up for unlimited access.', 'warning');
+    }
+    
+    return true;
+}
+
+// ===== UPDATE GUEST DISPLAY =====
+function updateGuestDisplay() {
+    const currentUses = getCurrentGuestUses();
+    const remaining = Math.max(0, maxGuestUses - currentUses);
+    
+    // Update global variable
+    guestUses = currentUses;
+    
+    // Update UI elements
+    if (usesLeft) usesLeft.textContent = remaining;
+    if (usageCounter) usageCounter.textContent = `${remaining}/3 uses left`;
+    
+    // Update user badge
+    if (userBadge && !auth.currentUser) {
+        if (remaining === 0) {
+            userBadge.textContent = 'Limit reached - Sign up!';
+            userBadge.style.background = '#ef4444';
+        } else {
+            userBadge.textContent = `Guest: ${remaining}/3 uses left`;
+            userBadge.style.background = '#f59e0b';
+        }
+    }
 }
 
 // ===== HANDLE TOOL CLICK =====
@@ -388,34 +470,9 @@ auth.onAuthStateChanged((user) => {
         if (footerUserInfo) footerUserInfo.style.display = 'none';
         if (usageCounter) usageCounter.style.display = 'inline-flex';
         if (welcomeMessage) welcomeMessage.style.display = 'none';
-        if (userBadge) userBadge.textContent = 'Guest: 3 free uses';
-    }
-});
-
-// ===== GUEST FUNCTIONS =====
-function updateGuestDisplay() {
-    if (usesLeft) usesLeft.textContent = Math.max(0, maxGuestUses - guestUses);
-}
-
-function canUseTool() {
-    const user = auth.currentUser;
-    if (user) return true;
-    return guestUses < maxGuestUses;
-}
-
-function trackToolUse() {
-    const user = auth.currentUser;
-    if (!user) {
-        const isToolPage = window.location.pathname.includes('/tools/');
-        if (!isToolPage) return;
-        const hasResult = document.querySelector('.result-card, .thumbnails-grid, #result, .output');
-        if (!hasResult) return;
-        let used = parseInt(localStorage.getItem('toolsnova_tools_used') || '0');
-        used++;
-        localStorage.setItem('toolsnova_tools_used', used);
         updateGuestDisplay();
     }
-}
+});
 
 // ===== LOGOUT BUTTONS =====
 if (logoutBtn) logoutBtn.onclick = (e) => { e.preventDefault(); showLogoutConfirmation(); };
@@ -588,50 +645,15 @@ function initDesktopSidebar() {
         const isInTools = currentPath.includes('/tools/');
         const basePath = isInTools ? '../' : './';
         
-        // Debug: Log the current path to console
-        console.log('Current path:', currentPath);
-        
         function isActive(href) {
-            // For index.html (homepage)
-            if (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html' || currentPath.endsWith('index.html'))) {
-                console.log('Home active');
-                return true;
-            }
-            // For ai-assistant.html
-            if (href === 'ai-assistant.html' && (currentPath.includes('ai-assistant') || currentPath.includes('ai-assistant.html'))) {
-                console.log('AI Assistant active');
-                return true;
-            }
-            // For tools.html
-            if (href === 'tools.html' && (currentPath.includes('tools.html') || currentPath === '/tools.html')) {
-                console.log('Tools active');
-                return true;
-            }
-            // For changelog.html - FIXED
-            if (href === 'changelog.html' && (currentPath.includes('changelog') || currentPath.includes('changelog.html'))) {
-                console.log('Changelog active');
-                return true;
-            }
-            // For about.html
-            if (href === 'about.html' && (currentPath.includes('about') || currentPath.includes('about.html'))) {
-                console.log('About active');
-                return true;
-            }
-            // For privacy.html
-            if (href === 'privacy.html' && (currentPath.includes('privacy') || currentPath.includes('privacy.html'))) {
-                console.log('Privacy active');
-                return true;
-            }
-            // For terms.html
-            if (href === 'terms.html' && (currentPath.includes('terms') || currentPath.includes('terms.html'))) {
-                console.log('Terms active');
-                return true;
-            }
-            // For contact.html
-            if (href === 'contact.html' && (currentPath.includes('contact') || currentPath.includes('contact.html'))) {
-                console.log('Contact active');
-                return true;
-            }
+            if (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html' || currentPath.endsWith('index.html'))) return true;
+            if (href === 'ai-assistant.html' && (currentPath.includes('ai-assistant') || currentPath.includes('ai-assistant.html'))) return true;
+            if (href === 'tools.html' && (currentPath.includes('tools.html') || currentPath === '/tools.html')) return true;
+            if (href === 'changelog.html' && (currentPath.includes('changelog') || currentPath.includes('changelog.html'))) return true;
+            if (href === 'about.html' && (currentPath.includes('about') || currentPath.includes('about.html'))) return true;
+            if (href === 'privacy.html' && (currentPath.includes('privacy') || currentPath.includes('privacy.html'))) return true;
+            if (href === 'terms.html' && (currentPath.includes('terms') || currentPath.includes('terms.html'))) return true;
+            if (href === 'contact.html' && (currentPath.includes('contact') || currentPath.includes('contact.html'))) return true;
             return false;
         }
         
@@ -710,6 +732,7 @@ window.canUseTool = canUseTool;
 window.trackToolUse = trackToolUse;
 window.guestUses = guestUses;
 window.maxGuestUses = maxGuestUses;
+window.getCurrentGuestUses = getCurrentGuestUses;
 window.isGuestUser = () => !auth.currentUser;
 window.showNotification = showNotification;
 window.dispatchEvent(new Event('toolsnova-auth-ready'));
@@ -721,7 +744,6 @@ function initFaqAccordion() {
     if (faqQuestions.length === 0) return;
     
     faqQuestions.forEach(question => {
-        // Remove any existing listeners to avoid duplicates
         question.removeEventListener('click', handleFaqClick);
         question.addEventListener('click', handleFaqClick);
     });
@@ -731,14 +753,12 @@ function handleFaqClick() {
     const faqItem = this.parentElement;
     const isActive = faqItem.classList.contains('active');
     
-    // Close all other FAQ items
     document.querySelectorAll('.faq-item').forEach(item => {
         if (item !== faqItem) {
             item.classList.remove('active');
         }
     });
     
-    // Toggle current item
     if (!isActive) {
         faqItem.classList.add('active');
     } else {
@@ -746,12 +766,10 @@ function handleFaqClick() {
     }
 }
 
-// Initialize FAQ when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initFaqAccordion();
 });
 
-// Also re-initialize when content might change (for dynamic pages)
 if (typeof MutationObserver !== 'undefined') {
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
@@ -764,13 +782,11 @@ if (typeof MutationObserver !== 'undefined') {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// ===== ACTIVE NAVIGATION HIGHLIGHT - FIXED =====
+// ===== ACTIVE NAVIGATION HIGHLIGHT =====
 function highlightActiveNav() {
     const currentPath = window.location.pathname;
     const currentPage = currentPath.split('/').pop() || 'index.html';
     const isInToolsFolder = currentPath.includes('/tools/');
-    
-    console.log('Current page:', currentPage); // Debug
     
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.classList.remove('active');
@@ -778,28 +794,22 @@ function highlightActiveNav() {
         
         if (!href) return;
         
-        // For Tools page - highlight when on tools.html or any tool inside /tools/ folder
         if ((href === 'tools.html' || href === './tools.html') && 
             (currentPage === 'tools.html' || isInToolsFolder)) {
             link.classList.add('active');
-            console.log('Tools link active'); // Debug
         }
-        // For changelog page
         else if ((href === 'changelog.html' || href === './changelog.html') && 
                  currentPage === 'changelog.html') {
             link.classList.add('active');
         }
-        // For AI Assistant page
         else if ((href === 'ai-assistant.html' || href === './ai-assistant.html') && 
                  currentPage === 'ai-assistant.html') {
             link.classList.add('active');
         }
-        // For Home page
         else if ((href === 'index.html' || href === './index.html') && 
                  (currentPage === 'index.html' || currentPage === '' || currentPath === '/')) {
             link.classList.add('active');
         }
-        // For About page
         else if ((href === 'about.html' || href === './about.html') && 
                  currentPage === 'about.html') {
             link.classList.add('active');
@@ -807,15 +817,11 @@ function highlightActiveNav() {
     });
 }
 
-// Run on page load
 document.addEventListener('DOMContentLoaded', highlightActiveNav);
-// Run after a small delay to ensure everything is loaded
 setTimeout(highlightActiveNav, 100);
 
 // ===== SATELLITE SITE LINK FIXER =====
-// This runs only on satellite sites and fixes sidebar/mobile links
 (function fixSatelliteLinks() {
-    // Check if we're on a satellite site (not the main toolsnova.github.io)
     const isSatellite = window.location.hostname === 'toolsnova.github.io' && 
                         window.location.pathname.includes('/YouTube-to-MP3-ToolsNova');
     
@@ -824,19 +830,14 @@ setTimeout(highlightActiveNav, 100);
         
         const MAIN_SITE = 'https://toolsnova.github.io';
         
-        // Function to fix all internal links
         function fixLinks() {
-            // Select all navigation links (sidebar, mobile menu, navbar)
             const links = document.querySelectorAll('a[href^="./"], a[href^="../"], a[href^="/"], a[href^="index.html"], a[href^="tools.html"], a[href^="ai-assistant.html"], a[href^="about.html"], a[href^="login.html"], a[href^="signup.html"]');
             
             links.forEach(link => {
                 const originalHref = link.getAttribute('href');
                 if (originalHref && !originalHref.startsWith('http') && !originalHref.startsWith('https')) {
-                    // Remove leading dots and slashes
                     let cleanPath = originalHref.replace(/^\.\.?\//, '').replace(/^\//, '');
-                    // Build new URL
                     link.href = `${MAIN_SITE}/${cleanPath}`;
-                    // Optional: open in same tab (remove target if you want)
                     if (link.target !== '_blank') {
                         link.removeAttribute('target');
                     }
@@ -844,17 +845,14 @@ setTimeout(highlightActiveNav, 100);
             });
         }
         
-        // Run immediately when DOM is ready
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', fixLinks);
         } else {
             fixLinks();
         }
         
-        // Also run after a short delay for dynamically added menu items
         setTimeout(fixLinks, 500);
         
-        // Watch for mobile menu opening (if it generates links dynamically)
         const mobileBtn = document.querySelector('.mobile-menu-btn');
         if (mobileBtn) {
             mobileBtn.addEventListener('click', function() {
@@ -863,3 +861,20 @@ setTimeout(highlightActiveNav, 100);
         }
     }
 })();
+
+// ===== RESET GUEST USES (for testing - remove in production) =====
+window.resetGuestUses = function() {
+    localStorage.removeItem('toolsnova_guest_uses');
+    localStorage.removeItem('toolsnova_tools_used');
+    guestUses = 0;
+    updateGuestDisplay();
+    showNotification('Guest uses reset to 0/3', 'success');
+    console.log('Guest uses reset');
+};
+
+window.checkGuestUses = function() {
+    const uses = getCurrentGuestUses();
+    console.log(`Current guest uses: ${uses}/${maxGuestUses}`);
+    console.log(`Auth user: ${auth.currentUser ? 'Logged in' : 'Guest'}`);
+    return { uses, maxUses: maxGuestUses, isLoggedIn: !!auth.currentUser };
+};
