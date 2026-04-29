@@ -74,7 +74,7 @@ let guestUses = getCurrentGuestUses();
 // ===== TOOLS DATABASE - ONLY TOOLS THAT EXIST IN tools.html =====
 const tools = [
     { id: 1, name: "YouTube Thumbnail Downloader", desc: "Download any video thumbnail in HD quality", icon: "fa-brands fa-youtube", cat: "media", popular: true, url: "tools/yt-thumbnail.html" },
-    { id: 2, name: "YouTube to MP3", desc: "Convert YouTube videos to MP3 audio", icon: "fa-solid fa-music", cat: "media", popular: true, url: "tools/video-to-mp3.html" },
+    { id: 2, name: "YouTube to MP3", desc: "Convert YouTube videos to MP3 audio", icon: "fa-solid fa-music", cat: "media", popular: true, url: "https://toolsnova.github.io/YouTube-to-MP3-ToolsNova/" },,
     { id: 3, name: "YouTube Transcript Generator", desc: "Get transcripts from any YouTube video", icon: "fa-solid fa-closed-captioning", cat: "media", popular: true, url: "tools/yt-transcript.html" },
     { id: 4, name: "Image Compressor", desc: "Reduce image file size without losing quality", icon: "fa-solid fa-compress", cat: "media", popular: false, url: "tools/image-compressor.html" },
     { id: 5, name: "QR Code Generator", desc: "Create QR codes for URLs, text, WiFi", icon: "fa-solid fa-qrcode", cat: "media", popular: true, url: "tools/qr-generator.html" },
