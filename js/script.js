@@ -644,6 +644,9 @@ function initDesktopSidebar() {
         const currentPath = window.location.pathname;
         const isInTools = currentPath.includes('/tools/');
         const basePath = isInTools ? '../' : './';
+
+            // If on satellite, use absolute URLs
+    const basePath = isSatellite ? 'https://toolsnova.github.io/' : (isInTools ? '../' : './');
         
         function isActive(href) {
             if (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html' || currentPath.endsWith('index.html'))) return true;
@@ -791,7 +794,7 @@ function highlightActiveNav() {
     });
 }
 
-// ===== SATELLITE SITE LINK FIXER =====
+// ===== SATELLITE SITE LINK FIXER - ENHANCED =====
 (function fixSatelliteLinks() {
     const isSatellite = window.location.hostname === 'toolsnova.github.io' && 
                         window.location.pathname.includes('/YouTube-to-MP3-ToolsNova');
@@ -801,33 +804,75 @@ function highlightActiveNav() {
         
         const MAIN_SITE = 'https://toolsnova.github.io';
         
-        function fixLinks() {
-            const links = document.querySelectorAll('a[href^="./"], a[href^="../"], a[href^="/"], a[href^="index.html"], a[href^="tools.html"], a[href^="ai-assistant.html"], a[href^="about.html"], a[href^="login.html"], a[href^="signup.html"]');
+        function fixAllLinks() {
+            // Fix all types of internal links
+            const selectors = [
+                'a[href^="./"]',
+                'a[href^="../"]', 
+                'a[href^="/"]',
+                'a[href^="index.html"]',
+                'a[href^="tools.html"]',
+                'a[href^="ai-assistant.html"]',
+                'a[href^="about.html"]',
+                'a[href^="login.html"]',
+                'a[href^="signup.html"]',
+                'a[href^="changelog.html"]',
+                'a[href^="privacy.html"]',
+                'a[href^="terms.html"]',
+                'a[href^="contact.html"]',
+                '.mobile-link',      // Mobile menu links
+                '.desktop-sidebar-link' // Sidebar links
+            ];
+            
+            const links = document.querySelectorAll(selectors.join(','));
             
             links.forEach(link => {
                 const originalHref = link.getAttribute('href');
-                if (originalHref && !originalHref.startsWith('http') && !originalHref.startsWith('https')) {
+                if (originalHref && !originalHref.startsWith('http') && !originalHref.startsWith('https') && originalHref !== '#') {
+                    // Remove leading dots, slashes, and clean the path
                     let cleanPath = originalHref.replace(/^\.\.?\//, '').replace(/^\//, '');
-                    link.href = `${MAIN_SITE}/${cleanPath}`;
-                    if (link.target !== '_blank') {
+                    
+                    // Don't add MAIN_SITE if it's already a full URL
+                    if (!cleanPath.startsWith('http')) {
+                        link.href = `${MAIN_SITE}/${cleanPath}`;
+                    }
+                    
+                    // Open in same tab (remove target=_blank if exists)
+                    if (link.target === '_blank') {
                         link.removeAttribute('target');
                     }
                 }
             });
+            
+            console.log('Satellite: Fixed', links.length, 'links');
         }
         
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', fixLinks);
-        } else {
-            fixLinks();
-        }
+        // Run immediately
+        fixAllLinks();
         
-        setTimeout(fixLinks, 500);
+        // Run after a delay for dynamically loaded content
+        setTimeout(fixAllLinks, 500);
+        setTimeout(fixAllLinks, 1000);
         
+        // Observe DOM changes
+        const observer = new MutationObserver(function() {
+            fixAllLinks();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+        
+        // When mobile menu opens, fix again
         const mobileBtn = document.querySelector('.mobile-menu-btn');
         if (mobileBtn) {
             mobileBtn.addEventListener('click', function() {
-                setTimeout(fixLinks, 100);
+                setTimeout(fixAllLinks, 50);
+            });
+        }
+        
+        // When sidebar toggle, fix again
+        const sidebarToggle = document.querySelector('.desktop-sidebar-toggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function() {
+                setTimeout(fixAllLinks, 50);
             });
         }
     }
