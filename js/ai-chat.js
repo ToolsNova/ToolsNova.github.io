@@ -1,4 +1,4 @@
-// ===== AI CHAT ASSISTANT - WITH LOGOUT CONFIRMATION & ENHANCED AI =====
+// ===== AI CHAT ASSISTANT - WITH FIXED GUEST TRACKING =====
 
 // ===== GOOGLE ANALYTICS =====
 window.dataLayer = window.dataLayer || [];
@@ -37,31 +37,64 @@ if (typeof firebase !== 'undefined') {
 const MAX_GUEST_MESSAGES = 3;
 const WORKER_URL = 'https://proxy.toolsnova.workers.dev';
 
-// ===== GUEST MESSAGE TRACKING =====
+// ===== UNIFIED GUEST TRACKING (Syncs with main site) =====
+function getCurrentGuestUses() {
+    // Check both keys used across the site
+    let messagesKey = parseInt(localStorage.getItem('toolsnova_guest_messages') || '0');
+    let usesKey = parseInt(localStorage.getItem('toolsnova_guest_uses') || '0');
+    let toolsUsedKey = parseInt(localStorage.getItem('toolsnova_tools_used') || '0');
+    
+    // Use the highest value to be safe
+    let total = Math.max(messagesKey, usesKey, toolsUsedKey);
+    
+    // Sync all keys to keep consistent
+    if (messagesKey !== total) localStorage.setItem('toolsnova_guest_messages', total);
+    if (usesKey !== total) localStorage.setItem('toolsnova_guest_uses', total);
+    if (toolsUsedKey !== total) localStorage.setItem('toolsnova_tools_used', total);
+    
+    return total;
+}
+
 function canGuestSend() {
     if (!auth) return true;
     const user = auth.currentUser;
-    if (user) return true;
-    const messagesSent = parseInt(localStorage.getItem('toolsnova_guest_messages') || '0');
-    return messagesSent < MAX_GUEST_MESSAGES;
+    if (user) return true; // Logged in users have unlimited
+    
+    const currentUses = getCurrentGuestUses();
+    const canSend = currentUses < MAX_GUEST_MESSAGES;
+    
+    console.log(`AI Guest check: ${currentUses}/${MAX_GUEST_MESSAGES} = ${canSend ? 'Allowed' : 'Blocked'}`);
+    return canSend;
 }
 
 function trackGuestMessage() {
-    if (!auth) return;
+    if (!auth) return false;
     const user = auth.currentUser;
-    if (!user) {
-        let messagesSent = parseInt(localStorage.getItem('toolsnova_guest_messages') || '0');
-        messagesSent++;
-        localStorage.setItem('toolsnova_guest_messages', messagesSent);
-        
-        const remaining = MAX_GUEST_MESSAGES - messagesSent;
-        if (remaining === 0) {
-            showNotification('✨ You have used all 3 free messages! Sign up for unlimited access!', 'warning');
-            setTimeout(() => { window.location.href = 'signup.html'; }, 2000);
-        } else if (remaining > 0) {
-            showNotification(`📬 You have ${remaining} free ${remaining === 1 ? 'message' : 'messages'} left. Sign up for unlimited!`, 'info');
-        }
+    if (user) return true; // No tracking for logged in users
+    
+    let currentUses = getCurrentGuestUses();
+    
+    if (currentUses >= MAX_GUEST_MESSAGES) {
+        console.log('Guest limit reached - blocking message');
+        return false;
     }
+    
+    // Increment and save to ALL keys for consistency
+    const newUses = currentUses + 1;
+    localStorage.setItem('toolsnova_guest_messages', newUses);
+    localStorage.setItem('toolsnova_guest_uses', newUses);
+    localStorage.setItem('toolsnova_tools_used', newUses);
+    
+    const remaining = MAX_GUEST_MESSAGES - newUses;
+    console.log(`AI Guest tracked: ${newUses}/${MAX_GUEST_MESSAGES}`);
+    
+    if (remaining === 0) {
+        showNotification('✨ You have used all 3 free messages! Sign up for unlimited access!', 'warning');
+    } else if (remaining > 0) {
+        showNotification(`📬 You have ${remaining} free ${remaining === 1 ? 'message' : 'messages'} left. Sign up for unlimited!`, 'info');
+    }
+    
+    return true;
 }
 
 // ===== GLOBAL STATE =====
@@ -380,16 +413,10 @@ Now, provide a helpful response to the user's message.`;
         } catch (error) {
             console.error('AI Error details:', error);
             
-            // Provide a more helpful error message
             if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
                 return `⚠️ **Connection Error**
 
 I'm having trouble connecting to the AI service. 
-
-**Possible reasons:**
-1. The Cloudflare Worker might be offline
-2. Network connectivity issues
-3. CORS configuration needs adjustment
 
 **Please try:**
 - Refreshing the page
@@ -724,17 +751,20 @@ function confirmDeleteChat(chatId) {
 window.renameChat = function(chatId) { window.showRenameModal(chatId); };
 window.deleteChat = function(chatId) { window.showDeleteModal(chatId); };
 
-// ===== SEND MESSAGE =====
+// ===== SEND MESSAGE (FIXED VERSION) =====
 async function sendMessage() {
     if (!messageInput) return;
     const text = messageInput.value.trim();
     if (!text && attachedFiles.length === 0) return;
+    
+    // ✅ CHECK LIMIT FIRST - BEFORE ANYTHING ELSE
     if (!canGuestSend()) {
         showNotification('✨ You have used all 3 free messages! Sign up for unlimited access!', 'warning');
         setTimeout(() => { window.location.href = 'signup.html'; }, 2000);
         return;
     }
     
+    // Get or create chat
     let currentChat = chats.find(c => c.id === currentChatId);
     if (!currentChat) {
         const newChat = { id: Date.now().toString(), title: text.substring(0, 30) + (text.length > 30 ? '...' : ''), messages: [], createdAt: Date.now() };
@@ -747,10 +777,19 @@ async function sendMessage() {
         aiAssistant.clearMessages();
     }
     
+    // Process files
     let processedFiles = [];
     if (attachedFiles.length > 0) processedFiles = await processFiles(attachedFiles);
-    currentChat.messages.push({ role: 'user', content: text || '📎 File upload', files: processedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })), time: Date.now() });
     
+    // Add user message
+    currentChat.messages.push({ 
+        role: 'user', 
+        content: text || '📎 File upload', 
+        files: processedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })), 
+        time: Date.now() 
+    });
+    
+    // Update title if needed
     if (currentChat.messages.length === 1 && currentChat.title === 'New Chat') {
         const titleText = text || processedFiles[0]?.name || 'New Chat';
         currentChat.title = titleText.substring(0, 30) + (titleText.length > 30 ? '...' : '');
@@ -760,6 +799,8 @@ async function sendMessage() {
     
     saveChats();
     loadChat(currentChatId);
+    
+    // Clear input
     messageInput.value = '';
     messageInput.style.height = 'auto';
     attachedFiles = [];
@@ -769,20 +810,29 @@ async function sendMessage() {
     sendBtn.disabled = true;
     messageInput.disabled = true;
     
+    // Show typing indicator
     const typingDiv = document.createElement('div');
     typingDiv.className = 'message';
     typingDiv.id = 'typingIndicator';
     typingDiv.innerHTML = `<div class="message-avatar ai"><i class="fas fa-robot"></i></div><div class="message-content"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
     messagesWrapper.appendChild(typingDiv);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    if (messagesContainer) messagesContainer.scrollTop = messagesContainer.scrollHeight;
     
     try {
         const response = await aiAssistant.getResponse(text, processedFiles);
         document.getElementById('typingIndicator')?.remove();
+        
+        // Add assistant response
         currentChat.messages.push({ role: 'assistant', content: response, time: Date.now() });
         saveChats();
         loadChat(currentChatId);
-        trackGuestMessage();
+        
+        // ✅ TRACK AFTER SUCCESSFUL MESSAGE
+        const tracked = trackGuestMessage();
+        if (!tracked) {
+            // If tracking fails (shouldn't happen), still have the message but block future ones
+            console.log('Guest tracking failed but message was sent');
+        }
     } catch (error) {
         console.error('Error:', error);
         document.getElementById('typingIndicator')?.remove();
@@ -924,4 +974,4 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeDeleteModal = closeDeleteModal;
 });
 
-console.log('🤖 AI Chat Assistant initialized!');
+console.log('🤖 AI Chat Assistant initialized with fixed guest tracking!');
