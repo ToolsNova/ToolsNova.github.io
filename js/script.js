@@ -74,7 +74,7 @@ let guestUses = getCurrentGuestUses();
 // ===== TOOLS DATABASE - ONLY TOOLS THAT EXIST IN tools.html =====
 const tools = [
     { id: 1, name: "YouTube Thumbnail Downloader", desc: "Download any video thumbnail in HD quality", icon: "fa-brands fa-youtube", cat: "media", popular: true, url: "tools/yt-thumbnail.html" },
-    { id: 2, name: "YouTube to MP3", desc: "Convert YouTube videos to MP3 audio", icon: "fa-solid fa-music", cat: "media", popular: true, url: "https://toolsnova.github.io/YouTube-to-MP3-ToolsNova/" },,
+    { id: 2, name: "YouTube to MP3", desc: "Convert YouTube videos to MP3 audio", icon: "fa-solid fa-music", cat: "media", popular: true, url: "https://toolsnova.github.io/YouTube-to-MP3-ToolsNova/" },
     { id: 3, name: "YouTube Transcript Generator", desc: "Get transcripts from any YouTube video", icon: "fa-solid fa-closed-captioning", cat: "media", popular: true, url: "tools/yt-transcript.html" },
     { id: 4, name: "Image Compressor", desc: "Reduce image file size without losing quality", icon: "fa-solid fa-compress", cat: "media", popular: false, url: "tools/image-compressor.html" },
     { id: 5, name: "QR Code Generator", desc: "Create QR codes for URLs, text, WiFi", icon: "fa-solid fa-qrcode", cat: "media", popular: true, url: "tools/qr-generator.html" },
@@ -530,7 +530,15 @@ if (mobileBtn) {
     function updateMobileMenu() {
         const user = auth.currentUser;
         const isInTools = window.location.pathname.includes('/tools/');
-        const basePath = isInTools ? '../' : './';
+        const isSatellite = window.location.pathname.includes('/YouTube-to-MP3-ToolsNova');
+        
+        // Use absolute URLs on satellite
+        let basePath;
+        if (isSatellite) {
+            basePath = 'https://toolsnova.github.io/';
+        } else {
+            basePath = isInTools ? '../' : './';
+        }
         
         let menuLinks = `
         <div class="mobile-menu-header">
@@ -614,6 +622,115 @@ if (mobileBtn) {
     mobileBtn.ontouchmove = (e) => { if (!isDragging) return; moved = true; const touch = e.touches[0]; let x = touch.clientX - offsetX, y = touch.clientY - offsetY; const maxX = window.innerWidth - mobileBtn.offsetWidth, maxY = window.innerHeight - mobileBtn.offsetHeight; mobileBtn.style.left = Math.max(0, Math.min(x, maxX)) + "px"; mobileBtn.style.top = Math.max(0, Math.min(y, maxY)) + "px"; mobileBtn.style.right = "auto"; };
     mobileBtn.ontouchend = (e) => { isDragging = false; if (!moved) { e.preventDefault(); openMenu(); } const rect = mobileBtn.getBoundingClientRect(); let finalX = rect.left < window.innerWidth / 2 ? 10 : window.innerWidth - mobileBtn.offsetWidth - 10; mobileBtn.style.left = finalX + "px"; localStorage.setItem('btn_x', mobileBtn.getBoundingClientRect().left); localStorage.setItem('btn_y', mobileBtn.getBoundingClientRect().top); };
     mobileBtn.onclick = () => { if (!isDragging && !moved) openMenu(); };
+}
+
+// ===== DESKTOP SIDEBAR =====
+let sidebarInitialized = false;
+function initDesktopSidebar() {
+    if (sidebarInitialized || window.innerWidth <= 768) return;
+    let sidebar = document.getElementById('desktopSidebar');
+    let toggleBtn = document.querySelector('.desktop-sidebar-toggle');
+    if (!sidebar) { sidebar = document.createElement('div'); sidebar.className = 'desktop-sidebar'; sidebar.id = 'desktopSidebar'; document.body.appendChild(sidebar); }
+    if (!toggleBtn) { toggleBtn = document.createElement('button'); toggleBtn.className = 'desktop-sidebar-toggle'; toggleBtn.innerHTML = '<i class="fas fa-chevron-left"></i>'; document.body.appendChild(toggleBtn); }
+    
+    const savedState = localStorage.getItem('desktopSidebarOpen');
+    const isSidebarOpen = savedState !== 'false';
+    if (isSidebarOpen) { sidebar.classList.remove('collapsed'); toggleBtn.innerHTML = '<i class="fas fa-chevron-left"></i>'; document.body.classList.remove('sidebar-collapsed'); }
+    else { sidebar.classList.add('collapsed'); toggleBtn.innerHTML = '<i class="fas fa-chevron-right"></i>'; document.body.classList.add('sidebar-collapsed'); }
+    sidebarInitialized = true;
+    
+    function toggleSidebarFunc() {
+        const isOpen = !sidebar.classList.contains('collapsed');
+        if (isOpen) { sidebar.classList.add('collapsed'); toggleBtn.innerHTML = '<i class="fas fa-chevron-right"></i>'; document.body.classList.add('sidebar-collapsed'); localStorage.setItem('desktopSidebarOpen', 'false'); }
+        else { sidebar.classList.remove('collapsed'); toggleBtn.innerHTML = '<i class="fas fa-chevron-left"></i>'; document.body.classList.remove('sidebar-collapsed'); localStorage.setItem('desktopSidebarOpen', 'true'); }
+        setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
+    }
+    toggleBtn.onclick = toggleSidebarFunc;
+    
+    function updateSidebarContent() {
+        const user = auth.currentUser;
+        const currentPath = window.location.pathname;
+        const isInTools = currentPath.includes('/tools/');
+        const isSatellite = currentPath.includes('/YouTube-to-MP3-ToolsNova');
+        
+        // Set basePath - use absolute URLs on satellite, relative on main site
+        let basePath;
+        if (isSatellite) {
+            basePath = 'https://toolsnova.github.io/';
+        } else {
+            basePath = isInTools ? '../' : './';
+        }
+        
+        function isActive(href) {
+            if (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html' || currentPath.endsWith('index.html'))) return true;
+            if (href === 'ai-assistant.html' && (currentPath.includes('ai-assistant') || currentPath.includes('ai-assistant.html'))) return true;
+            if (href === 'tools.html' && (currentPath.includes('tools.html') || currentPath === '/tools.html')) return true;
+            if (href === 'changelog.html' && (currentPath.includes('changelog') || currentPath.includes('changelog.html'))) return true;
+            if (href === 'about.html' && (currentPath.includes('about') || currentPath.includes('about.html'))) return true;
+            if (href === 'privacy.html' && (currentPath.includes('privacy') || currentPath.includes('privacy.html'))) return true;
+            if (href === 'terms.html' && (currentPath.includes('terms') || currentPath.includes('terms.html'))) return true;
+            if (href === 'contact.html' && (currentPath.includes('contact') || currentPath.includes('contact.html'))) return true;
+            return false;
+        }
+        
+        let html = `<div class="desktop-sidebar-header"><div class="desktop-sidebar-logo"><i class="fas fa-star"></i><span>ToolsNova</span></div></div>
+            <div class="desktop-sidebar-links">
+            <a href="${basePath}index.html" class="desktop-sidebar-link ${isActive('index.html') ? 'active' : ''}" data-tooltip="Home"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="${basePath}ai-assistant.html" class="desktop-sidebar-link ${isActive('ai-assistant.html') ? 'active' : ''}" data-tooltip="AI Assistant"><i class="fas fa-robot"></i><span>AI Assistant</span></a>
+            <a href="${basePath}tools.html" class="desktop-sidebar-link ${isActive('tools.html') ? 'active' : ''}" data-tooltip="All Tools"><i class="fas fa-tools"></i><span>All Tools</span></a>
+            <a href="${basePath}changelog.html" class="desktop-sidebar-link ${isActive('changelog.html') ? 'active' : ''}" data-tooltip="What's New"><i class="fa-solid fa-rocket"></i><span>What's New!</span></a>
+            <div class="desktop-sidebar-category-title">For You! 🔥</div>
+            <a href="${basePath}tools.html#media" class="desktop-sidebar-link" data-tooltip="Media Tools"><i class="fas fa-video"></i><span>Media Tools</span></a>
+            <a href="${basePath}tools.html#ai" class="desktop-sidebar-link" data-tooltip="AI Tools"><i class="fa-solid fa-gear"></i><span>AI Tools</span></a>
+            <a href="${basePath}tools.html#image" class="desktop-sidebar-link" data-tooltip="Image Editor"><i class="fas fa-paint-brush"></i><span>Image Editor</span></a>
+            <a href="${basePath}tools.html#code" class="desktop-sidebar-link" data-tooltip="Code Editors"><i class="fas fa-code"></i><span>Code Editors</span></a>
+            <a href="${basePath}tools.html#calc" class="desktop-sidebar-link" data-tooltip="Calculators"><i class="fas fa-calculator"></i><span>Calculators</span></a>
+            <div class="desktop-sidebar-divider"></div>
+            <a href="${basePath}about.html" class="desktop-sidebar-link ${isActive('about.html') ? 'active' : ''}" data-tooltip="About"><i class="fas fa-info-circle"></i><span>About</span></a>
+            <a href="${basePath}privacy.html" class="desktop-sidebar-link ${isActive('privacy.html') ? 'active' : ''}" data-tooltip="Privacy"><i class="fas fa-shield-alt"></i><span>Privacy</span></a>
+            <a href="${basePath}terms.html" class="desktop-sidebar-link ${isActive('terms.html') ? 'active' : ''}" data-tooltip="Terms"><i class="fas fa-file-contract"></i><span>Terms</span></a>
+            <a href="${basePath}contact.html" class="desktop-sidebar-link ${isActive('contact.html') ? 'active' : ''}" data-tooltip="Contact"><i class="fas fa-envelope"></i><span>Contact</span></a>
+            <div class="desktop-sidebar-divider"></div>
+            <button class="desktop-sidebar-link" id="desktopDarkToggle"><i class="fas ${document.body.classList.contains('dark-mode') ? 'fa-sun' : 'fa-moon'}"></i><span>${document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode'}</span></button>`;
+        
+        if (user) {
+            html += `<div class="desktop-sidebar-divider"></div><div class="desktop-sidebar-user-info"><i class="fas fa-user-circle"></i><span>${user.email.split('@')[0]}</span></div>
+                <a href="#" class="desktop-sidebar-link desktop-sidebar-logout" id="desktopSidebarLogout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+                <a href="#" class="desktop-sidebar-link desktop-sidebar-delete" id="desktopDeleteAccount"><i class="fas fa-trash-alt"></i><span>Delete Account</span></a>`;
+        } else {
+            html += `<div class="desktop-sidebar-divider"></div><a href="${basePath}login.html" class="desktop-sidebar-link"><i class="fas fa-sign-in-alt"></i><span>Login</span></a>
+                <a href="${basePath}signup.html" class="desktop-sidebar-link desktop-sidebar-cta"><i class="fas fa-user-plus"></i><span>Sign Up</span></a>`;
+        }
+        html += `</div>`;
+        
+        if (sidebar.innerHTML !== html) sidebar.innerHTML = html;
+        
+        document.getElementById('desktopDarkToggle')?.addEventListener('click', () => { 
+            document.body.classList.toggle('dark-mode'); 
+            const isDark = document.body.classList.contains('dark-mode'); 
+            localStorage.setItem('darkMode', isDark); 
+            const btn = document.getElementById('desktopDarkToggle'); 
+            if(btn) btn.innerHTML = isDark ? '<i class="fas fa-sun"></i><span>Light Mode</span>' : '<i class="fas fa-moon"></i><span>Dark Mode</span>'; 
+            const mainIcon = document.querySelector('.theme-toggle i'); 
+            if(mainIcon) mainIcon.className = isDark ? 'fas fa-sun' : 'far fa-moon'; 
+        });
+        
+        document.getElementById('desktopSidebarLogout')?.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            showLogoutConfirmation(); 
+        });
+        
+        document.getElementById('desktopDeleteAccount')?.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            window.deleteUserAccount(); 
+        });
+    }
+    
+    updateSidebarContent();
+    
+    if (auth) {
+        auth.onAuthStateChanged(() => updateSidebarContent());
+    }
 }
 
 // ===== FAQ ACCORDION FUNCTIONALITY =====
