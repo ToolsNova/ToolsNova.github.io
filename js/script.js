@@ -717,26 +717,6 @@ function initDesktopSidebar() {
     }
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDesktopSidebar);
-} else {
-    initDesktopSidebar();
-}
-
-// ===== INITIAL GUEST DISPLAY =====
-updateGuestDisplay();
-
-// ===== GLOBAL EXPORTS =====
-window.auth = auth;
-window.canUseTool = canUseTool;
-window.trackToolUse = trackToolUse;
-window.guestUses = guestUses;
-window.maxGuestUses = maxGuestUses;
-window.getCurrentGuestUses = getCurrentGuestUses;
-window.isGuestUser = () => !auth.currentUser;
-window.showNotification = showNotification;
-window.dispatchEvent(new Event('toolsnova-auth-ready'));
-
 // ===== FAQ ACCORDION FUNCTIONALITY =====
 function initFaqAccordion() {
     const faqQuestions = document.querySelectorAll('.faq-question');
@@ -764,22 +744,6 @@ function handleFaqClick() {
     } else {
         faqItem.classList.remove('active');
     }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    initFaqAccordion();
-});
-
-if (typeof MutationObserver !== 'undefined') {
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.addedNodes.length) {
-                initFaqAccordion();
-            }
-        });
-    });
-    
-    observer.observe(document.body, { childList: true, subtree: true });
 }
 
 // ===== ACTIVE NAVIGATION HIGHLIGHT =====
@@ -816,9 +780,6 @@ function highlightActiveNav() {
         }
     });
 }
-
-document.addEventListener('DOMContentLoaded', highlightActiveNav);
-setTimeout(highlightActiveNav, 100);
 
 // ===== SATELLITE SITE LINK FIXER =====
 (function fixSatelliteLinks() {
@@ -878,3 +839,213 @@ window.checkGuestUses = function() {
     console.log(`Auth user: ${auth.currentUser ? 'Logged in' : 'Guest'}`);
     return { uses, maxUses: maxGuestUses, isLoggedIn: !!auth.currentUser };
 };
+
+// ===== SHOW LIMIT REACHED MODAL =====
+function showLimitReachedModal() {
+    // Check if modal already exists
+    let modalOverlay = document.getElementById('limitReachedModal');
+    if (modalOverlay) {
+        modalOverlay.classList.add('active');
+        return;
+    }
+    
+    modalOverlay = document.createElement('div');
+    modalOverlay.id = 'limitReachedModal';
+    modalOverlay.className = 'modal-overlay';
+    document.body.appendChild(modalOverlay);
+    
+    modalOverlay.innerHTML = `
+        <div class="modal-container" style="max-width: 400px; text-align: center;">
+            <div class="modal-header" style="justify-content: center; border-bottom: none;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #f59e0b; margin-bottom: 10px;"></i>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <h3 style="margin-bottom: 12px; font-size: 1.5rem;">⚠️ Free Limit Reached</h3>
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">
+                    You have used all <strong>3 free tries</strong>.
+                </p>
+                <div style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); padding: 20px; border-radius: 16px; margin: 20px 0;">
+                    <i class="fas fa-crown" style="font-size: 32px; color: #ffd700; margin-bottom: 10px; display: block;"></i>
+                    <p style="color: white; font-weight: bold; margin-bottom: 15px;">Sign up for unlimited access!</p>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <a href="signup.html" style="background: white; color: #3b82f6; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;">Sign Up Free</a>
+                        <a href="login.html" style="background: transparent; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 8px; text-decoration: none;">Login</a>
+                    </div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                    ✨ No credit card required<br>
+                    🚀 Unlimited access to all tools<br>
+                    💾 Save your history
+                </p>
+            </div>
+            <div class="modal-footer" style="justify-content: center; border-top: none;">
+                <button class="modal-btn modal-btn-cancel" onclick="closeLimitReachedModal()">Close</button>
+            </div>
+        </div>
+    `;
+    
+    modalOverlay.classList.add('active');
+    
+    // Close on escape
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            closeLimitReachedModal();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
+}
+
+window.closeLimitReachedModal = function() {
+    const modal = document.getElementById('limitReachedModal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.remove();
+        }, 300);
+    }
+};
+
+// ===== GLOBAL TOOL LINK INTERCEPTOR =====
+// This blocks all tool links when guest limit is reached
+function initGlobalLinkInterceptor() {
+    // Select all tool links (links that go to /tools/ or specific tool pages)
+    const toolSelectors = [
+        'a[href*="tools/"]',           // Any link containing "tools/"
+        'a[href*="yt-thumbnail"]',
+        'a[href*="video-to-mp3"]',
+        'a[href*="yt-transcript"]',
+        'a[href*="age-calculator"]',
+        'a[href*="discount-calculator"]',
+        'a[href*="bmi-calculator"]',
+        'a[href*="currency-converter"]',
+        'a[href*="image-compressor"]',
+        'a[href*="qr-generator"]',
+        'a[href*="background-remover"]',
+        'a[href*="ai-content-detector"]',
+        'a[href*="ai-grammar-checker"]',
+        'a[href*="ai-text-summarizer"]',
+        'a[href*="image-editor"]',
+        'a[href*="image-to-png"]',
+        'a[href*="ocr"]',
+        'a[href*="python-editor"]',
+        'a[href*="live-editor"]',
+        'a[href*="json-formatter"]',
+        'a[href*="ai-assistant.html"]'  // AI Assistant link
+    ];
+    
+    const selector = toolSelectors.join(',');
+    
+    function blockToolLink(event) {
+        const link = event.currentTarget;
+        const href = link.getAttribute('href');
+        
+        // Skip if it's a hash link or javascript: or external
+        if (!href || href === '#' || href.startsWith('javascript:') || href.startsWith('http')) {
+            return;
+        }
+        
+        // Check if user is logged in
+        const user = auth.currentUser;
+        if (user) return true; // Logged in users can access
+        
+        // Check guest limit
+        const currentUses = getCurrentGuestUses();
+        if (currentUses >= maxGuestUses) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // Show modal or notification
+            showLimitReachedModal();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    // Attach listeners to all tool links
+    function attachLinkListeners() {
+        const links = document.querySelectorAll(selector);
+        links.forEach(link => {
+            // Remove existing listener to avoid duplicates
+            link.removeEventListener('click', blockToolLink);
+            link.addEventListener('click', blockToolLink);
+        });
+    }
+    
+    // Initial attachment
+    attachLinkListeners();
+    
+    // Re-attach when DOM changes (for dynamically loaded content)
+    const observer = new MutationObserver(function(mutations) {
+        attachLinkListeners();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    
+    // Also attach when sidebar/mobile menu updates
+    if (auth) {
+        auth.onAuthStateChanged(() => {
+            setTimeout(attachLinkListeners, 100);
+        });
+    }
+}
+
+// ===== ALSO BLOCK THE YOUTUBE TO MP3 SATELLITE LINK =====
+function blockSatelliteLink() {
+    const satLink = document.querySelector('a[href*="YouTube-to-MP3-ToolsNova"]');
+    if (satLink) {
+        satLink.addEventListener('click', function(e) {
+            const user = auth.currentUser;
+            if (!user) {
+                const currentUses = getCurrentGuestUses();
+                if (currentUses >= maxGuestUses) {
+                    e.preventDefault();
+                    showLimitReachedModal();
+                    return false;
+                }
+            }
+            return true;
+        });
+    }
+}
+
+// ===== INITIALIZE EVERYTHING =====
+document.addEventListener('DOMContentLoaded', function() {
+    initDesktopSidebar();
+    initFaqAccordion();
+    highlightActiveNav();
+    updateGuestDisplay();
+    initGlobalLinkInterceptor();
+    setTimeout(blockSatelliteLink, 500);
+});
+
+// Run FAQ accordion again after DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+    initFaqAccordion();
+});
+
+if (typeof MutationObserver !== 'undefined') {
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length) {
+                initFaqAccordion();
+            }
+        });
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
+document.addEventListener('DOMContentLoaded', highlightActiveNav);
+setTimeout(highlightActiveNav, 100);
+
+// ===== GLOBAL EXPORTS =====
+window.auth = auth;
+window.canUseTool = canUseTool;
+window.trackToolUse = trackToolUse;
+window.guestUses = guestUses;
+window.maxGuestUses = maxGuestUses;
+window.getCurrentGuestUses = getCurrentGuestUses;
+window.isGuestUser = () => !auth.currentUser;
+window.showNotification = showNotification;
+window.dispatchEvent(new Event('toolsnova-auth-ready'));
