@@ -758,6 +758,11 @@ function highlightActiveNav() {
         
         if (!href) return;
         
+        // Don't highlight signup/login links
+        if (href.includes('signup') || href.includes('login')) {
+            return;
+        }
+        
         if ((href === 'tools.html' || href === './tools.html') && 
             (currentPage === 'tools.html' || isInToolsFolder)) {
             link.classList.add('active');
@@ -906,12 +911,11 @@ window.closeLimitReachedModal = function() {
     }
 };
 
-// ===== GLOBAL TOOL LINK INTERCEPTOR =====
-// This blocks all tool links when guest limit is reached
+// ===== GLOBAL TOOL LINK INTERCEPTOR - STRONGER VERSION =====
 function initGlobalLinkInterceptor() {
-    // Select all tool links (links that go to /tools/ or specific tool pages)
+    // Select all tool links
     const toolSelectors = [
-        'a[href*="tools/"]',           // Any link containing "tools/"
+        'a[href*="tools/"]',
         'a[href*="yt-thumbnail"]',
         'a[href*="video-to-mp3"]',
         'a[href*="yt-transcript"]',
@@ -931,7 +935,9 @@ function initGlobalLinkInterceptor() {
         'a[href*="python-editor"]',
         'a[href*="live-editor"]',
         'a[href*="json-formatter"]',
-        'a[href*="ai-assistant.html"]'  // AI Assistant link
+        'a[href*="ai-assistant.html"]',
+        '.tool-link',  // Catch by class
+        '.tool-card a' // Catch tool card links
     ];
     
     const selector = toolSelectors.join(',');
@@ -945,6 +951,11 @@ function initGlobalLinkInterceptor() {
             return;
         }
         
+        // Skip if it's login/signup pages (don't block those)
+        if (href.includes('login.html') || href.includes('signup.html')) {
+            return;
+        }
+        
         // Check if user is logged in
         const user = auth.currentUser;
         if (user) return true; // Logged in users can access
@@ -954,8 +965,8 @@ function initGlobalLinkInterceptor() {
         if (currentUses >= maxGuestUses) {
             event.preventDefault();
             event.stopPropagation();
+            event.stopImmediatePropagation();
             
-            // Show modal or notification
             showLimitReachedModal();
             return false;
         }
@@ -963,26 +974,57 @@ function initGlobalLinkInterceptor() {
         return true;
     }
     
-    // Attach listeners to all tool links
+    // Attach listeners with capture phase to catch all clicks
     function attachLinkListeners() {
         const links = document.querySelectorAll(selector);
         links.forEach(link => {
-            // Remove existing listener to avoid duplicates
-            link.removeEventListener('click', blockToolLink);
-            link.addEventListener('click', blockToolLink);
+            // Remove existing listeners to avoid duplicates
+            link.removeEventListener('click', blockToolLink, true);
+            link.addEventListener('click', blockToolLink, true);
         });
     }
+    
+    // Also intercept clicks on document level (catch-all)
+    document.addEventListener('click', function(event) {
+        let target = event.target;
+        // Find closest anchor tag
+        while (target && target !== document && target.tagName !== 'A') {
+            target = target.parentElement;
+        }
+        
+        if (target && target.tagName === 'A') {
+            const href = target.getAttribute('href');
+            
+            if (href && (href.includes('tools/') || href.includes('yt-thumbnail') || href.includes('video-to-mp3') || href.includes('age-calculator') || href.includes('discount-calculator'))) {
+                // Skip login/signup
+                if (href.includes('login.html') || href.includes('signup.html')) {
+                    return;
+                }
+                
+                const user = auth.currentUser;
+                if (!user) {
+                    const currentUses = getCurrentGuestUses();
+                    if (currentUses >= maxGuestUses) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        showLimitReachedModal();
+                        return false;
+                    }
+                }
+            }
+        }
+    }, true);
     
     // Initial attachment
     attachLinkListeners();
     
-    // Re-attach when DOM changes (for dynamically loaded content)
-    const observer = new MutationObserver(function(mutations) {
+    // Re-attach when DOM changes
+    const observer = new MutationObserver(function() {
         attachLinkListeners();
     });
     observer.observe(document.body, { childList: true, subtree: true });
     
-    // Also attach when sidebar/mobile menu updates
+    // Also attach when auth state changes
     if (auth) {
         auth.onAuthStateChanged(() => {
             setTimeout(attachLinkListeners, 100);
