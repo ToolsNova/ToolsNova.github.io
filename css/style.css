@@ -2973,3 +2973,16 @@ body.sidebar-collapsed .navbar {
 .nav-links a:not(.active):hover::after {
     width: 100%;
 }
+
+/* Remove highlight from Sign Up button ONLY on signup page */
+body:has(.signup-container) .nav-cta,
+body:has(#signupForm) .nav-cta,
+body:has(.signup-page) .nav-cta,
+body[class*="signup"] .nav-cta,
+.page-signup .nav-cta {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important;
+    color: white !important;
+    box-shadow: none !important;
+    transform: none !important;
+    border: none !important;
+}

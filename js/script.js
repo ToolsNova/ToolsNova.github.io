@@ -746,7 +746,7 @@ function handleFaqClick() {
     }
 }
 
-// ===== ACTIVE NAVIGATION HIGHLIGHT =====
+// ===== ACTIVE NAVIGATION HIGHLIGHT - FIXED =====
 function highlightActiveNav() {
     const currentPath = window.location.pathname;
     const currentPage = currentPath.split('/').pop() || 'index.html';
@@ -758,9 +758,14 @@ function highlightActiveNav() {
         
         if (!href) return;
         
-        // Don't highlight signup/login links
-        if (href.includes('signup') || href.includes('login')) {
-            return;
+        // Skip ONLY signup link when on signup page
+        if (currentPage === 'signup.html' && href.includes('signup')) {
+            return; // Don't highlight signup button on signup page
+        }
+        
+        // Skip ONLY login link when on login page
+        if (currentPage === 'login.html' && href.includes('login')) {
+            return; // Don't highlight login button on login page
         }
         
         if ((href === 'tools.html' || href === './tools.html') && 
@@ -776,7 +781,7 @@ function highlightActiveNav() {
             link.classList.add('active');
         }
         else if ((href === 'index.html' || href === './index.html') && 
-                 (currentPage === 'index.html' || currentPage === '' || currentPath === '/')) {
+                 (currentPage === 'index.html' || currentPage === '' || currentPath === '/' || currentPath.endsWith('/index.html'))) {
             link.classList.add('active');
         }
         else if ((href === 'about.html' || href === './about.html') && 
