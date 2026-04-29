@@ -811,3 +811,55 @@ function highlightActiveNav() {
 document.addEventListener('DOMContentLoaded', highlightActiveNav);
 // Run after a small delay to ensure everything is loaded
 setTimeout(highlightActiveNav, 100);
+
+// ===== SATELLITE SITE LINK FIXER =====
+// This runs only on satellite sites and fixes sidebar/mobile links
+(function fixSatelliteLinks() {
+    // Check if we're on a satellite site (not the main toolsnova.github.io)
+    const isSatellite = window.location.hostname === 'toolsnova.github.io' && 
+                        window.location.pathname.includes('/YouTube-to-MP3-ToolsNova');
+    
+    if (isSatellite) {
+        console.log('Satellite mode: Fixing links to point to main site');
+        
+        const MAIN_SITE = 'https://toolsnova.github.io';
+        
+        // Function to fix all internal links
+        function fixLinks() {
+            // Select all navigation links (sidebar, mobile menu, navbar)
+            const links = document.querySelectorAll('a[href^="./"], a[href^="../"], a[href^="/"], a[href^="index.html"], a[href^="tools.html"], a[href^="ai-assistant.html"], a[href^="about.html"], a[href^="login.html"], a[href^="signup.html"]');
+            
+            links.forEach(link => {
+                const originalHref = link.getAttribute('href');
+                if (originalHref && !originalHref.startsWith('http') && !originalHref.startsWith('https')) {
+                    // Remove leading dots and slashes
+                    let cleanPath = originalHref.replace(/^\.\.?\//, '').replace(/^\//, '');
+                    // Build new URL
+                    link.href = `${MAIN_SITE}/${cleanPath}`;
+                    // Optional: open in same tab (remove target if you want)
+                    if (link.target !== '_blank') {
+                        link.removeAttribute('target');
+                    }
+                }
+            });
+        }
+        
+        // Run immediately when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', fixLinks);
+        } else {
+            fixLinks();
+        }
+        
+        // Also run after a short delay for dynamically added menu items
+        setTimeout(fixLinks, 500);
+        
+        // Watch for mobile menu opening (if it generates links dynamically)
+        const mobileBtn = document.querySelector('.mobile-menu-btn');
+        if (mobileBtn) {
+            mobileBtn.addEventListener('click', function() {
+                setTimeout(fixLinks, 100);
+            });
+        }
+    }
+})();
